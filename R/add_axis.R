@@ -24,7 +24,7 @@ add_axis <- function(axis,
                      gridFirst      = 1,
                      gridLwd        = 1,
                      gridType       = 1,
-                     gridKula       = "#E6E6E6FF") {
+                     gridKula       = "#E6E6E6AA") {
   #' Add highly customisable axes to a plot
   #'
   #' @description The syntax and logic for axes in base R are not intuitive.
