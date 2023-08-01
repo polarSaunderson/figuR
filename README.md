@@ -25,13 +25,15 @@ devtools::install_github("polarSaunderson/figuR")
 ```
 
 4) Some of the functions in `figuR` require my `domR` and `kulaR` packages too.
-If you want to use these functions, it is necessary to also install these:
+If you want to use these functions, it is necessary to also install these and their dependencis:
 ```R
 devtools::install_github("polarSaunderson/domR")
+
+install.packages("khroma")  # necessary for kulaR
 devtools::install_github("polarSaunderson/kulaR")
 ```
 
-5) Load the domR package
+5) Load the figuR package
 ```R
-library(domR)
+library(figuR)
 ```
