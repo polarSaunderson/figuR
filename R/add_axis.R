@@ -24,7 +24,7 @@ add_axis <- function(axis,
                      gridFirst      = 1,
                      gridLwd        = 1,
                      gridType       = 1,
-                     gridKula       = "#B3B3B3FF") {
+                     gridKula       = "#E6E6E6FF") {
   #' Add highly customisable axes to a plot
   #'
   #' @description The syntax and logic for axes in base R are not intuitive.
@@ -165,13 +165,13 @@ add_axis <- function(axis,
                               seq(figBottom, figTop,    length = tickCount),
                               seq(figLeft,   figRight,  length = tickCount),
                               seq(figBottom, figTop,    length = tickCount))
-      } else if (!is.null(tickSeq)) {
-        tickLocations <- switch(axis,
-                                seq(figLeft,   figRight,  tickSeq),
-                                seq(figBottom, figTop,    tickSeq),
-                                seq(figLeft,   figRight,  tickSeq),
-                                seq(figBottom, figTop,    tickSeq))
-      }
+    } else if (!is.null(tickSeq)) {
+      tickLocations <- switch(axis,
+                              seq(figLeft,   figRight,  tickSeq),
+                              seq(figBottom, figTop,    tickSeq),
+                              seq(figLeft,   figRight,  tickSeq),
+                              seq(figBottom, figTop,    tickSeq))
+    }
   } else if (isTRUE(alignMidPoints)) {
     if (!is.null(tickCount)) {
       tickLocations <- switch(axis,
