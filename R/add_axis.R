@@ -2,6 +2,8 @@ add_axis <- function(axis,
                      tickSeq        = NULL,
                      tickCount      = NULL,
                      alignMidPoints = FALSE,
+                     tickEvery      = 1,
+                     tickFirst      = 1,
                      tickLength     = 0.2,
                      tickKula       = "#1A1A1AFF",
                      labels         = NULL,
@@ -34,7 +36,8 @@ add_axis <- function(axis,
   #'   examples. Everything is based on the concept of "ticks", the little marks
   #'   that come over the edge of the axis to show where the values fall
   #'   exactly; labels and grid lines can be added to align with these ticks (or
-  #'   a subset of them).
+  #'   a subset of them). It is also possible to only draw tickmarks on certain
+  #'   ticks.
   #'
   #' @param axis numeric: Which side to add the axis to? 1 bottom, 2 left, 3
   #'   top, 4 right.
@@ -52,6 +55,11 @@ add_axis <- function(axis,
   #'   be TRUE. See the examples for a visual explanation. If still unsure, call
   #'   `plot()` using `axes = TRUE` and add dummy data to see what aligns and
   #'   what makes sense.
+  #' @param tickEvery numeric: Draw an actual tick mark every how many ticks?
+  #'   See the labelEvery argument for details.
+  #' @param tickFirst numeric: WHich should be the first tick mark shown? Works
+  #'   from the bottom on the y-axes and the left on the x-axes. Provide the
+  #'   index, not the tick value.
   #' @param tickLength numeric: How long should the tick mark be? Positive
   #'   values go outwards from the axis. Works using `tcl`, so see par for more
   #'   information.
@@ -224,8 +232,16 @@ add_axis <- function(axis,
                    col = gridKula, lwd = gridLwd, lty = gridType)
 
   # Add ticks ----!
+  if (length(tickEvery) == 1) {
+    # Option 1: Label every x ticks
+    tickMarks <- tickLocations[seq(tickFirst, length(tickLocations), tickEvery)]
+  } else {
+    # Option 2: Label only specific ticks
+    tickMarks <- tickLocations[tickEvery]
+  }
+
   axis(side   = axis,
-       at     = tickLocations,
+       at     = tickMarks,
        labels = FALSE,            # no labels yet
        tcl    = tickLength * -1,  # negative here so positive values go outwards
        col    = tickKula)
@@ -276,4 +292,5 @@ add_axis <- function(axis,
                    cex = nameCex, srt = nameSrt, col = nameKula)
   }
 
+  return(invisible(list(tickLocations)))
 }

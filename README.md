@@ -13,7 +13,7 @@ The public version of this repo can be accessed at:
 ## To-Do
 ### 2023-08-02
 - [ ] Expand arguments & document `pre_plot()`
-- [ ] Add `arrange_subplots()`
+- [X] Add `arrange_subplots()`
 - [ ] Document functions
 - [ ] Use `pre_plot()` in `kulaR` for creating kulaBars
 - [ ] Create `plot_points()`, `plot_lines()`, etc.
