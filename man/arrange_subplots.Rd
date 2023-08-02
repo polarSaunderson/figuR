@@ -4,47 +4,41 @@
 \alias{arrange_subplots}
 \title{Creates a layout for subplots with fine-grained control}
 \usage{
-arrange_subplots(locations, size = FALSE, plotOrder = NULL)
+arrange_subplots(locations, useSize = FALSE, plotOrder = NULL)
 }
 \arguments{
-\item{locations}{"list": Coordinates of the subplots, each vectored ordered
-c(xmin, xmax, ymin, ymax), or c(xmin, width, ymax, height); see size.}
-
-\item{size}{BINARY: Are the second and fourth values the width and height (TRUE)?
-By default (FALSE), use the four coordinates; see locations.}
-
-\item{plotOrder}{vector: Which order will the subplots be added in? By
-default (i.e. NULL), subplots will be added in order of the vectors
-within the locations list.}
+\item{toKeep}{"string": Which of the four options should be kept?
+* f    functions
+* v    variables/values
+* p    plots
+* c    console
+* e    environment (i.e. functions & variables)}
 }
 \description{
-The default layout is a bit faffy for my liking with the need
-  for setting it as a matrix, and then it is not overly flexible. This
-  function is one of my ways of arranging sub-plots. The locations are
-  based on a 100 x 100 grid (so essentially % of the x- and y-axes); the
-  values range from 1,1 in the top-left to 100,100 in the bottom-right;
-  numbers should therefore not be repeated unless you want plots to
-  overlap. Call this before any plotting is done; it is used in the same
-  way as layout (it is essentially my syntactical wrapper around layout) or
-  par(mar).
-
-  There are two options for how to define the locations: either using all 4
-  coordinates, or using the bottom-left coordinate with the width and
-  height too. See the locations argument for more info. See plotOrder for
-  defining the order that the subplots will be added.
+This function is largely a wrapper around the `layout()`
+  function as a I don't find the logic and syntax intuitive. Locations of
+  the subplots / panels can be arranged using a 100 x 100 grid; the values
+  from 1,1 (top-left) to 100,100 (bottom-right). Grid cell numbers should
+  not be repeated (unless an overlap is required, but take care with that).
+  There are two ways to define the locations; see the "useSize" argument
+  and the examples.
 }
 \examples{
-# These will both produce the same output
-t1 <- list(c(1, 2, 1, 2),
-           c(50, 100, 20, 50),
-           c(88, 94, 89, 100))
-arrange_subplots(t1, size = FALSE) # uses the 4 coordinates
-layout.show(length(t1))
+  # These both produce the same output:
+  t1 <- list(c(1, 2, 1, 2),
+             c(50, 70, 50, 80),
+             c(88, 94, 89, 100))
+  arrange_subplots(t1, useSize = FALSE) # uses the 4 coordinates
+  layout.show(length(t1))
 
-t2 <- list(c(1, 1, 1, 1),
-           c(50, 50, 20, 30),
-           c(88, 6, 89, 11))
-arrange_subplots(t2, size = TRUE) # uses top-left, width & height
-layout.show(length(t2))
+  t2 <- list(c(1, 1, 1, 1),
+             c(50, 50, 20, 30),
+             c(88, 89, 6, 11))
+  arrange_subplots(t2, useSize = TRUE) # uses top-left, width & height
+  layout.show(length(t2))
+
+  # Demonstrating plotOrder; compare with above
+  arrange_subplots(t1, plotOrder = c(3, 1, 2))
+  layout.show(length(t1))
 
 }
