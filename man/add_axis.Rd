@@ -9,10 +9,12 @@ add_axis(
   tickSeq = NULL,
   tickCount = NULL,
   alignMidPoints = FALSE,
+  tickEvery = NULL,
+  tickFirst = NULL,
   tickLength = 0.2,
   tickKula = "#1A1A1AFF",
   labels = NULL,
-  labelEvery = 1,
+  labelEvery = 2,
   labelFirst = 1,
   labelOffset = NULL,
   labelCex = 0.92,
@@ -27,8 +29,8 @@ add_axis(
   nameCex = 1,
   nameOffset = NULL,
   nameSrt = NULL,
-  gridEvery = 1,
-  gridFirst = 1,
+  gridEvery = NULL,
+  gridFirst = NULL,
   gridLwd = 1,
   gridType = 1,
   gridKula = "#E6E6E6AA"
@@ -54,6 +56,13 @@ barchart, the ticks cany sit in the centre of the column, so this would
 be TRUE. See the examples for a visual explanation. If still unsure, call
 `plot()` using `axes = TRUE` and add dummy data to see what aligns and
 what makes sense.}
+
+\item{tickEvery}{numeric: Draw an actual tick mark every how many ticks? If
+null, matches 'labelEvery'; see there for details.}
+
+\item{tickFirst}{numeric: WHich should be the first tick mark shown? Works
+from the bottom on the y-axes and the left on the x-axes. Provide the
+index, not the tick value.}
 
 \item{tickLength}{numeric: How long should the tick mark be? Positive
 values go outwards from the axis. Works using `tcl`, so see par for more
@@ -108,13 +117,14 @@ dot-dashed ; (5) long dashed ; and (6) dash-dotted.}
 \item{nameCex}{What font size should the name text be?}
 
 \item{nameOffset}{numeric: How far from the axis should the name text be?
-Works on the "offset" argument of `text()`.}
+Works as the second value in the vector for the 'adj' argument of
+`text()`; the first is 0.5, to centre the text.}
 
 \item{nameSrt}{What angle should the name text be? Positive values rotate
 the label clockwise (i.e. the top moves right).}
 
 \item{gridEvery}{numeric: Add a gridline across the full plot every how
-many ticks? See the labelEvery argument for details.}
+many ticks? If null, matches 'labelEvery'; see there for details.}
 
 \item{gridFirst}{numeric: Which should be the first gridline shown? Works
 from the bottom on the y-axes and the left on the x-axes. Provide the
@@ -135,7 +145,8 @@ The syntax and logic for axes in base R are not intuitive.
   examples. Everything is based on the concept of "ticks", the little marks
   that come over the edge of the axis to show where the values fall
   exactly; labels and grid lines can be added to align with these ticks (or
-  a subset of them).
+  a subset of them). It is also possible to only draw tickmarks on certain
+  ticks.
 }
 \examples{
   # Most simple implementation

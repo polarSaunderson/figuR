@@ -6,8 +6,8 @@ pre_plot <- function(xlim, ylim,
 
                      xTickSeq        = NULL,     # xSeq = NULL,
                      xTickCount      = NULL,
-                     xTickFirst      = 1,
-                     xTickEvery      = 1,
+                     xTickFirst      = NULL,
+                     xTickEvery      = NULL,
                      xAlignMidPoints = FALSE,
                      xTickLength     = 0.2,
                      xTickKula       = "#1A1A1AFF",
@@ -32,8 +32,8 @@ pre_plot <- function(xlim, ylim,
                      xNameOffset     = NULL,
                      xNameSrt        = NULL,
 
-                     xGridEvery      = 1,
-                     xGridFirst      = 1,
+                     xGridEvery      = NULL,
+                     xGridFirst      = NULL,
                      xGridLwd        = 1,
                      xGridType       = 1,
                      xGridKula       = "#E6E6E6AA",
@@ -41,8 +41,8 @@ pre_plot <- function(xlim, ylim,
 
                      yTickSeq        = NULL,     # YSeq = NULL,
                      yTickCount      = NULL,
-                     yTickFirst      = 1,
-                     yTickEvery      = 1,
+                     yTickFirst      = NULL,
+                     yTickEvery      = NULL,
                      yAlignMidPoints = FALSE,
                      yTickLength     = 0.2,
                      yTickKula       = "#1A1A1AFF",
@@ -67,8 +67,8 @@ pre_plot <- function(xlim, ylim,
                      yNameOffset     = NULL,
                      yNameSrt        = NULL,
 
-                     yGridEvery      = 1,
-                     yGridFirst      = 1,
+                     yGridEvery      = NULL,
+                     yGridFirst      = NULL,
                      yGridLwd        = 1,
                      yGridType       = 1,
                      yGridKula       = "#E6E6E6AA",
@@ -85,7 +85,15 @@ pre_plot <- function(xlim, ylim,
                      annotationText     = "",
                      annotationCex      = 0.9,
 
-                     mar = c(2.75, 2.75, 1.5, 1.25)) {
+                     mar = c(3, 3.25, 1.5, 1.25)) {
+
+  #' Fine-combed control for plots
+  #'
+  #' @description Easily customisable plot areas
+  #' @inheritParams add_axis
+  #' @export
+
+  # Code -----------------------------------------------------------------------
   # Set margins
   graphics::par(mar = mar)
 

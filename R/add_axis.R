@@ -2,12 +2,12 @@ add_axis <- function(axis,
                      tickSeq        = NULL,
                      tickCount      = NULL,
                      alignMidPoints = FALSE,
-                     tickEvery      = 1,
-                     tickFirst      = 1,
+                     tickEvery      = NULL,
+                     tickFirst      = NULL,
                      tickLength     = 0.2,
                      tickKula       = "#1A1A1AFF",
                      labels         = NULL,
-                     labelEvery     = 1,
+                     labelEvery     = 2,
                      labelFirst     = 1,
                      labelOffset    = NULL,
                      labelCex       = 0.92,
@@ -22,8 +22,8 @@ add_axis <- function(axis,
                      nameCex        = 1,
                      nameOffset     = NULL,
                      nameSrt        = NULL,
-                     gridEvery      = 1,
-                     gridFirst      = 1,
+                     gridEvery      = NULL,
+                     gridFirst      = NULL,
                      gridLwd        = 1,
                      gridType       = 1,
                      gridKula       = "#E6E6E6AA") {
@@ -55,8 +55,8 @@ add_axis <- function(axis,
   #'   be TRUE. See the examples for a visual explanation. If still unsure, call
   #'   `plot()` using `axes = TRUE` and add dummy data to see what aligns and
   #'   what makes sense.
-  #' @param tickEvery numeric: Draw an actual tick mark every how many ticks?
-  #'   See the labelEvery argument for details.
+  #' @param tickEvery numeric: Draw an actual tick mark every how many ticks? If
+  #'   null, matches 'labelEvery'; see there for details.
   #' @param tickFirst numeric: WHich should be the first tick mark shown? Works
   #'   from the bottom on the y-axes and the left on the x-axes. Provide the
   #'   index, not the tick value.
@@ -99,9 +99,10 @@ add_axis <- function(axis,
   #' @param nameSrt What angle should the name text be? Positive values rotate
   #'   the label clockwise (i.e. the top moves right).
   #' @param nameOffset numeric: How far from the axis should the name text be?
-  #'   Works on the "offset" argument of `text()`.
+  #'   Works as the second value in the vector for the 'adj' argument of
+  #'   `text()`; the first is 0.5, to centre the text.
   #' @param gridEvery numeric: Add a gridline across the full plot every how
-  #'   many ticks? See the labelEvery argument for details.
+  #'   many ticks? If null, matches 'labelEvery'; see there for details.
   #' @param gridFirst numeric: Which should be the first gridline shown? Works
   #'   from the bottom on the y-axes and the left on the x-axes. Provide the
   #'   index, not the tick value.
@@ -205,13 +206,6 @@ add_axis <- function(axis,
     }
   }
 
-  # Gridlines -----------------------------------------------------------------!
-  if (length(gridEvery) == 1) {
-    gridLocations <- tickLocations[seq(gridFirst, length(tickLocations), gridEvery)]
-  } else {
-    gridLocations <- tickLocations[gridEvery]
-  }
-
   # Labels --------------------------------------------------------------------!
   if (is.null(labels)) labels <- tickLocations
   if (length(labelEvery) == 1) {
@@ -224,6 +218,15 @@ add_axis <- function(axis,
     labelLocations <- tickLocations[labelEvery]
   }
 
+  # Gridlines -----------------------------------------------------------------!
+  gridFirst <- domR::set_if_null(gridFirst, labelFirst)
+  gridEvery <- domR::set_if_null(gridEvery, labelEvery)
+  if (length(gridEvery) == 1) {
+    gridLocations <- tickLocations[seq(gridFirst, length(tickLocations), gridEvery)]
+  } else {
+    gridLocations <- tickLocations[gridEvery]
+  }
+
   # Display --------------------------------------------------------------------
   # Add grid lines
   hGrids <- switch(axis, NA, gridLocations, NA, gridLocations)
@@ -231,7 +234,9 @@ add_axis <- function(axis,
   graphics::abline(v = vGrids, h = hGrids,
                    col = gridKula, lwd = gridLwd, lty = gridType)
 
-  # Add ticks ----!
+  # Add ticks ------------------------------------------------------------------
+  tickFirst <- domR::set_if_null(tickFirst, labelFirst)
+  tickEvery <- domR::set_if_null(tickEvery, labelEvery)
   if (length(tickEvery) == 1) {
     # Option 1: Label every x ticks
     tickMarks <- tickLocations[seq(tickFirst, length(tickLocations), tickEvery)]
@@ -279,16 +284,18 @@ add_axis <- function(axis,
     figMidY <- switch(nameAxis, figBottom, figMidY, figTop,  figMidY)
     nameSrt <- domR::set_if_null(nameSrt, switch(nameAxis, 0, 90, 0, 270))
     nameOffset <- switch(axis,
-                         domR::set_if_null(nameOffset, 1.75),
-                         domR::set_if_null(nameOffset, 2.25),
-                         domR::set_if_null(nameOffset, 1.75),
-                         domR::set_if_null(nameOffset, 2))
+                         domR::set_if_null(nameOffset, 2.4),
+                         domR::set_if_null(nameOffset, -1.7),
+                         domR::set_if_null(nameOffset, 1.5),
+                         domR::set_if_null(nameOffset, 1.75))
+
+    namePos <- switch(axis, 1, 3, 3, 3)
 
     graphics::text(x = figMidX,
                    y = figMidY,
                    labels = name,
                    xpd = TRUE,
-                   pos = axis, offset = nameOffset,
+                   adj = c(0.5, nameOffset),
                    cex = nameCex, srt = nameSrt, col = nameKula)
   }
 
