@@ -7,12 +7,20 @@
 arrange_subplots(locations, useSize = FALSE, plotOrder = NULL)
 }
 \arguments{
-\item{toKeep}{"string": Which of the four options should be kept?
-* f    functions
-* v    variables/values
-* p    plots
-* c    console
-* e    environment (i.e. functions & variables)}
+\item{locations}{"list": A list of vectors, with each vector containing the
+locations defining a single subplot. The locations in each vector can be
+ordered in two ways:
+* Option 1    c(xmin, xmax, ymin, ymax)       # ymin is top, ymax bottom
+* Option 2    c(xmin, ymin, width, height)    # xmin, ymin = top-left}
+
+\item{useSize}{BINARY: Do the locations contain the subplot size? The
+default is FALSE, so the locations need to follow Option 1 and contain
+the four vertices. If TRUE, the locations should be anchored at the
+top-left, and contain a width and height.}
+
+\item{plotOrder}{vector: Which order will the subplots be created in? By
+default (i.e. NULL), subplots are created in the order of the vectors in
+the locations list.}
 }
 \description{
 This function is largely a wrapper around the `layout()`
