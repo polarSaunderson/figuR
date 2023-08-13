@@ -130,10 +130,11 @@ many ticks? If null, matches 'labelEvery'; see there for details.}
 from the bottom on the y-axes and the left on the x-axes. Provide the
 index, not the tick value.}
 
-\item{gridLwd}{numeric: How thick should the gridlines be?}
+\item{gridLwd}{numeric: How thick should the gridlines be? Set this or
+gridType as 0 to suppress any grid lines.}
 
 \item{gridType}{numeric: What line type should the gridlines be? See the
-axisType argument.}
+axisType argument. Set this or gridLwd as 0 to suppress grid lines.}
 
 \item{gridKula}{What colour should the gridlines be?}
 }

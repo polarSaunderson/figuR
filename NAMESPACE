@@ -3,6 +3,7 @@
 export(add_axis)
 export(add_plot_frame)
 export(arrange_subplots)
+export(calc_intervals)
 export(pre_plot)
 export(show_lty)
 export(show_pch)
