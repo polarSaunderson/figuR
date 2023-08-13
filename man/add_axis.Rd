@@ -171,7 +171,7 @@ The syntax and logic for axes in base R are not intuitive.
   add_axis(1, labels = month.abb[1:12], alignMidPoint = FALSE)
 
   # 2) Aligned with midpoints
-  image(matrix(1:144), ncol = 12, byrow = TRUE),
+  image(matrix(c(1:144), ncol = 12, byrow = TRUE),
         xaxs = "i", yaxs = "i", axes = FALSE)
   add_axis(1, labels = month.abb[1:12], alignMidPoint = FALSE)
 

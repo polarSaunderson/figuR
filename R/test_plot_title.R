@@ -15,6 +15,6 @@ test_plot_title <- function(text) {
 
   # Code -----------------------------------------------------------------------
   graphics::par(mar = c(5, 5, 5, 5))
-  plot(1:10,
+  graphics::plot(1:10,
        main = text, xlab = text, ylab = text, sub = text)
 }

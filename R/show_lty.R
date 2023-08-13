@@ -13,6 +13,6 @@ show_lty <- function(lwd = 1, kula = "black"){
   pre_plot(c(0,7), c(0, 7), yGridLwd = 0, xGridLwd = 0, main = "lty Types")
 
   for (ii in 1:6) {
-    abline(h = ii, lty = ii, lwd = lwd, col = kula)
+    graphics::abline(h = ii, lty = ii, lwd = lwd, col = kula)
   }
 }
