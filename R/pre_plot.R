@@ -111,13 +111,9 @@ pre_plot <- function(xlim, ylim,
   # x-axis ---------------------------------------------------------------------
   # Labels
   if (is.null(xLabels)) {
-    if (is.null(xTickSeq)) xTickSeq <- 1                       # default
-    if (xlim[1] - xlim[2] < 0) xTickSeq <-  sqrt(xTickSeq^2)   # ascending
-    if (xlim[1] - xlim[2] > 0) xTickSeq <- -sqrt(xTickSeq^2)   # descending
-    xLabels <- seq(xlim[1], xlim[2], xTickSeq)             # new labels
-    if (sum(xlim %notIn% xLabels) != 0) {
-      stop("Choose a nicer interval! ",
-          xTickSeq, " doesn't go into ", xlim[1], ":", xlim[2])
+    if (is.null(xTickSeq)) {
+      xLabels  <- calc_intervals(xlim[1], xlim[2])
+      xTickSeq <- xLabels[2] - xLabels[1]
     }
   }
 
@@ -155,13 +151,9 @@ pre_plot <- function(xlim, ylim,
   # y-axis ---------------------------------------------------------------------
   # Labels
   if (is.null(yLabels)) {
-    if (is.null(yTickSeq)) yTickSeq <- 1                   # default
-    if (ylim[1] - ylim[2] < 0) yTickSeq <-  sqrt(yTickSeq^2)   # ascending
-    if (ylim[1] - ylim[2] > 0) yTickSeq <- -sqrt(yTickSeq^2)   # descending
-    yLabels <- seq(ylim[1], ylim[2], yTickSeq)             # new labels
-    if (sum(ylim %notIn% yLabels) != 0) {
-      stop("Choose a nicer interval! ",
-          yTickSeq, " doesn't go into ", ylim[1], ":", ylim[2])
+    if (is.null(yTickSeq)) {
+      yLabels  <- calc_intervals(ylim[1], ylim[2])
+      yTickSeq <- yLabels[2] - yLabels[1]
     }
   }
 
