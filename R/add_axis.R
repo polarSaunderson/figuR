@@ -106,9 +106,10 @@ add_axis <- function(axis,
   #' @param gridFirst numeric: Which should be the first gridline shown? Works
   #'   from the bottom on the y-axes and the left on the x-axes. Provide the
   #'   index, not the tick value.
-  #' @param gridLwd numeric: How thick should the gridlines be?
+  #' @param gridLwd numeric: How thick should the gridlines be? Set this or
+  #'   gridType as 0 to suppress any grid lines.
   #' @param gridType numeric: What line type should the gridlines be? See the
-  #'   axisType argument.
+  #'   axisType argument. Set this or gridLwd as 0 to suppress grid lines.
   #' @param gridKula What colour should the gridlines be?
   #'
   #' @examples
@@ -222,17 +223,20 @@ add_axis <- function(axis,
   gridFirst <- domR::set_if_null(gridFirst, labelFirst)
   gridEvery <- domR::set_if_null(gridEvery, labelEvery)
   if (length(gridEvery) == 1) {
-    gridLocations <- tickLocations[seq(gridFirst, length(tickLocations), gridEvery)]
+    gridLocations <- tickLocations[seq(gridFirst, length(tickLocations),
+                                       gridEvery)]
   } else {
     gridLocations <- tickLocations[gridEvery]
   }
 
   # Display --------------------------------------------------------------------
   # Add grid lines
-  hGrids <- switch(axis, NA, gridLocations, NA, gridLocations)
-  vGrids <- switch(axis, gridLocations, NA, gridLocations, NA)
-  graphics::abline(v = vGrids, h = hGrids,
-                   col = gridKula, lwd = gridLwd, lty = gridType)
+  if (gridLwd > 0) {
+    hGrids <- switch(axis, NA, gridLocations, NA, gridLocations)
+    vGrids <- switch(axis, gridLocations, NA, gridLocations, NA)
+    graphics::abline(v = vGrids, h = hGrids,
+                     col = gridKula, lwd = gridLwd, lty = gridType)
+  }
 
   # Add ticks ------------------------------------------------------------------
   tickFirst <- domR::set_if_null(tickFirst, labelFirst)

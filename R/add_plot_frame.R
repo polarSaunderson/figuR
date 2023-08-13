@@ -9,6 +9,7 @@ add_plot_frame <- function(sides = c(1:4), kula = "black") {
 
   # Code -----------------------------------------------------------------------
   for (ii in sides) {
-    add_axis(ii, labels = rep("", 2), tickLength = 0, axisKula = kula)
+    add_axis(ii, labels = rep("", 2), tickLength = 0,
+             axisKula = kula, gridLwd = 0)
   }
 }
