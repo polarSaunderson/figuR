@@ -52,7 +52,7 @@ calc_intervals <- function(x1, x2,
     for (jj in incInt) {
       ij <- 10^ii * jj
       if ((xRange %% ij) == 0) {
-        incInt <- c(incInt, ii)
+        incInt <- c(incInt, ij)
       }
     }
   }
@@ -64,6 +64,7 @@ calc_intervals <- function(x1, x2,
 
   # Check whether the intervals are acceptable, and try alternatives if not
   while (isFALSE(acceptInterval)) {
+    # cat(ii)
     xIntervals <- seq(x2, x1, -incInt[ii])    # create the vector
     xLength <- length(xIntervals)             # length
     # cat("Interval of:", incInt[ii],
@@ -74,7 +75,7 @@ calc_intervals <- function(x1, x2,
       ii <- ii + 1
     } else if (isTRUE(forceZero) & (as.character(0) %notIn% as.character(xIntervals))) {
       # cat("no zero\n")
-      print(xIntervals)
+      # print(xIntervals)
       acceptInterval <- FALSE
       ii <- ii + 1
     } else if (as.character(x1) %notIn% as.character(round(xIntervals, x1Prec)) |
