@@ -112,7 +112,7 @@ pre_plot <- function(xlim, ylim,
   # Labels
   if (is.null(xLabels)) {
     if (is.null(xTickSeq)) {
-      xLabels  <- calc_intervals(xlim[1], xlim[2])
+      xLabels  <- calc_intervals(xlim[1], xlim[2]) |> suppressWarnings()
       xTickSeq <- xLabels[2] - xLabels[1]
     }
   }
@@ -152,7 +152,7 @@ pre_plot <- function(xlim, ylim,
   # Labels
   if (is.null(yLabels)) {
     if (is.null(yTickSeq)) {
-      yLabels  <- calc_intervals(ylim[1], ylim[2])
+      yLabels  <- calc_intervals(ylim[1], ylim[2]) |> suppressWarnings()
       yTickSeq <- yLabels[2] - yLabels[1]
     }
   }

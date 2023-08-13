@@ -1,5 +1,6 @@
-calc_intervals <- function(x1, x2, forceZero = TRUE,
-                           intMin = 4, intMax = 12,
+calc_intervals <- function(x1, x2,
+                           intMin = 5, intMax = 10,
+                           forceZero = NULL,
                            preferError = FALSE) {
   #' Calculate pretty intervals and include the boundaries exactly
   #'
@@ -10,11 +11,12 @@ calc_intervals <- function(x1, x2, forceZero = TRUE,
   #' @param x1 The first value. If less than x2, an ascending vector is
   #'   returned; if greater than x2, a descending vector is returned.
   #' @param x2 The second value.
+  #' @param intMax The maximum number of numbers in the vector. The maximum is
+  #'   100, so that it is not left in an eternal searching loop.
+  #' @param intMin The minimum number of numbers in the vector.
   #' @param forceZero Does zero have to be included in the vectors? By default,
   #'   if x1 and x2 fall either side of 0, this will be TRUE, and if both x1 and
   #'   x2 have the same sign, it will be FALSE. Can be overwritten.
-  #' @param intMax The maximum number of numbers in the vector.
-  #' @param intMin The minimum number of numbers in the vector.
   #' @param preferError If a suitable interval cannot be found with the existing
   #'   'intMax', is it preferable to throw an error (TRUE), or ignore the
   #'   'intMax' argument (FALSE; default)?
@@ -23,6 +25,10 @@ calc_intervals <- function(x1, x2, forceZero = TRUE,
 
   # Code -----------------------------------------------------------------------
   xRange <- x2 - x1
+  x1Prec <- domR::count_decimal_places(x1)
+  x2Prec <- domR::count_decimal_places(x2)
+
+  # Preallocate
   incInt <- c()   # to hold possible intervals
 
   # Should zero be forced into the line?
@@ -51,65 +57,53 @@ calc_intervals <- function(x1, x2, forceZero = TRUE,
     }
   }
 
-
+  # Figuring out the vector interval
   acceptInterval <- FALSE
-  incInt <- unique(incInt) |> sort(TRUE) # descending
-  print(incInt)
-  print_line()
+  incInt <- unique(incInt) |> sort(TRUE); # print(incInt) # descending
   ii <- 1
 
-  # Initial interval guess
-  xIntervals <- seq(x2, x1, -incInt[ii]) # descending
-
-  # Check whether these intervals are acceptable, and try alternatives if not
+  # Check whether the intervals are acceptable, and try alternatives if not
   while (isFALSE(acceptInterval)) {
-    xIntervals <- seq(x2, x1, -incInt[ii])
-    xLength <- length(xIntervals)
-    cat("Interval of:", incInt[ii], "and a length of:", xLength, "\n")
+    xIntervals <- seq(x2, x1, -incInt[ii])    # create the vector
+    xLength <- length(xIntervals)             # length
+    # cat("Interval of:", incInt[ii],
+    # "and a length of:", xLength, "\n")
     if (xLength < intMin | xLength > intMax) {
-      cat("wrong length\n")
+      # cat("wrong length\n")
       acceptInterval <- FALSE
       ii <- ii + 1
-    } else if (isTRUE(forceZero) & (0 %notIn% xIntervals)) {
-      cat("no zero\n")
+    } else if (isTRUE(forceZero) & (as.character(0) %notIn% as.character(xIntervals))) {
+      # cat("no zero\n")
       print(xIntervals)
       acceptInterval <- FALSE
       ii <- ii + 1
-    } else if (sum(c(x1, x2) %notIn% xIntervals) != 0) {
-      cat("misses limits:", xIntervals)
+    } else if (as.character(x1) %notIn% as.character(round(xIntervals, x1Prec)) |
+               as.character(x2) %notIn% as.character(round(xIntervals, x2Prec))) {
+      # uses as.character because numeric are difficult to match
+      # cat("excludes limits:", c(x1, x2), "not in", xIntervals, "\n")
       acceptInterval <- FALSE
       ii <- ii + 1
     } else {
-      cat(". The solution is:", xIntervals)
+      # cat("The solution is:", xIntervals, "\n\n")
       acceptInterval <- TRUE
     }
 
-    print_line()
-    # if (ii > length(incInt)) {stop("No matches found!")}
-    # if (ii > length(incInt)) {
-    #   print("resetting ii")
-    #   ii <- 1
-    #   if (isTRUE(forceZero)) {
-    #     print("abandoning zero requirement")
-    #     forceZero <- FALSE
-    #   } else {
-    #     print("abandoning max interval count")
-    #     intMax <- intMax * 2
-    #   }
-    # }
-
+    # If nothing is found, can we ignore the maxInt count? Or throw an error?
     if (ii > length(incInt)) {
       if (isTRUE(preferError)) {
         stop("No suitable interval found.")
       } else {
-        print_line("@_")
         ii <- 1
-        print("abandoning max interval count & trying again")
+        cat("\n")
+        warning("Ignoring the maximum interval count & trying again\n")
+        # print("abandoning max interval count & trying again")
         intMax <- intMax * 2
+        if (intMax > 100) {preferError <- TRUE}
       }
     }
   }
 
+  # Which direction should the interval go?
   if (x1 < x2) {
     xIntervals <- rev(xIntervals)         # ascending
   }
