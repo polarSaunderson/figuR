@@ -13,7 +13,7 @@ plot_lines(
   lty = 1,
   borderKula = NULL,
   pointKula = "white",
-  cex = 1.5,
+  cex = 1.25,
   pch = 21,
   xpd = TRUE,
   ...
@@ -22,7 +22,11 @@ plot_lines(
 \arguments{
 \item{x}{The x data to plot.}
 
-\item{y}{The y data to plot.}
+\item{y}{The y data to plot. y must either be the same length as x, or a
+multiple of its length; if the latter, the x data is repeated, and the y
+treated as separate data series; 'lineKula' is ignored in such a
+situation and each y series is coloured differently (colours will repeat
+after 7 y "series").}
 
 \item{addPoints}{LOGICAL: Should points be added on top of the lines (TRUE,
 default), or not (FALSE)?}

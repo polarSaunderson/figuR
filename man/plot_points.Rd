@@ -9,8 +9,8 @@ plot_points(
   y,
   borderKula = "#004488FF",
   pointKula = "white",
-  cex = 1.75,
-  pch = 21,
+  cex = 1.25,
+  pch = NULL,
   lwd = 3,
   xpd = TRUE,
   ...
@@ -19,7 +19,11 @@ plot_points(
 \arguments{
 \item{x}{The x data to plot.}
 
-\item{y}{The y data to plot.}
+\item{y}{The y data to plot. y must either be the same length as x, or a
+multiple of its length; if the latter, the x data is repeated, and the y
+treated as separate data series; 'borderKula' is ignored in such a
+situation and each y series is coloured differently (colours will repeat
+after 7 y "series").}
 
 \item{borderKula}{What colour should the boundary of the marker be?}
 

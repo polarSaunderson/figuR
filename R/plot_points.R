@@ -1,7 +1,7 @@
 plot_points <- function(x, y,
                         borderKula = "#004488FF",
                         pointKula  = "white",
-                        cex = 1.75, pch = 21,
+                        cex = 1.25, pch = NULL,
                         lwd = 3, xpd = TRUE, ...) {
   #' Scatterplot of x and y values
   #'
@@ -9,7 +9,11 @@ plot_points <- function(x, y,
   #'   simple scatterplot.
   #'
   #' @param x The x data to plot.
-  #' @param y The y data to plot.
+  #' @param y The y data to plot. y must either be the same length as x, or a
+  #'   multiple of its length; if the latter, the x data is repeated, and the y
+  #'   treated as separate data series; 'borderKula' is ignored in such a
+  #'   situation and each y series is coloured differently (colours will repeat
+  #'   after 7 y "series").
   #' @param borderKula What colour should the boundary of the marker be?
   #' @param pointKula What colour should the centre of the marker be?
   #' @param cex What size should the marker be?
@@ -37,13 +41,45 @@ plot_points <- function(x, y,
   # Use created xxLimits and yyLimits if necessary
   defArgs <- list(yLimits = yyLimits, xLimits = xxLimits) # defaults
   dotArgs[names(defArgs)] <- defArgs
-  do.call(figuR::pre_plot, dotArgs)        # run the function
+
+  # Account for multiple y vectors against a single x
+  if (length(y) != length(x)) {
+    # print("no match!")
+    if (length(y) %% length(x) == 0) {
+      # print("goes into it!!")
+      xRep <- length(y) / length(x)
+    } else {
+      stop("x and y are different lengths!")
+    }
+  }
+
+  # run the function
+  do.call(figuR::pre_plot, dotArgs)
 
   # Add points
-  points(x, y,
-         col = borderKula, bg = pointKula,
-         cex = cex, pch = pch,
-         lwd = lwd, xpd = xpd)
+  if (exists("xRep", inherits = FALSE)) {  # only search inside the function
+    pch <- domR::set_if_null(pch, 16)
+    kk <- 1
+    for (ii in 1:xRep) {
+      iiData <- y[(ii * length(x) - (length(x) - 1)):(ii * length(x))]
+      points(x, iiData,
+             col = kulaQ(kk), bg = pointKula,
+             cex = cex, pch = pch,
+             lwd = lwd, xpd = xpd)
+      kk <- kk + 1
+      if (kk > 7) {kk <- 1}
+    }
+  } else {
+    pch <- domR::set_if_null(pch, 21)
+    points(x, y,
+           col = borderKula, bg = pointKula,
+           cex = cex, pch = pch,
+           lwd = lwd, xpd = xpd)
+    # points(x, y,
+    #        col = "white", bg = pointKula,
+    #        cex = cex / 2.5, pch = 16,
+    #        lwd = lwd, xpd = xpd)
+  }
 }
 
 
