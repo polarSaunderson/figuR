@@ -25,11 +25,19 @@ plot_points <- function(x, y,
   xxLimits <- xyLimits$xxLim
   yyLimits <- xyLimits$yyLim
 
-  # Use created xlim and ylim if necessary
-  defArgs <- list(yLimits = yyLimits, xLimits = xxLimits)
+  # If provided, yLabels and xLabels need special handling BEFORE pre_plot
   dotArgs <- list(...)
-  defArgs[names(dotArgs)] <- dotArgs
-  do.call(figuR::pre_plot, defArgs)   # run the function
+  if ("yLabels" %in% names(dotArgs)) {
+    yyLimits <- range(seq_along(dotArgs$yLabels))
+  }
+  if ("xLabels" %in% names(dotArgs)) {
+    xxLimits <- range(seq_along(dotArgs$xLabels))
+  }
+
+  # Use created xxLimits and yyLimits if necessary
+  defArgs <- list(yLimits = yyLimits, xLimits = xxLimits) # defaults
+  dotArgs[names(defArgs)] <- defArgs
+  do.call(figuR::pre_plot, dotArgs)        # run the function
 
   # Add points
   points(x, y,

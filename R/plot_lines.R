@@ -28,16 +28,24 @@ plot_lines <- function(x, y,
   #' @export
 
   # Code -----------------------------------------------------------------------
-  # Create xxLim & yyLim for xLimits and yLimits (both mandatory for pre_plot)
+  # Create xxLimits & yyLimits for xLimits and yLimits (both mandatory for pre_plot)
   xyLimits <- calc_plot_limits(x, y)
   xxLimits <- xyLimits$xxLim
   yyLimits <- xyLimits$yyLim
 
-  # Use created xxLim and yyLim if necessary
-  defArgs <- list(yLimits = yyLimits, xLimits = xxLimits)
+  # If provided, yLabels and xLabels need special handling BEFORE pre_plot
   dotArgs <- list(...)
-  defArgs[names(dotArgs)] <- dotArgs
-  do.call(figuR::pre_plot, defArgs)   # run the function
+  if ("yLabels" %in% names(dotArgs)) {
+    yyLimits <- range(seq_along(dotArgs$yLabels))
+  }
+  if ("xLabels" %in% names(dotArgs)) {
+    xxLimits <- range(seq_along(dotArgs$xLabels))
+  }
+
+  # Use created xxLimits and yyLimits if necessary
+  defArgs <- list(yLimits = yyLimits, xLimits = xxLimits) # defaults
+  dotArgs[names(defArgs)] <- defArgs
+  do.call(figuR::pre_plot, dotArgs)
 
   # Add points
   lines(x, y, col = lineKula,

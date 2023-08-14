@@ -1,7 +1,7 @@
 Package: figuR
 Type: Package
 Title: Personal Approach to Plotting in R
-Version: 0.0.0.3
+Version: 0.0.0.4
 Authors@R: 
     person("Dominic", "Saunderson",
            role = c("aut", "cre"),

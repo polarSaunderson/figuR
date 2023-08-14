@@ -112,8 +112,10 @@ pre_plot <- function(xLimits, yLimits,
   # Labels
   if (is.null(xLabels)) {
     if (is.null(xTickSeq)) {
-      xLabels  <- calc_intervals(xLimits[1], xLimits[2]) |> suppressWarnings()
-      xTickSeq <- xLabels[2] - xLabels[1]
+      xIntervals <- calc_intervals(xLimits[1], xLimits[2]) |> suppressWarnings()
+      xLabels  <- xIntervals$vIntervals
+      xTickSeq <- xIntervals$vSeq
+      # xTickSeq <- xLabels[2] - xLabels[1]
     }
   }
 
@@ -152,8 +154,11 @@ pre_plot <- function(xLimits, yLimits,
   # Labels
   if (is.null(yLabels)) {
     if (is.null(yTickSeq)) {
-      yLabels  <- calc_intervals(yLimits[1], yLimits[2]) |> suppressWarnings()
-      yTickSeq <- yLabels[2] - yLabels[1]
+      yIntervals <- calc_intervals(yLimits[1], yLimits[2]) |> suppressWarnings()
+      yLabels  <- yIntervals$vIntervals
+      yTickSeq <- yIntervals$vSeq
+      # yLabels  <- calc_intervals(yLimits[1], yLimits[2]) |> suppressWarnings()
+      # yTickSeq <- yLabels[2] - yLabels[1]
     }
   }
 

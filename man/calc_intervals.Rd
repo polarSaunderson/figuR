@@ -5,8 +5,8 @@
 \title{Calculate pretty intervals and include the boundaries exactly}
 \usage{
 calc_intervals(
-  x1,
-  x2,
+  v1,
+  v2,
   intMin = 5,
   intMax = 11,
   forceZero = NULL,
@@ -14,28 +14,30 @@ calc_intervals(
 )
 }
 \arguments{
-\item{x1}{The first value. If less than x2, an ascending vector is
-returned; if greater than x2, a descending vector is returned. If a
-vector of length two is used, the second value will be used as x2. If a
+\item{v1}{The first value. If less than v2, an ascending vector is
+returned; if greater than v2, a descending vector is returned. If a
+vector of length two is used, the second value will be used as v2. If a
 vector of length > 2 is used, a range will be calculated and an ascending
 vector returned.}
 
-\item{x2}{The second value.}
+\item{v2}{The second value.}
 
 \item{intMin}{The minimum number of numbers in the vector.}
 
 \item{intMax}{The maximum number of numbers in the vector; if 'preferError'
-is FALSE, this argument is overruled (essentially reset to 100) and
+is FALSE, this argument is reset to 100; overruled (essentially reset to 100) and
 becomes more of a guideline for deeming whether the initial intervals are
 suitable.}
 
 \item{forceZero}{Does zero have to be included in the vectors? By default,
-if x1 and x2 fall either side of 0, this will be TRUE; if both x1 and x2
+if v1 and v2 fall either side of 0, this will be TRUE; if both v1 and v2
 have the same sign, it will be FALSE. These defaults can be overwritten.}
 
 \item{preferError}{If a suitable interval cannot be found with the existing
 'intMax', is it preferable to throw an error (TRUE), or ignore the
-'intMax' argument (FALSE; default)?}
+'intMax' argument (FALSE; default) and reset it to 100? If FALSE, and it
+has still not converged, `pretty` limits will be returned, which are not
+guaranteed to include the exact boundaries.}
 }
 \description{
 This function is my attempt at creating pretty intervals. It
