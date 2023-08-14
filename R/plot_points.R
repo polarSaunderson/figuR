@@ -1,22 +1,32 @@
 plot_points <- function(x, y,
-                        borderKula = "red",
+                        borderKula = "#004488FF",
                         pointKula  = "white",
-                        cex = 1, pch = 21,
-                        lwd = 2, xpd = TRUE, ...) {
+                        cex = 1.75, pch = 21,
+                        lwd = 3, xpd = TRUE, ...) {
+  #' Scatterplot of x and y values
+  #'
+  #' @description This is the figuR equivalent of `plot(x, y)` to create a
+  #'   simple scatterplot.
+  #'
+  #' @param x The x data to plot.
+  #' @param y The y data to plot.
+  #' @param borderKula What colour should the boundary of the marker be?
+  #' @param pointKula What colour should the centre of the marker be?
+  #' @param cex What size should the marker be?
+  #' @param pch What style should the marker be?
+  #' @param lwd How thick should the marker boundary be?
+  #' @param xpd Can the markers be plotted off the chart?
+  #'
+  #' @export
 
-
-  # Create xlim and ylim - these are the only things that pre_plot must have
-  xInfo <- kulaR::get_kulaInfo(x)
-  xxlim <- c(xInfo$zRange[1] - xInfo$zIncrements,
-             xInfo$zRange[2] + xInfo$zIncrements)
-  # xxlim <- xInfo$zRange
-
-  yInfo <- kulaR::get_kulaInfo(y)
-  yylim <- c(yInfo$zRange[1] - yInfo$zIncrements,
-             yInfo$zRange[2] + yInfo$zIncrements)
+  # Code -----------------------------------------------------------------------
+  # Create xxLim & yyLim for xLimits and yLimits (both mandatory for pre_plot)
+  xyLimits <- calc_plot_limits(x, y)
+  xxLimits <- xyLimits$xxLim
+  yyLimits <- xyLimits$yyLim
 
   # Use created xlim and ylim if necessary
-  defArgs <- list(ylim = yylim, xlim = xxlim)
+  defArgs <- list(yLimits = yyLimits, xLimits = xxLimits)
   dotArgs <- list(...)
   defArgs[names(dotArgs)] <- dotArgs
   do.call(figuR::pre_plot, defArgs)   # run the function

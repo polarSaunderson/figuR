@@ -4,7 +4,7 @@
 \alias{show_lty}
 \title{Plot each of the lty line styles}
 \usage{
-show_lty(lwd = 1, kula = "black")
+show_lty(lwd = 2, kula = "black")
 }
 \arguments{
 \item{lwd}{numeric: How thick should the lines be?}

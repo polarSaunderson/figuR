@@ -1,4 +1,4 @@
-pre_plot <- function(xlim, ylim,
+pre_plot <- function(xLimits, yLimits,
 
                      main = "",
                      mainOffset = 0.25,
@@ -98,9 +98,9 @@ pre_plot <- function(xlim, ylim,
   graphics::par(mar = mar)
 
   # Blank plot area
-  graphics::plot(xlim, ylim,
+  graphics::plot(xLimits, yLimits,
                  type = "n",
-                 xlim = xlim, ylim = ylim,
+                 xlim = xLimits, ylim = yLimits,
                  xaxs = "i", yaxs = "i",
                  axes = FALSE,
                  main = NA,
@@ -112,7 +112,7 @@ pre_plot <- function(xlim, ylim,
   # Labels
   if (is.null(xLabels)) {
     if (is.null(xTickSeq)) {
-      xLabels  <- calc_intervals(xlim[1], xlim[2]) |> suppressWarnings()
+      xLabels  <- calc_intervals(xLimits[1], xLimits[2]) |> suppressWarnings()
       xTickSeq <- xLabels[2] - xLabels[1]
     }
   }
@@ -152,7 +152,7 @@ pre_plot <- function(xlim, ylim,
   # Labels
   if (is.null(yLabels)) {
     if (is.null(yTickSeq)) {
-      yLabels  <- calc_intervals(ylim[1], ylim[2]) |> suppressWarnings()
+      yLabels  <- calc_intervals(yLimits[1], yLimits[2]) |> suppressWarnings()
       yTickSeq <- yLabels[2] - yLabels[1]
     }
   }

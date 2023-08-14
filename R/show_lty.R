@@ -1,4 +1,4 @@
-show_lty <- function(lwd = 1, kula = "black"){
+show_lty <- function(lwd = 2, kula = "black"){
   #' Plot each of the lty line styles
   #'
   #' @description Who can ever remember the lty codes for the different line

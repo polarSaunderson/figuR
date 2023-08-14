@@ -8,25 +8,30 @@ calc_intervals(
   x1,
   x2,
   intMin = 5,
-  intMax = 10,
+  intMax = 11,
   forceZero = NULL,
   preferError = FALSE
 )
 }
 \arguments{
 \item{x1}{The first value. If less than x2, an ascending vector is
-returned; if greater than x2, a descending vector is returned.}
+returned; if greater than x2, a descending vector is returned. If a
+vector of length two is used, the second value will be used as x2. If a
+vector of length > 2 is used, a range will be calculated and an ascending
+vector returned.}
 
 \item{x2}{The second value.}
 
 \item{intMin}{The minimum number of numbers in the vector.}
 
-\item{intMax}{The maximum number of numbers in the vector. The maximum is
-100, so that it is not left in an eternal searching loop.}
+\item{intMax}{The maximum number of numbers in the vector; if 'preferError'
+is FALSE, this argument is overruled (essentially reset to 100) and
+becomes more of a guideline for deeming whether the initial intervals are
+suitable.}
 
 \item{forceZero}{Does zero have to be included in the vectors? By default,
-if x1 and x2 fall either side of 0, this will be TRUE, and if both x1 and
-x2 have the same sign, it will be FALSE. Can be overwritten.}
+if x1 and x2 fall either side of 0, this will be TRUE; if both x1 and x2
+have the same sign, it will be FALSE. These defaults can be overwritten.}
 
 \item{preferError}{If a suitable interval cannot be found with the existing
 'intMax', is it preferable to throw an error (TRUE), or ignore the
@@ -35,5 +40,7 @@ x2 have the same sign, it will be FALSE. Can be overwritten.}
 \description{
 This function is my attempt at creating pretty intervals. It
   differs from `pretty()` because it forces the min and max values to be
-  included in the returned vector. It still needs further testing.
+  included in the returned vector. It also allows many more values to be
+  considered pretty (i.e. not just multiples of 1, 2, 5, but also values
+  such as e.g. 0.25, 0.75, and 4). It still needs further testing.
 }

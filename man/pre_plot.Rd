@@ -5,8 +5,8 @@
 \title{Fine-combed control for plots}
 \usage{
 pre_plot(
-  xlim,
-  ylim,
+  xLimits,
+  yLimits,
   main = "",
   mainOffset = 0.25,
   mainCex = 1.25,

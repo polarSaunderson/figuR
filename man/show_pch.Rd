@@ -4,9 +4,16 @@
 \alias{show_pch}
 \title{Plot each of the pch symbols}
 \usage{
-show_pch()
+show_pch(cex = 2, kula = "red")
+}
+\arguments{
+\item{cex}{What size should the markers be?}
+
+\item{kula}{What colour should the markers be?}
 }
 \description{
 Who can ever remember the pch codes for the different point
-  markers? This function creates a plot showing each of them in order.
+  markers? This function creates a plot showing each of them in order. (An
+  alternative is just to run ?pch and scroll down, but that's less fun than
+  creating a new function!)
 }
