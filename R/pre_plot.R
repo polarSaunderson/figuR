@@ -14,7 +14,7 @@ pre_plot <- function(xLimits, yLimits,
 
                      xAxisSide       = 1,
                      xLabels         = NULL,
-                     xLabelEvery     = 2,
+                     xLabelEvery     = NULL,
                      xLabelFirst     = 1,
                      xLabelOffset    = NULL,
                      xLabelCex       = 0.92,
@@ -49,7 +49,7 @@ pre_plot <- function(xLimits, yLimits,
 
                      yAxisSide       = 2,
                      yLabels         = NULL,
-                     yLabelEvery     = 1,
+                     yLabelEvery     = NULL,
                      yLabelFirst     = 1,
                      yLabelOffset    = NULL,
                      yLabelCex       = 0.92,
@@ -118,6 +118,8 @@ pre_plot <- function(xLimits, yLimits,
     }
   }
 
+  xLabelEvery <- domR::set_if_null(xLabelEvery, ceiling(length(xLabels) / 8))
+
   # Add to the plot
   xTickLocations <- add_axis(axis           = xAxisSide,
                              tickSeq        = xTickSeq,
@@ -158,6 +160,8 @@ pre_plot <- function(xLimits, yLimits,
       yTickSeq <- yIntervals$vSeq
     }
   }
+
+  yLabelEvery <- domR::set_if_null(yLabelEvery, ceiling(length(yLabels) / 12))
 
   # Add to the plot
   yTickLocations <- add_axis(axis           = yAxisSide,
