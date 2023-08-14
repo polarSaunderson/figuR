@@ -1,4 +1,4 @@
-show_pch <- function(cex = 2, kula = "red"){
+show_pch <- function(cex = 2, kula = "#004488FF"){
   #' Plot each of the pch symbols
   #'
   #' @description Who can ever remember the pch codes for the different point
@@ -15,5 +15,5 @@ show_pch <- function(cex = 2, kula = "red"){
   plot_points(1:25, 1:25,
               pch = 1:25,
               main = "pch codes",
-              cex = cex, col = kula)
+              cex = cex, borderKula = kula)
 }

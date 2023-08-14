@@ -4,7 +4,7 @@
 \alias{show_pch}
 \title{Plot each of the pch symbols}
 \usage{
-show_pch(cex = 2, kula = "red")
+show_pch(cex = 2, kula = "#004488FF")
 }
 \arguments{
 \item{cex}{What size should the markers be?}

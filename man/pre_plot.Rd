@@ -9,7 +9,7 @@ pre_plot(
   yLimits,
   main = "",
   mainOffset = 0.25,
-  mainCex = 1.25,
+  mainCex = 1.1,
   xTickSeq = NULL,
   xTickCount = NULL,
   xTickFirst = NULL,
@@ -19,11 +19,11 @@ pre_plot(
   xTickKula = "#1A1A1AFF",
   xAxisSide = 1,
   xLabels = NULL,
-  xLabelEvery = 1,
+  xLabelEvery = 2,
   xLabelFirst = 1,
   xLabelOffset = NULL,
   xLabelCex = 0.92,
-  xLabelSrt = NULL,
+  xLabelSrt = -45,
   xLabelKula = "#4D4D4DFF",
   xAxisLwd = 1,
   xAxisType = 1,
@@ -76,7 +76,7 @@ pre_plot(
   annotationLocation = c(0, 0),
   annotationText = "",
   annotationCex = 0.9,
-  mar = c(3, 3.25, 1.5, 1.25)
+  mar = c(2.5, 3.5, 2.5, 1.5)
 )
 }
 \description{

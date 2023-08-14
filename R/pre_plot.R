@@ -2,7 +2,7 @@ pre_plot <- function(xLimits, yLimits,
 
                      main = "",
                      mainOffset = 0.25,
-                     mainCex = 1.25,
+                     mainCex = 1.1,
 
                      xTickSeq        = NULL,     # xSeq = NULL,
                      xTickCount      = NULL,
@@ -14,11 +14,11 @@ pre_plot <- function(xLimits, yLimits,
 
                      xAxisSide       = 1,
                      xLabels         = NULL,
-                     xLabelEvery     = 1,
+                     xLabelEvery     = 2,
                      xLabelFirst     = 1,
                      xLabelOffset    = NULL,
                      xLabelCex       = 0.92,
-                     xLabelSrt       = NULL,
+                     xLabelSrt       = -45,
                      xLabelKula      = "#4D4D4DFF",
 
                      xAxisLwd        = 1,
@@ -85,7 +85,7 @@ pre_plot <- function(xLimits, yLimits,
                      annotationText     = "",
                      annotationCex      = 0.9,
 
-                     mar = c(3, 3.25, 1.5, 1.25)) {
+                     mar = c(2.5, 3.5, 2.5, 1.5)) {
 
   #' Fine-combed control for plots
   #'

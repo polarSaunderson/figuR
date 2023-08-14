@@ -265,7 +265,7 @@ add_axis <- function(axis,
                             figTop, labelLocations)
 
   if (!is.null(labelSrt)) labelSrt <- labelSrt * -1 # rotate clockwise
-  labelOffset <- domR::set_if_null(labelOffset, 0.75)
+  labelOffset <- domR::set_if_null(labelOffset, 0.9)
 
   graphics::text(x = labelLocationsX,
                  y = labelLocationsY,
@@ -289,7 +289,7 @@ add_axis <- function(axis,
     nameSrt <- domR::set_if_null(nameSrt, switch(nameAxis, 0, 90, 0, 270))
     nameOffset <- switch(axis,
                          domR::set_if_null(nameOffset, 2.4),
-                         domR::set_if_null(nameOffset, -1.7),
+                         domR::set_if_null(nameOffset, -2.2),
                          domR::set_if_null(nameOffset, 1.5),
                          domR::set_if_null(nameOffset, 1.75))
 
