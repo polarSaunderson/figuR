@@ -51,3 +51,23 @@ default), or not (FALSE)?}
 This is the figuR equivalent of `plot(x, y, type = "l")` to
   create a simple line chart.
 }
+\examples{
+  # Data
+  x  <- c(1:6)
+  y1 <- c(1:6)
+  y2 <- c(7:12)
+  y3 <- c(8:3)
+
+  # Plots
+  plot_lines(x = x, y = y1)
+  plot_lines(x = x, y = c(y1, y2, y3))
+  plot_lines(x = x, y = y2, xName = "newXname")
+
+  # We can also just provide labels if they're unique and correctly ordered
+  plot_lines(x = month.abb, y = c(y1, y3), xLabelEvery = 1)
+
+  # But beware here - the following won't plot what you'd hope for
+  plot_lines(x = c("Jan", "Feb", "Mar", "Jan", "Feb", "Mar"),
+             y = 1:6, xLabelEvery = 1)
+
+}

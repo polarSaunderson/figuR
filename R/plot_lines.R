@@ -29,6 +29,25 @@ plot_lines <- function(x, y,
   #' @param pch What style should the marker be?
   #' @param xpd Can the markers be plotted off the chart?
   #'
+  #' @examples
+  #'   # Data
+  #'   x  <- c(1:6)
+  #'   y1 <- c(1:6)
+  #'   y2 <- c(7:12)
+  #'   y3 <- c(8:3)
+  #'
+  #'   # Plots
+  #'   plot_lines(x = x, y = y1)
+  #'   plot_lines(x = x, y = c(y1, y2, y3))
+  #'   plot_lines(x = x, y = y2, xName = "newXname")
+  #'
+  #'   # We can also just provide labels if they're unique and correctly ordered
+  #'   plot_lines(x = month.abb, y = c(y1, y3), xLabelEvery = 1)
+  #'
+  #'   # But beware here - the following won't plot what you'd hope for
+  #'   plot_lines(x = c("Jan", "Feb", "Mar", "Jan", "Feb", "Mar"),
+  #'              y = 1:6, xLabelEvery = 1)
+  #'
   #' @export
 
   # Code -----------------------------------------------------------------------
@@ -37,8 +56,21 @@ plot_lines <- function(x, y,
   xxLimits <- xyLimits$xxLim
   yyLimits <- xyLimits$yyLim
 
-  # If provided, yLabels and xLabels need special handling BEFORE pre_plot
+  # Get any additional arguments fed in for pre_plot
   dotArgs <- list(...)
+
+  # If axis labels are provided in place of x or y, enumerate them
+  if (isTRUE(xyLimits$xLabels)) {
+    dotArgs$xLabels <- x         # add as labels for pre_plot
+    x <- seq_along(x)            # but must plot against numbers
+  }
+  if (isTRUE(xyLimits$yLabels)) {
+    dotArgs$yLabels <- y         # add as labels for pre_plot
+    y <- seq_along(y)            # but must plot against numbers
+  }
+
+  # If yLabels and xLabels exist, they need special handling BEFORE pre_plot
+  # because labels take precedence when determining the axis limits
   if ("yLabels" %in% names(dotArgs)) {
     yyLimits <- range(seq_along(dotArgs$yLabels))
   }
@@ -46,16 +78,38 @@ plot_lines <- function(x, y,
     xxLimits <- range(seq_along(dotArgs$xLabels))
   }
 
-  # Use created xxLimits and yyLimits if necessary
+  # Only use created xxLimits and yyLimits if necessary
+  # They are considered the defaults, but will be overwritten if xLimits or
+  # yLimits are provided in as ... arguments
   defArgs <- list(yLimits = yyLimits, xLimits = xxLimits) # defaults
-  dotArgs[names(defArgs)] <- defArgs
+  defArgs[names(dotArgs)] <- dotArgs                      # overwrite defaults
+                                                          # adds any others too
+
+  # dotArgs[names(defArgs)] <- defArgs                      # overwrite defaults
+  # print_line("def1", 7)
+  # print(defArgs)
+
+  # xtrArgs <- dotArgs
+  # xtrArgs[names(defArgs)] <- NULL
+  # feedArgs <- c(defArgs, xtrArgs)
+
+  # print_line("def2", 8)
+  # print(defArgs)
+  # print_line("dot", 10)
+  # print(dotArgs)
+  # print_line("xtr", 10)
+  # print(xtrArgs)
+  # print_line("feed", 8)
+  # print(feedArgs)
 
   # Plot the data, but account for multiple y vectors against a single x
   if (length(y) != length(x)) {
-    # print("no match!")
+    # print("x and y length don't match!")
     if (length(y) %% length(x) == 0) {
-      # print("goes into it!!")
-      do.call(figuR::pre_plot, dotArgs)
+      # print("but y is an exact multiple of x!")
+      do.call(figuR::pre_plot, defArgs)
+
+      # We'll loop through the multiples and plot each as a separate y series
       xRep <- length(y) / length(x)
       kk <- 1
       for (ii in 1:xRep) {
@@ -73,13 +127,13 @@ plot_lines <- function(x, y,
         if (kk > 7) {kk <- 1}
       }
     } else {
-      stop("x and y are different lengths!")
+      stop("x and y are different lengths! And y is not an exact multiple of x!")
     }
   } else {
     # Plot normally if x and y lengths match
-    do.call(figuR::pre_plot, dotArgs)
+    do.call(figuR::pre_plot, defArgs)
 
-    # Add lines (and points?)
+    # Add lines (and points if necessary)
     lines(x, y, col = lineKula,
           lwd = lwd, xpd = xpd)
     if (isTRUE(addPoints)) {
@@ -114,3 +168,308 @@ plot_lines <- function(x, y,
 #   iiData <- yy[(ii * length(xx) - (length(xx) - 1)):(ii * length(xx))]
 #   lines(xx, iiData, col = kulaQ3(ii), lwd = 4)
 # }
+#'   #' @param y The y data to plot. y must either be the same length as x, or a
+#'   #'   multiple of its length; if the latter, the x data is repeated, and the y
+#'   #'   treated as separate data series; 'lineKula' is ignored in such a
+#'   #'   situation and each y series is coloured differently (colours will repeat
+#'   #'   after 7 y "series").
+#'   #' @param addPoints LOGICAL: Should points be added on top of the lines (TRUE,
+#'   #'   default), or not (FALSE)?
+#'   #' @param lineKula What colour should the line be?
+#'   #' @param lwd How thick should the line be?
+#'   #' @param lty What type (solid, dotted, dashed, etc.) should the line be?
+#'   #' @param borderKula What colour should the boundary of the marker be?
+#'   #' @param pointKula What colour should the centre of the marker be?
+#'   #' @param cex What size should the marker be?
+#'   #' @param pch What style should the marker be?
+#'   #' @param xpd Can the markers be plotted off the chart?
+#'   #'
+#'   #' @export
+#'
+#'   # Code -----------------------------------------------------------------------
+#'   # Create xxLimits & yyLimits for xLimits and yLimits (both mandatory for pre_plot)
+#'   xyLimits <- calc_plot_limits(x, y)
+#'   xxLimits <- xyLimits$xxLim
+#'   yyLimits <- xyLimits$yyLim
+#'
+#'   # If provided, yLabels and xLabels need special handling BEFORE pre_plot
+#'   dotArgs <- list(...)
+#'   if ("yLabels" %in% names(dotArgs)) {
+#'     yyLimits <- range(seq_along(dotArgs$yLabels))
+#'   }
+#'   if ("xLabels" %in% names(dotArgs)) {
+#'     xxLimits <- range(seq_along(dotArgs$xLabels))
+#'   }
+#'
+#'   # Use created xxLimits and yyLimits if necessary
+#'   defArgs <- list(yLimits = yyLimits, xLimits = xxLimits) # defaults
+#'   dotArgs[names(defArgs)] <- defArgs
+#'
+#'   # Plot the data, but account for multiple y vectors against a single x
+#'   if (length(y) != length(x)) {
+#'     # print("no match!")
+#'     if (length(y) %% length(x) == 0) {
+#'       # print("goes into it!!")
+#'       do.call(figuR::pre_plot, dotArgs)
+#'       xRep <- length(y) / length(x)
+#'       kk <- 1
+#'       for (ii in 1:xRep) {
+#'         iiData <- y[(ii * length(x) - (length(x) - 1)):(ii * length(x))]
+#'         lines(x, iiData, col = kulaQ(kk), lwd = 4)
+#'         if (isTRUE(addPoints)) {
+#'           borderKula <- domR::set_if_null(borderKula, kulaQ(kk))
+#'           points(x, iiData,
+#'                  col = borderKula, bg = pointKula,
+#'                  cex = cex, pch = pch,
+#'                  xpd = xpd)
+#'         }
+#'         # There are only so many colours in the world!
+#'         kk <- kk + 1
+#'         if (kk > 7) {kk <- 1}
+#'       }
+#'     } else {
+#'       stop("x and y are different lengths!")
+#'     }
+#'   } else {
+#'     # Plot normally if x and y lengths match
+#'     do.call(figuR::pre_plot, dotArgs)
+#'
+#'     # Add lines (and points?)
+#'     lines(x, y, col = lineKula,
+#'           lwd = lwd, xpd = xpd)
+#'     if (isTRUE(addPoints)) {
+#'       borderKula <- domR::set_if_null(borderKula, lineKula)
+#'       points(x, y,
+#'             col = borderKula, bg = pointKula,
+#'             cex = cex, pch = pch,
+#'             xpd = xpd)
+#'     }
+#'   }
+#' }
+#'
+#'
+# xx <- xData
+# yy <- c(racmoData$senf[, 6],
+#     racmoData$latf[, 6],
+#     racmoData$senf[, 6] + racmoData$latf[, 6])
+#
+# alternative with easier data
+#
+# xx <- 1:10
+# yy <- c(1:10, 11:20, 21:30)  # or yy <- c(1:30)
+# plot_lines(xx, yy) # this fails
+#
+# Split the data if it matches length wise
+# if (length(yy) %% length(xx) == 0) {
+#   xRep <- length(yy) / length(xx)
+# }
+#
+# plot_points(rep(xx, xRep), yy, cex = 0) # just for the plot background really
+# for (ii in 1:xRep) {
+#   iiData <- yy[(ii * length(xx) - (length(xx) - 1)):(ii * length(xx))]
+#   lines(xx, iiData, col = kulaQ3(ii), lwd = 4)
+#' # }
+#'   #' @param y The y data to plot. y must either be the same length as x, or a
+#'   #'   multiple of its length; if the latter, the x data is repeated, and the y
+#'   #'   treated as separate data series; 'lineKula' is ignored in such a
+#'   #'   situation and each y series is coloured differently (colours will repeat
+#'   #'   after 7 y "series").
+#'   #' @param addPoints LOGICAL: Should points be added on top of the lines (TRUE,
+#'   #'   default), or not (FALSE)?
+#'   #' @param lineKula What colour should the line be?
+#'   #' @param lwd How thick should the line be?
+#'   #' @param lty What type (solid, dotted, dashed, etc.) should the line be?
+#'   #' @param borderKula What colour should the boundary of the marker be?
+#'   #' @param pointKula What colour should the centre of the marker be?
+#'   #' @param cex What size should the marker be?
+#'   #' @param pch What style should the marker be?
+#'   #' @param xpd Can the markers be plotted off the chart?
+#'   #'
+#'   #' @export
+#'
+#'   # Code -----------------------------------------------------------------------
+#'   # Create xxLimits & yyLimits for xLimits and yLimits (both mandatory for pre_plot)
+#'   xyLimits <- calc_plot_limits(x, y)
+#'   print("plot_lines 37")
+#'   print(xyLimits)
+#'   xxLimits <- xyLimits$xxLim
+#'   yyLimits <- xyLimits$yyLim
+#'
+#'   # If provided, yLabels and xLabels need special handling BEFORE pre_plot
+#'   dotArgs <- list(...)
+#'   if ("yLabels" %in% names(dotArgs)) {
+#'     yyLimits <- range(seq_along(dotArgs$yLabels))
+#'   }
+#'   if ("xLabels" %in% names(dotArgs)) {
+#'     xxLimits <- range(seq_along(dotArgs$xLabels))
+#'   }
+#'
+#'   # Use created xxLimits and yyLimits if necessary
+#'   defArgs <- list(yLimits = yyLimits, xLimits = xxLimits) # defaults
+#'   dotArgs[names(defArgs)] <- defArgs
+#'
+#'   # Plot the data, but account for multiple y vectors against a single x
+#'   if (length(y) != length(x)) {
+#'     # print("no match!")
+#'     if (length(y) %% length(x) == 0) {
+#'       # print("goes into it!!")
+#'       do.call(figuR::pre_plot, dotArgs)
+#'       xRep <- length(y) / length(x)
+#'       kk <- 1
+#'       for (ii in 1:xRep) {
+#'         iiData <- y[(ii * length(x) - (length(x) - 1)):(ii * length(x))]
+#'         lines(x, iiData, col = kulaQ(kk), lwd = 4)
+#'         if (isTRUE(addPoints)) {
+#'           borderKula <- domR::set_if_null(borderKula, kulaQ(kk))
+#'           points(x, iiData,
+#'                  col = borderKula, bg = pointKula,
+#'                  cex = cex, pch = pch,
+#'                  xpd = xpd)
+#'         }
+#'         # There are only so many colours in the world!
+#'         kk <- kk + 1
+#'         if (kk > 7) {kk <- 1}
+#'       }
+#'     } else {
+#'       stop("x and y are different lengths!")
+#'     }
+#'   } else {
+#'     # Plot normally if x and y lengths match
+#'     do.call(figuR::pre_plot, dotArgs)
+#'
+#'     # Add lines (and points?)
+#'     lines(x, y, col = lineKula,
+#'           lwd = lwd, xpd = xpd)
+#'     if (isTRUE(addPoints)) {
+#'       borderKula <- domR::set_if_null(borderKula, lineKula)
+#'       points(x, y,
+#'             col = borderKula, bg = pointKula,
+#'             cex = cex, pch = pch,
+#'             xpd = xpd)
+#'     }
+#'   }
+#' }
+#'
+#'
+#' # xx <- xData
+#' # yy <- c(racmoData$senf[, 6],
+#' #     racmoData$latf[, 6],
+#' #     racmoData$senf[, 6] + racmoData$latf[, 6])
+#' #
+#' # alternative with easier data
+#' #
+#' # xx <- 1:10
+#' # yy <- c(1:10, 11:20, 21:30)  # or yy <- c(1:30)
+#' # plot_lines(xx, yy) # this fails
+#' #
+#' # Split the data if it matches length wise
+#' # if (length(yy) %% length(xx) == 0) {
+#' #   xRep <- length(yy) / length(xx)
+#' # }
+#' #
+#' # plot_points(rep(xx, xRep), yy, cex = 0) # just for the plot background really
+#' # for (ii in 1:xRep) {
+#' #   iiData <- yy[(ii * length(xx) - (length(xx) - 1)):(ii * length(xx))]
+#' #   lines(xx, iiData, col = kulaQ3(ii), lwd = 4)
+#' # }
+#' #'   #' @param y The y data to plot. y must either be the same length as x, or a
+#' #'   #'   multiple of its length; if the latter, the x data is repeated, and the y
+#' #'   #'   treated as separate data series; 'lineKula' is ignored in such a
+#' #'   #'   situation and each y series is coloured differently (colours will repeat
+#' #'   #'   after 7 y "series").
+#' #'   #' @param addPoints LOGICAL: Should points be added on top of the lines (TRUE,
+#' #'   #'   default), or not (FALSE)?
+#' #'   #' @param lineKula What colour should the line be?
+#' #'   #' @param lwd How thick should the line be?
+#' #'   #' @param lty What type (solid, dotted, dashed, etc.) should the line be?
+#' #'   #' @param borderKula What colour should the boundary of the marker be?
+#' #'   #' @param pointKula What colour should the centre of the marker be?
+#' #'   #' @param cex What size should the marker be?
+#' #'   #' @param pch What style should the marker be?
+#' #'   #' @param xpd Can the markers be plotted off the chart?
+#' #'   #'
+#' #'   #' @export
+#' #'
+#' #'   # Code -----------------------------------------------------------------------
+#' #'   # Create xxLimits & yyLimits for xLimits and yLimits (both mandatory for pre_plot)
+#' #'   xyLimits <- calc_plot_limits(x, y)
+#' #'   xxLimits <- xyLimits$xxLim
+#' #'   yyLimits <- xyLimits$yyLim
+#' #'
+#' #'   # If provided, yLabels and xLabels need special handling BEFORE pre_plot
+#' #'   dotArgs <- list(...)
+#' #'   if ("yLabels" %in% names(dotArgs)) {
+#' #'     yyLimits <- range(seq_along(dotArgs$yLabels))
+#' #'   }
+#' #'   if ("xLabels" %in% names(dotArgs)) {
+#' #'     xxLimits <- range(seq_along(dotArgs$xLabels))
+#' #'   }
+#' #'
+#' #'   # Use created xxLimits and yyLimits if necessary
+#' #'   defArgs <- list(yLimits = yyLimits, xLimits = xxLimits) # defaults
+#' #'   dotArgs[names(defArgs)] <- defArgs
+#' #'
+#' #'   # Plot the data, but account for multiple y vectors against a single x
+#' #'   if (length(y) != length(x)) {
+#' #'     # print("no match!")
+#' #'     if (length(y) %% length(x) == 0) {
+#' #'       # print("goes into it!!")
+#' #'       do.call(figuR::pre_plot, dotArgs)
+#' #'       xRep <- length(y) / length(x)
+#' #'       kk <- 1
+#' #'       for (ii in 1:xRep) {
+#' #'         iiData <- y[(ii * length(x) - (length(x) - 1)):(ii * length(x))]
+#' #'         lines(x, iiData, col = kulaQ(kk), lwd = 4)
+#' #'         if (isTRUE(addPoints)) {
+#' #'           borderKula <- domR::set_if_null(borderKula, kulaQ(kk))
+#' #'           points(x, iiData,
+#' #'                  col = borderKula, bg = pointKula,
+#' #'                  cex = cex, pch = pch,
+#' #'                  xpd = xpd)
+#' #'         }
+#' #'         # There are only so many colours in the world!
+#' #'         kk <- kk + 1
+#' #'         if (kk > 7) {kk <- 1}
+#' #'       }
+#' #'     } else {
+#' #'       stop("x and y are different lengths!")
+#' #'     }
+#' #'   } else {
+#' #'     # Plot normally if x and y lengths match
+#' #'     do.call(figuR::pre_plot, dotArgs)
+#' #'
+#' #'     # Add lines (and points?)
+#' #'     lines(x, y, col = lineKula,
+#' #'           lwd = lwd, xpd = xpd)
+#' #'     if (isTRUE(addPoints)) {
+#' #'       borderKula <- domR::set_if_null(borderKula, lineKula)
+#' #'       points(x, y,
+#' #'             col = borderKula, bg = pointKula,
+#' #'             cex = cex, pch = pch,
+#' #'             xpd = xpd)
+#' #'     }
+#' #'   }
+#' #' }
+#' #'
+#' #'
+#' # xx <- xData
+#' # yy <- c(racmoData$senf[, 6],
+#' #     racmoData$latf[, 6],
+#' #     racmoData$senf[, 6] + racmoData$latf[, 6])
+#' #
+#' # alternative with easier data
+#' #
+#' # xx <- 1:10
+#' # yy <- c(1:10, 11:20, 21:30)  # or yy <- c(1:30)
+#' # plot_lines(xx, yy) # this fails
+#' #
+#' # Split the data if it matches length wise
+#' # if (length(yy) %% length(xx) == 0) {
+#' #   xRep <- length(yy) / length(xx)
+#' # }
+#' #
+#' # plot_points(rep(xx, xRep), yy, cex = 0) # just for the plot background really
+#' # for (ii in 1:xRep) {
+#' #   iiData <- yy[(ii * length(xx) - (length(xx) - 1)):(ii * length(xx))]
+#' #   lines(xx, iiData, col = kulaQ3(ii), lwd = 4)
+#' # }

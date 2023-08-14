@@ -12,8 +12,13 @@ calc_plot_limits <- function(x, y) {
   # Code -----------------------------------------------------------------------
   # Create xlim and ylim - these are the only things that pre_plot must have
   xxInt <- calc_intervals(x) |> suppressWarnings()
+  if (isTRUE(xxInt$vLabels)) {
+    x <- seq_along(x)
+  }
+
   xxLim <- xxInt$vRange
-  if (isFALSE(xxInt$usesPretty)) {
+  # cat("\nxxLim:", xxLim, "\n")
+  if (isFALSE(xxInt$vPretty)) {
     xxOff <- xxInt$vSeq
     xxLim <- c(xxLim[1] - xxOff,
                xxLim[2] + xxOff)
@@ -27,9 +32,15 @@ calc_plot_limits <- function(x, y) {
   }
 
   yyInt <- calc_intervals(y) |> suppressWarnings()
+  if (isTRUE(yyInt$vLabels)) {
+    # print("yLabels")
+    y <- seq_along(y)
+  }
   yyLim <- yyInt$vRange
-  if (isFALSE(yyInt$usesPretty)) {
+  # cat("\nyyLim:", yyLim, "\n")
+  if (isFALSE(yyInt$vPretty)) {
     yyOff <- yyInt$vSeq
+    # cat("\nyyOff:", yyOff, "\n")
     yyLim <- c(yyLim[1] - yyOff,
                yyLim[2] + yyOff)
     if (min(y) > 0 & yyLim[1] < 0) {
@@ -42,5 +53,7 @@ calc_plot_limits <- function(x, y) {
   }
 
   return(list("xxLim" = xxLim,
-              "yyLim" = yyLim))
+              "yyLim" = yyLim,
+              "xLabels" = xxInt$vLabels,
+              "yLabels" = yyInt$vLabels))
 }

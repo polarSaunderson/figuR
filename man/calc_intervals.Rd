@@ -25,9 +25,9 @@ vector returned.}
 \item{intMin}{The minimum number of numbers in the vector.}
 
 \item{intMax}{The maximum number of numbers in the vector; if 'preferError'
-is FALSE, this argument is reset to 100; overruled (essentially reset to 100) and
-becomes more of a guideline for deeming whether the initial intervals are
-suitable.}
+is FALSE, this argument is reset to 100; overruled (essentially reset to
+100) and becomes more of a guideline for deeming whether the initial
+intervals are suitable.}
 
 \item{forceZero}{Does zero have to be included in the vectors? By default,
 if v1 and v2 fall either side of 0, this will be TRUE; if both v1 and v2
