@@ -207,6 +207,15 @@ add_axis <- function(axis,
     }
   }
 
+  # Account for overzealous decimal points - think about this more!
+  tickDP <- domR::count_decimal_places(tickLocations)
+  tickDP[tickDP > 10] <- NA
+  tickPrec <- median(tickDP, na.rm = TRUE) |> ceiling()
+  tickLocations <- round(tickLocations, tickPrec + 1)
+  # cat("\n add axis line 215\n")
+  # print(tickLocations)
+  # print_line("@")
+
   # Labels --------------------------------------------------------------------!
   if (is.null(labels)) labels <- tickLocations
   if (length(labelEvery) == 1) {
@@ -219,6 +228,18 @@ add_axis <- function(axis,
     labelLocations <- tickLocations[labelEvery]
   }
 
+  # cat("\n add_axis line_231\n")
+  # print(labels)
+  # print_line(".")
+
+  # print(tickLocations)
+  # tt <- count_decimal_places(tickLocations)
+  # print(tt)
+  # print_line("0")
+  # t1 <- median(tt) |> floor()
+  # print(t1)
+  # print_line(".  ")
+
   # Gridlines -----------------------------------------------------------------!
   gridFirst <- domR::set_if_null(gridFirst, labelFirst)
   gridEvery <- domR::set_if_null(gridEvery, labelEvery)
@@ -228,6 +249,7 @@ add_axis <- function(axis,
   } else {
     gridLocations <- tickLocations[gridEvery]
   }
+
 
   # Display --------------------------------------------------------------------
   # Add grid lines
