@@ -1,5 +1,5 @@
 calc_intervals <- function(v1, v2,
-                           intMin = 5, intMax = 11,
+                           intMin = 5, intIdeal = 12, intMax = 100,
                            forceZero = NULL,
                            preferError = FALSE) {
   #' Calculate pretty intervals and include the boundaries exactly
@@ -17,18 +17,28 @@ calc_intervals <- function(v1, v2,
   #'   vector returned.
   #' @param v2 The second value.
   #' @param intMin The minimum number of numbers in the vector.
-  #' @param intMax The maximum number of numbers in the vector; if 'preferError'
-  #'   is FALSE, this argument is reset to 100; overruled (essentially reset to
-  #'   100) and becomes more of a guideline for deeming whether the initial
-  #'   intervals are suitable.
+  #' @param intIdeal The ideal upper limit on the number of numbers in the
+  #'   vector.
+  #' @param intMax The absolute maximum number of numbers in the vector. By
+  #'   default, vector lengths between 'intMin' and 'intIdeal' are searched for;
+  #'   if 'preferError' is FALSE, this argument resets the upper limit (i.e.
+  #'   ranges from 'intMin' to 'intMax'). If a suitable vector is still not
+  #'   found in that case, the function defaults to using `pretty()`.
+  #'
+  #'   Think about the use case; 100 intervals could be too many intervals for a
+  #'   colour bar, but on an axis, the labels may only need to be drawn every so
+  #'   many ticks, and 100 makes no discernible difference. (However, consider
+  #'   that this is the equivalent to an alternative larger interval that was
+  #'   not selected here because the numbers were too "weird").
   #' @param forceZero Does zero have to be included in the vectors? By default,
   #'   if v1 and v2 fall either side of 0, this will be TRUE; if both v1 and v2
   #'   have the same sign, it will be FALSE. These defaults can be overwritten.
   #' @param preferError If a suitable interval cannot be found with the existing
-  #'   'intMax', is it preferable to throw an error (TRUE), or ignore the
-  #'   'intMax' argument (FALSE; default) and reset it to 100? If FALSE, and it
-  #'   has still not converged, `pretty` limits will be returned, which are not
-  #'   guaranteed to include the exact boundaries.
+  #'   'intMin' to 'intIdeal', is it preferable to throw an error (TRUE), or
+  #'   reset intIdeal to match the 'intMax' argument  (FALSE; default)? If
+  #'   FALSE, and a suitable vector has still not been found converged, `pretty`
+  #'   limits will be returned, which are not guaranteed to include the exact
+  #'   boundaries.
   #'
   #' @export
 
@@ -59,10 +69,14 @@ calc_intervals <- function(v1, v2,
   vvPrec <- max(v1Prec, v2Prec)
   # cat("\n vv:", vv)
 
+  # cat("\n calc_intervals_72\n")
+  # print(vv)
+  # print_line("+")
+
   # Don't try to be too precise - `seq()` cannot handle such small intervals
   if (vvPrec > 5) {
     warning("Data is too precise! Ignoring exact bounds & using pretty\n")
-    vVector    <- pretty(vVector)
+    vVector    <- pretty(vv)
     usesPretty <- TRUE
   }
 
@@ -91,37 +105,47 @@ calc_intervals <- function(v1, v2,
     incIntervals <- c()          # preallocate to hold exact intervals
     for (ii in checkIntervals) {
       iiRemains <- (vvDiff %% ii) |> round(vvPrec + 1)
-      # cat(ii, ", remainder:", iiRemains, "\n")
+    # cat(ii, ", remainder:", iiRemains, "\n")
       if (iiRemains == 0) {
         incIntervals <- c(incIntervals, ii)
       }
     }
-    if (length(incIntervals) == 0) {
-      warning("No exact intervals found! Ignoring exact bounds & using pretty\n")
-      vVector    <- pretty(vVector)
-      usesPretty <- TRUE
-    }
-
+    # cat("\n incIntervals:", incIntervals, "\n")
+    # print_line("]")
     # Check intervals ----
-    # Do the intervals meet the criteria? (forceZero and vector length) ----
-    acceptInterval <- FALSE
+    acceptInterval <- FALSE # will use a while soon
     ii <- 1
 
+    # Don't bother searching if no intervals are even a possibility
+    if (length(incIntervals) < 1) {
+      warning("No exact intervals found! Ignoring exact bounds & using pretty\n")
+      vVector    <- pretty(vv)
+      usesPretty <- TRUE
+      acceptInterval <- TRUE
+    }
+
+    # Do the intervals meet the criteria? (forceZero and vector length) ----
     # Use while because we need to update based on the outcome
     while(isFALSE(acceptInterval)) {
       # Create the vector
-      vVector <- seq(v1, v2, incIntervals[ii])
+      vVector <- seq(v1, v2, incIntervals[ii]) |> round(vvPrec + 1)
       vLength <- length(vVector)
-      vString <- round(vVector, vvPrec + 1) |> as.character()
+      vString <- as.character(vVector)
+      # vString <- round(vVector, vvPrec + 1) |> as.character()
       # cat("Interval of:", incIntervals[ii], "= vector length:", vLength, "\n")
-
       # Is the vector suitable?
-      if (vLength < intMin | vLength > intMax) {
+      if (vLength < intMin | vLength > intIdeal) {
         # cat("Wrong length.\n")
         ii <- ii + 1
         acceptInterval <- FALSE
       } else if ( (isTRUE(forceZero)) & (as.character(0) %notIn% vString) ) {
         # cat("No zero.\n")
+        ii <- ii + 1
+        acceptInterval <- FALSE
+      } else if ( (as.character(v1) %notIn% vString) |
+                  (as.character(v2) %notIn% vString) ) {
+        # seq doesn't have to hit the limits, so check if the values do
+        # cat("Misses the limits!", vv, "not in", vString, "\n")
         ii <- ii + 1
         acceptInterval <- FALSE
       } else {
@@ -136,14 +160,17 @@ calc_intervals <- function(v1, v2,
           stop("No exact interval is found!")
         } else {
           ii <- 1 # reset and go again!
-          if (intMax == 100) {
+          if (intIdeal == intMax) {
             warning("Using pretty instead!\n")
+            # cat("\nGoing pretty instead! \n")
             vVector        <- pretty(vv)
             usesPretty     <- TRUE
             acceptInterval <- TRUE
           } else {
-            warning("Ignoring maxInt & trying again!\n")
-            intMax <- 100
+            warning("Ignoring intIdeal & trying again!\n")
+            # cat("\nIgnoring intIdeal & trying again! \n\n")
+            intIdeal <- intMax
+            acceptInterval <- FALSE
           }
         }
       }
@@ -153,10 +180,6 @@ calc_intervals <- function(v1, v2,
   # Which direction should the interval go? ----
   if (v1 > v2) {
       vVector <- rev(vVector)  # change from descending to ascending
-    # if (isTRUE(usesPretty)) {
-      # vVector <- vVector       # calculated with pretty, so already ascending
-    # } else {
-    # }
   }
 
   return(list("vVector"  = vVector,
@@ -165,288 +188,3 @@ calc_intervals <- function(v1, v2,
               "vSeq"     = vVector[2] - vVector[1],
               "vPretty"  = usesPretty))
 }
-
-#   # OLD OLD OLD
-#
-#   # Basic Prep
-#   vPair  <- c(v1, v2)
-#   # cat("\n Min & max:", vPair)
-#   vRange <- v2 - v1
-#   v1Prec <- domR::count_decimal_places(v1)
-#   v2Prec <- domR::count_decimal_places(v2)
-#   vvPrec <- max(v2Prec, v1Prec)
-#
-#   # Don't try to be too precise, `seq()` cannot handle too small intervals
-#   if (vvPrec > 5) {
-#     warning("Data is too precise! Ignoring exact boundaries & using pretty()\n")
-#     # print("going pretty")
-#     vIntervals <- pretty(vPair)
-#     usesPretty <- TRUE
-#   } else {
-#     # Should zero be forced into the line?
-#     if ((v1 < 0 & v2 > 0) | c(v1 > 0 & v2 < 0)) {
-#       forceZero <- set_if_null(forceZero, TRUE)      # if diverging, use zero
-#       # cat("\nforcing Zero\n")
-#     } else {
-#       forceZero <- set_if_null(forceZero, FALSE)     # if same sign, no zero
-#       # cat("\n not forcing Zero\n")
-#     }
-#
-#     # Preallocate for possible intervals
-#     incInt <- c()
-#
-#     # Which values should be checked as possible intervals?
-#     vCheckBase <- c(1:10, 12, 14, 15, 18, 25, 75)
-#     vChecks <- c()
-#     for (ii in c((-xPrec:-1), (1:xPrec))) {
-#       iiChecks <- vCheckBase * (10^ii)
-#       vChecks  <- c(vChecks, iiChecks)
-#     }
-#     vChecks <- sort(vChecks, TRUE)
-#
-#     for (ii in vChecks) {
-#       iiV1Remains <- (v1 %% ii)
-#
-#       if ()
-#     }
-#
-#         # Check basic divisions
-#     # vChecks <- c(0.05, 0.1, 0.2, 0.25, 0.4, 0.5, 0.75, 1:25)
-#     # vChecks <- c(c(1, 1.25, 1.5, 1.75, 2, 2.25, 2.5,
-#                    # 3, 4, 5, 6, 7, 7.5, 8, 9) * (10^(-(max(vvPrec) + 1))),
-#                    # 1:25)
-#
-#
-#
-#     # print(vChecks)
-#     for (ii in vChecks) {
-#       # print_line()
-#       # cat("_v1:_", v1, "\n")
-#       # cat("ii: ", ii, "remainder:", round((v1 %% ii), v1Prec))
-#       if (round((v1 %% ii), v1Prec) == 0) {
-#         # cat("\n_v2:_", v2, "\n")
-#         # cat("\n", ii, "remainder:", round((v2 %% ii), v2Prec))
-#         if (round((v2 %% ii), v2Prec) == 0) {
-#           # cat("\n in here:", ii)
-#           incInt <- c(incInt, ii)
-#         }
-#       }
-#     }
-#
-#     if (length(incInt) == 0) {
-#       warning("Nothing goes into these numbers precisely; using pretty intervals\n")
-#       vIntervals <- pretty(vPair)
-#       usesPretty <- TRUE
-#     } else {
-#
-#     # Check scale
-#     for (ii in c(-vvPrec:-1, 1:vvPrec)) {
-#       for (jj in incInt) {
-#         ij <- 10^ii * jj
-#         if ((vRange %% ij) == 0) {
-#           incInt <- c(incInt, ij)
-#         }
-#       }
-#     }
-#
-#
-#     # Figuring out the vector interval
-#     acceptInterval <- FALSE
-#     incInt <- unique(incInt) |> sort(TRUE)#; print(incInt) # descending
-#     ii <- 1
-#
-#     # print_line("(3)")
-#     # print(incInt)
-#     # print_line("(3)")
-#
-#     # Check whether the intervals are acceptable, and try alternatives if not
-#     while (isFALSE(acceptInterval)) {
-#       # cat("\n", ii)
-#       vIntervals <- seq(max(vPair), min(vPair), -incInt[ii])  # create the vector
-#       vLength <- length(vIntervals)                           # length
-#       # cat("Interval of:", incInt[ii],
-#           # "and a length of:", vLength, "\n")
-#       if (vLength < intMin | vLength > intMax) {
-#         # cat("wrong length\n")
-#         acceptInterval <- FALSE
-#         ii <- ii + 1
-#       } else if (isTRUE(forceZero) & (as.character(0) %notIn% as.character(vIntervals))) {
-#         # cat("no zero\n")
-#         # print(vIntervals)
-#         acceptInterval <- FALSE
-#         ii <- ii + 1
-#       } else if (as.character(v1) %notIn% as.character(round(vIntervals, v1Prec)) |
-#                  as.character(v2) %notIn% as.character(round(vIntervals, v2Prec))) {
-#   #      uses as.character because numeric are difficult to match
-#         # cat("excludes limits:", c(v1, v2), "not in", vIntervals, "\n")
-#         acceptInterval <- FALSE
-#         ii <- ii + 1
-#       } else {
-#         # cat("The solution is:", vIntervals, "\n\n")
-#         usesPretty <- FALSE
-#         acceptInterval <- TRUE
-#       }
-#
-#       # If nothing is found, can we ignore the maxInt count? Or throw an error?
-#       if (ii > length(incInt)) {
-#         if (isTRUE(preferError)) {
-#           stop("No suitable interval found.")
-#         } else {
-#           ii <- 1
-#           cat("\n")
-#           warning("Ignoring the maximum interval count & trying again\n")
-#           # print("abandoning max interval count & trying again")
-#           intMax <- intMax * 2
-#           if (intMax > 100) {
-#             warning("Ignoring the exact boundaries & using pretty intervals\n")
-#             vIntervals <- pretty(vPair)
-#             usesPretty <- TRUE
-#             acceptInterval <- TRUE
-#           }
-#         }
-#       }
-#     }
-#     }
-# }
-#
-#   # Which direction should the interval go?
-#   if (v1 < v2) {
-#     if (intMax > 100) {
-#       vIntervals <- vIntervals    # calculated with pretty, so already ascending
-#     } else {
-#       vIntervals <- rev(vIntervals) # change from descending to ascending
-#     }
-#   }
-#
-#   return(list("vIntervals" = vIntervals,
-#               "vRange"     = range(vIntervals),
-#               "vLabels"    = vLabels,
-#               "vSeq"       = vIntervals[2] - vIntervals[1],
-#               "usesPretty" = usesPretty))
-# }
-#
-#
-#   # # Calculate vectors
-#   # xIntervals <- seq(x2, x1, -max(incInt)) # descending
-#   #
-#   #   # but we don't only want 2 numbers, or tonnes of numbers
-#   #   tt <- 0
-#   #   while (length(xIntervals) < intMin | length(xIntervals) > intMax) {
-#   #     tt <- tt + 1
-#   #     if (tt > 20 | tt > length(incInt) + 1) {
-#   #       stop("Can't converge, try a different vector length.")
-#   #     }
-#   #     xIntervals <- seq(x2, x1, -incInt[length(incInt) - tt]) # descending
-#   #   }
-#
-#
-#
-#
-#
-# ## SCRAPS ##
-# # ## ```{r}
-# # devtools::load_all("../../domiProjects/Coding/domR_Packages/figuR/")
-# #
-# # # print(calc_intervals(2, 5))
-# # # print_line()
-# # # print(calc_intervals(-2.5, 5.5, forceZero = FALSE))
-# # # print_line()
-# # print(calc_intervals(-2.5, 5.5, intMax = 20))
-# # ```
-# #
-# # ```{r}
-# # length(seq(-2.5, 5.5, 0.5))
-# # ```
-# #
-# #
-# #
-# # ```{r}
-# # tt <- 1
-# # while (tt < 5) {
-# #   tt <- tt + 1
-# #   if (tt == 4) {
-# #     next
-# #   }
-# #   print(tt)
-# # }
-# # ```
-# #
-# # ```{r}
-# # x1 <- 20
-# # x2 <- 170
-# #
-# # xx <- c(x1, x2)
-# # xD <- x2 - x1
-# #
-# # incX <- c()
-# # for (ii in 1:10) {
-# #   # cat(ii, xD %% ii, "\n")
-# #   if ((xD %% ii) == 0) {
-# #     incX <- c(incX, ii)
-# #   }
-# # }
-# #
-# # for (ii in 1:5) {
-# #   for (jj in incX) {
-# #     ij <- 10^ii * jj
-# #     # cat(ij, xD %% ij, "\n")
-# #     if ((xD %% ij) == 0) {
-# #       incX <- c(incX, ij)
-# #     }
-# #   }
-# # }
-# #
-# #
-# # print_line("@")
-# # max(incX)
-# # print(incX)
-# #
-# # seq(x1, x2, max(incX))
-# #
-# # ```
-# #
-# # ```{r}
-# # seq(-3, 10, 2)
-# # ```
-# #
-# #
-# # ```{r}
-# # x1 <- 2
-# # x2 <- 17
-# #
-# # xx <- c(x1, x2)
-# #
-# # xP <- pretty(xx)
-# #
-# #   print(xP)
-# # if (sum(xx %notIn% xP) != 0) {
-# #   print("pretty doesn't include limits")
-# # }else {
-# #   stop()
-# # }
-# #
-# # xP <- pretty(xx, n = length(xP) * 2)
-# #   print(xP)
-# # if (sum(xx %notIn% xP) != 0) {
-# #   print("pretty doesn't include limits")
-# # } else {
-# #   stop()
-# # }
-# #
-# # xP <- pretty(xx, n = length(xP) * 2.25, )
-# #   print(xP)
-# # if (sum(xx %notIn% xP) != 0) {
-# #   print("pretty doesn't include limits")
-# # }else {
-# #   stop()
-# # }
-# #
-# # ```
-# #
-# #
-# # ```{r}
-# # xx
-# # pretty(xx, bound = TRUE)
-# # ```
-# #
-# #

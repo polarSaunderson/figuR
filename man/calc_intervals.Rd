@@ -8,7 +8,8 @@ calc_intervals(
   v1,
   v2,
   intMin = 5,
-  intMax = 11,
+  intIdeal = 12,
+  intMax = 100,
   forceZero = NULL,
   preferError = FALSE
 )
@@ -24,20 +25,31 @@ vector returned.}
 
 \item{intMin}{The minimum number of numbers in the vector.}
 
-\item{intMax}{The maximum number of numbers in the vector; if 'preferError'
-is FALSE, this argument is reset to 100; overruled (essentially reset to
-100) and becomes more of a guideline for deeming whether the initial
-intervals are suitable.}
+\item{intIdeal}{The ideal upper limit on the number of numbers in the
+vector.}
+
+\item{intMax}{The absolute maximum number of numbers in the vector. By
+  default, vector lengths between 'intMin' and 'intIdeal' are searched for;
+  if 'preferError' is FALSE, this argument resets the upper limit (i.e.
+  ranges from 'intMin' to 'intMax'). If a suitable vector is still not
+  found in that case, the function defaults to using `pretty()`.
+
+  Think about the use case; 100 intervals could be too many intervals for a
+  colour bar, but on an axis, the labels may only need to be drawn every so
+  many ticks, and 100 makes no discernible difference. (However, consider
+  that this is the equivalent to an alternative larger interval that was
+  not selected here because the numbers were too "weird").}
 
 \item{forceZero}{Does zero have to be included in the vectors? By default,
 if v1 and v2 fall either side of 0, this will be TRUE; if both v1 and v2
 have the same sign, it will be FALSE. These defaults can be overwritten.}
 
 \item{preferError}{If a suitable interval cannot be found with the existing
-'intMax', is it preferable to throw an error (TRUE), or ignore the
-'intMax' argument (FALSE; default) and reset it to 100? If FALSE, and it
-has still not converged, `pretty` limits will be returned, which are not
-guaranteed to include the exact boundaries.}
+'intMin' to 'intIdeal', is it preferable to throw an error (TRUE), or
+reset intIdeal to match the 'intMax' argument  (FALSE; default)? If
+FALSE, and a suitable vector has still not been found converged, `pretty`
+limits will be returned, which are not guaranteed to include the exact
+boundaries.}
 }
 \description{
 This function is my attempt at creating pretty intervals. It
