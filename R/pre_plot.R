@@ -112,7 +112,8 @@ pre_plot <- function(xLimits, yLimits,
   # Labels
   if (is.null(xLabels)) {
     if (is.null(xTickSeq)) {
-      xIntervals <- calc_intervals(xLimits[1], xLimits[2]) |> suppressWarnings()
+      xIntervals <- calc_intervals(xLimits[1], xLimits[2], intMax = 256,
+                                   preferError = TRUE) |> suppressWarnings()
       xLabels  <- xIntervals$vVector
       xTickSeq <- xIntervals$vSeq
     }
@@ -153,13 +154,20 @@ pre_plot <- function(xLimits, yLimits,
 
   # y-axis ---------------------------------------------------------------------
   # Labels
+  # cat("\n pre_plot line_157")
+  # print(yLabels)
+  # print_line(".")
   if (is.null(yLabels)) {
     if (is.null(yTickSeq)) {
-      yIntervals <- calc_intervals(yLimits[1], yLimits[2]) |> suppressWarnings()
+      yIntervals <- calc_intervals(yLimits[1], yLimits[2], intMax = 256,
+                                   preferError = TRUE) |> suppressWarnings()
       yLabels  <- yIntervals$vVector
       yTickSeq <- yIntervals$vSeq
     }
   }
+  # cat("\n pre_plot line_168")
+  # print(yLabels)
+  # print_line(":")
 
   yLabelEvery <- domR::set_if_null(yLabelEvery, ceiling(length(yLabels) / 12))
 
