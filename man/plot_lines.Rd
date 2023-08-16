@@ -11,6 +11,7 @@ plot_lines(
   lineKula = "#004488FF",
   lwd = 4,
   lty = 1,
+  expandLimits = TRUE,
   borderKula = NULL,
   pointKula = "white",
   cex = 1.25,
@@ -37,6 +38,9 @@ default), or not (FALSE)?}
 
 \item{lty}{What type (solid, dotted, dashed, etc.) should the line be?}
 
+\item{expandLimits}{LOGICAL: Should `pretty()` limits be used (TRUE), or
+exact min & max values (FALSE)? Fed directly into `calc_plot_limits()`.}
+
 \item{borderKula}{What colour should the boundary of the marker be?}
 
 \item{pointKula}{What colour should the centre of the marker be?}
@@ -46,6 +50,8 @@ default), or not (FALSE)?}
 \item{pch}{What style should the marker be?}
 
 \item{xpd}{Can the markers be plotted off the chart?}
+
+\item{...}{Any arguments that can be fed into `pre_plot()`.}
 }
 \description{
 This is the figuR equivalent of `plot(x, y, type = "l")` to

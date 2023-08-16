@@ -4,14 +4,18 @@
 \alias{calc_plot_limits}
 \title{Calculate axis limits automatically}
 \usage{
-calc_plot_limits(x, y)
+calc_plot_limits(x, y, expandLimits = TRUE)
 }
 \arguments{
 \item{x}{The x values that will be plotted.}
 
 \item{y}{The y values that will be plotted.}
+
+\item{expandLimits}{Should the axes fit exactly to the data (FALSE), or
+should they be expanded slightly (TRUE)? The former will produce a point
+on each axis, the latter will use `pretty()` to widen the axes.}
 }
 \description{
-This function is used in `plot_lines` and `plot_points`,
-  if the x and y limits are are not provided.
+This function is used in `plot_lines` and `plot_points`, if
+  the x and y limits are are not provided.
 }
