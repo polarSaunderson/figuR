@@ -29,10 +29,12 @@ vector returned.}
 vector.}
 
 \item{intMax}{The absolute maximum number of numbers in the vector. By
-  default, vector lengths between 'intMin' and 'intIdeal' are searched for;
-  if 'preferError' is FALSE, this argument resets the upper limit (i.e.
-  ranges from 'intMin' to 'intMax'). If a suitable vector is still not
-  found in that case, the function defaults to using `pretty()`.
+  default, vector lengths between 'intMin' and 'intIdeal' are searched for.
+  If this argument is not NULL, the function will try again, after
+  resetting 'intIdeal' to 'intMax' (i.e. it ranges from 'intMin' to
+  'intMax'). If a suitable vector is still not found, 'preferError'
+  determines what happens. If 'intMax' is NULL, 'intHigh' is not reset, and
+  the function jumps straight the 'preferError' behaviour.
 
   Think about the use case; 100 intervals could be too many intervals for a
   colour bar, but on an axis, the labels may only need to be drawn every so
@@ -44,12 +46,11 @@ vector.}
 if v1 and v2 fall either side of 0, this will be TRUE; if both v1 and v2
 have the same sign, it will be FALSE. These defaults can be overwritten.}
 
-\item{preferError}{If a suitable interval cannot be found with the existing
-'intMin' to 'intIdeal', is it preferable to throw an error (TRUE), or
-reset intIdeal to match the 'intMax' argument  (FALSE; default)? If
-FALSE, and a suitable vector has still not been found converged, `pretty`
-limits will be returned, which are not guaranteed to include the exact
-boundaries.}
+\item{preferError}{If a suitable interval cannot be found using the
+'intMin' and 'intIdeal' or 'intMax' arguments (see 'intMax'), is it
+preferable to throw an error (TRUE), or default to using 'pretty()'? In
+some cases `pretty` is not acceptable because it doesn't guarantee that
+the exact limits are not included.-}
 }
 \description{
 This function is my attempt at creating pretty intervals. It

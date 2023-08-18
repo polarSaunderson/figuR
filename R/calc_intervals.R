@@ -20,10 +20,12 @@ calc_intervals <- function(v1, v2,
   #' @param intIdeal The ideal upper limit on the number of numbers in the
   #'   vector.
   #' @param intMax The absolute maximum number of numbers in the vector. By
-  #'   default, vector lengths between 'intMin' and 'intIdeal' are searched for;
-  #'   if 'preferError' is FALSE, this argument resets the upper limit (i.e.
-  #'   ranges from 'intMin' to 'intMax'). If a suitable vector is still not
-  #'   found in that case, the function defaults to using `pretty()`.
+  #'   default, vector lengths between 'intMin' and 'intIdeal' are searched for.
+  #'   If this argument is not NULL, the function will try again, after
+  #'   resetting 'intIdeal' to 'intMax' (i.e. it ranges from 'intMin' to
+  #'   'intMax'). If a suitable vector is still not found, 'preferError'
+  #'   determines what happens. If 'intMax' is NULL, 'intHigh' is not reset, and
+  #'   the function jumps straight the 'preferError' behaviour.
   #'
   #'   Think about the use case; 100 intervals could be too many intervals for a
   #'   colour bar, but on an axis, the labels may only need to be drawn every so
@@ -33,12 +35,11 @@ calc_intervals <- function(v1, v2,
   #' @param forceZero Does zero have to be included in the vectors? By default,
   #'   if v1 and v2 fall either side of 0, this will be TRUE; if both v1 and v2
   #'   have the same sign, it will be FALSE. These defaults can be overwritten.
-  #' @param preferError If a suitable interval cannot be found with the existing
-  #'   'intMin' to 'intIdeal', is it preferable to throw an error (TRUE), or
-  #'   reset intIdeal to match the 'intMax' argument  (FALSE; default)? If
-  #'   FALSE, and a suitable vector has still not been found converged, `pretty`
-  #'   limits will be returned, which are not guaranteed to include the exact
-  #'   boundaries.
+  #' @param preferError If a suitable interval cannot be found using the
+  #'   'intMin' and 'intIdeal' or 'intMax' arguments (see 'intMax'), is it
+  #'   preferable to throw an error (TRUE), or default to using 'pretty()'? In
+  #'   some cases `pretty` is not acceptable because it doesn't guarantee that
+  #'   the exact limits are not included.-
   #'
   #' @export
 
@@ -67,27 +68,28 @@ calc_intervals <- function(v1, v2,
   v1Prec <- domR::count_decimal_places(v1)
   v2Prec <- domR::count_decimal_places(v2)
   vvPrec <- max(v1Prec, v2Prec)
-  # cat("\n vv:", vv)
-
-  # cat("\n calc_intervals_72\n")
-  # print(vv)
-  # print_line("+")
+  # cat2(vv)
+  # cat2(vvPrec)
 
   # Don't try to be too precise - `seq()` cannot handle such small intervals
   if (vvPrec > 5) {
-    warning("Data is too precise! Ignoring exact bounds & using pretty\n")
-    vVector    <- pretty(vv)
-    usesPretty <- TRUE
+    if (isTRUE(preferError)) {
+      stop("Values are too precise to calculate exact intervals!")
+    } else {
+      warning("Values are too precise! Ignoring exact bounds & using `pretty()`\n")
+      vVector    <- pretty(vv)
+      usesPretty <- TRUE
+    }
   }
 
   # The actual meat of this function
   if (vvPrec <= 5) {
     # Should zero be forced into the vector? ----
     if ((v1 < 0 & v2 > 0) | c(v1 > 0 & v2 < 0)) {
-      forceZero <- set_if_null(forceZero, TRUE)      # if diverging, use zero
+      forceZero <- domR::set_if_null(forceZero, TRUE)      # if diverging, use zero
       # cat("\nforcing Zero\n")
     } else {
-      forceZero <- set_if_null(forceZero, FALSE)     # if same sign, no zero
+      forceZero <- domR::set_if_null(forceZero, FALSE)     # if same sign, no zero
       # cat("\n not forcing Zero\n")
     }
 
@@ -110,28 +112,32 @@ calc_intervals <- function(v1, v2,
         incIntervals <- c(incIntervals, ii)
       }
     }
-    # cat("\n incIntervals:", incIntervals, "\n")
-    # print_line("]")
+    # domR::cat2(incIntervals)
+
     # Check intervals ----
     acceptInterval <- FALSE # will use a while soon
     ii <- 1
 
     # Don't bother searching if no intervals are even a possibility
     if (length(incIntervals) < 1) {
-      warning("No exact intervals found! Ignoring exact bounds & using pretty\n")
-      vVector    <- pretty(vv)
-      usesPretty <- TRUE
-      acceptInterval <- TRUE
+      if (isTRUE(preferError)) {
+        stop("No exact intervals found!")
+      } else {
+        warning("No exact intervals found! Ignoring exact bounds & using `pretty()`\n")
+        vVector    <- pretty(vv)
+        usesPretty <- TRUE
+        acceptInterval <- TRUE
+      }
     }
 
     # Do the intervals meet the criteria? (forceZero and vector length) ----
     # Use while because we need to update based on the outcome
-    while(isFALSE(acceptInterval)) {
+    while (isFALSE(acceptInterval)) {
       # Create the vector
       vVector <- seq(v1, v2, incIntervals[ii]) |> round(vvPrec + 1)
       vLength <- length(vVector)
       vString <- as.character(vVector)
-      # vString <- round(vVector, vvPrec + 1) |> as.character()
+      vString <- round(vVector, vvPrec + 1) |> as.character()
       # cat("Interval of:", incIntervals[ii], "= vector length:", vLength, "\n")
       # Is the vector suitable?
       if (vLength < intMin | vLength > intIdeal) {
@@ -156,17 +162,29 @@ calc_intervals <- function(v1, v2,
 
       # Handle if no acceptable interval in found ----
       if (ii > length(incIntervals)) {
-        if (isTRUE(preferError)) {
-          stop("No exact interval is found!")
-        } else {
-          ii <- 1 # reset and go again!
-          if (intIdeal == intMax) {
+        # print("too long")
+        if (is.null(intMax)) {
+          # print("is null")
+          if (isTRUE(preferError)) {
+            # print("prefer error")
+            stop("No exact interval found!")
+          } else if (isFALSE(preferError)) {
+            # print("prefer pretty")
             warning("Using pretty instead!\n")
             # cat("\nGoing pretty instead! \n")
             vVector        <- pretty(vv)
             usesPretty     <- TRUE
             acceptInterval <- TRUE
+          }
+        } else {
+          # print("not null")
+          ii <- 1                # reset and go again!
+          if (intIdeal == intMax) {
+            # print("ideal and max match")
+            intMax <- NULL       # if it fails again, it goes to the block above
+            acceptInterval <- FALSE
           } else {
+            # print("ideal and max don't match - resetting")
             warning("Ignoring intIdeal & trying again!\n")
             # cat("\nIgnoring intIdeal & trying again! \n\n")
             intIdeal <- intMax
