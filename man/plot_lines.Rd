@@ -6,7 +6,7 @@
 \usage{
 plot_lines(
   x,
-  y,
+  y = NULL,
   addPoints = TRUE,
   lineKula = "#004488FF",
   lwd = 4,
@@ -23,11 +23,12 @@ plot_lines(
 \arguments{
 \item{x}{The x data to plot.}
 
-\item{y}{The y data to plot. y must either be the same length as x, or a
-multiple of its length; if the latter, the x data is repeated, and the y
-treated as separate data series; 'lineKula' is ignored in such a
-situation and each y series is coloured differently (colours will repeat
-after 7 y "series").}
+\item{y}{The y data to plot. y must either be empty, the same length as x,
+or a multiple of its length. If empty, 'x' is used as 'y', and 'x'
+becomes `1:length(y)`. If length is a multiple of 'x' length , the 'x'
+data are repeated, and the 'y' data are treated as separate data series;
+'lineKula' is currently ignored in such a situation and each y series is
+coloured differently (colours will repeat after 7 y "series").}
 
 \item{addPoints}{LOGICAL: Should points be added on top of the lines (TRUE,
 default), or not (FALSE)?}

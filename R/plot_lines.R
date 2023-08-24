@@ -1,4 +1,4 @@
-plot_lines <- function(x, y,
+plot_lines <- function(x, y = NULL,
                        addPoints = TRUE,
                        lineKula = "#004488FF",
                        lwd = 4,
@@ -14,11 +14,12 @@ plot_lines <- function(x, y,
   #'   create a simple line chart.
   #'
   #' @param x The x data to plot.
-  #' @param y The y data to plot. y must either be the same length as x, or a
-  #'   multiple of its length; if the latter, the x data is repeated, and the y
-  #'   treated as separate data series; 'lineKula' is ignored in such a
-  #'   situation and each y series is coloured differently (colours will repeat
-  #'   after 7 y "series").
+  #' @param y The y data to plot. y must either be empty, the same length as x,
+  #'   or a multiple of its length. If empty, 'x' is used as 'y', and 'x'
+  #'   becomes `1:length(y)`. If length is a multiple of 'x' length , the 'x'
+  #'   data are repeated, and the 'y' data are treated as separate data series;
+  #'   'lineKula' is currently ignored in such a situation and each y series is
+  #'   coloured differently (colours will repeat after 7 y "series").
   #' @param addPoints LOGICAL: Should points be added on top of the lines (TRUE,
   #'   default), or not (FALSE)?
   #' @param lineKula What colour should the line be?
@@ -55,6 +56,12 @@ plot_lines <- function(x, y,
   #' @export
 
   # Code -----------------------------------------------------------------------
+  # Handle if only one dataset is provided
+  if (is.null(y)) {
+    y <- x
+    x <- seq_along(y)
+  }
+
   # Create xxLimits & yyLimits for xLimits and yLimits (both mandatory for pre_plot)
   xyLimits <- calc_plot_limits(x, y, expandLimits)
   # cat("\n plot_lines_57\n")
