@@ -33,8 +33,8 @@ vector.}
   If this argument is not NULL, the function will try again, after
   resetting 'intIdeal' to 'intMax' (i.e. it ranges from 'intMin' to
   'intMax'). If a suitable vector is still not found, 'preferError'
-  determines what happens. If 'intMax' is NULL, 'intHigh' is not reset, and
-  the function jumps straight the 'preferError' behaviour.
+  determines what happens. If 'intMax' is NULL, 'intIdeal' is not reset,
+  and the function jumps straight the 'preferError' behaviour.
 
   Think about the use case; 100 intervals could be too many intervals for a
   colour bar, but on an axis, the labels may only need to be drawn every so

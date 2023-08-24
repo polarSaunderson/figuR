@@ -24,8 +24,8 @@ calc_intervals <- function(v1, v2,
   #'   If this argument is not NULL, the function will try again, after
   #'   resetting 'intIdeal' to 'intMax' (i.e. it ranges from 'intMin' to
   #'   'intMax'). If a suitable vector is still not found, 'preferError'
-  #'   determines what happens. If 'intMax' is NULL, 'intHigh' is not reset, and
-  #'   the function jumps straight the 'preferError' behaviour.
+  #'   determines what happens. If 'intMax' is NULL, 'intIdeal' is not reset,
+  #'   and the function jumps straight the 'preferError' behaviour.
   #'
   #'   Think about the use case; 100 intervals could be too many intervals for a
   #'   colour bar, but on an axis, the labels may only need to be drawn every so
@@ -44,6 +44,8 @@ calc_intervals <- function(v1, v2,
   #' @export
 
   # Code -----------------------------------------------------------------------
+  showCat <- FALSE # for help with debugging
+
   # Handle if v1 and v2 are not numeric (i.e. they are labels) ----
   if ("character" %in% methods::is(v1)) {
     v2 <- length(v1)
@@ -58,18 +60,18 @@ calc_intervals <- function(v1, v2,
     v2 <- v1[2]
     v1 <- v1[1]
   } else if (length(v1) > 2) {
-    v2 <- max(v1)
-    v1 <- min(v1)
+    v2 <- max(v1, na.rm = TRUE)
+    v1 <- min(v1, na.rm = TRUE)
   }
 
   # Basic Set-Up ----
   vv     <- c(v1, v2)
-  vvDiff <- max(vv) - min(vv)
+  vvDiff <- max(vv, na.rm = TRUE) - min(vv, na.rm = TRUE)
   v1Prec <- domR::count_decimal_places(v1)
   v2Prec <- domR::count_decimal_places(v2)
-  vvPrec <- max(v1Prec, v2Prec)
-  # cat2(vv)
-  # cat2(vvPrec)
+  vvPrec <- max(v1Prec, v2Prec, na.rm = TRUE)
+  cat2(vv,  show = showCat)
+  cat2(vvPrec,  show = showCat)
 
   # Don't try to be too precise - `seq()` cannot handle such small intervals
   if (vvPrec > 5) {
@@ -86,17 +88,17 @@ calc_intervals <- function(v1, v2,
   if (vvPrec <= 5) {
     # Should zero be forced into the vector? ----
     if ((v1 < 0 & v2 > 0) | c(v1 > 0 & v2 < 0)) {
-      forceZero <- domR::set_if_null(forceZero, TRUE)      # if diverging, use zero
-      # cat("\nforcing Zero\n")
+      forceZero <- domR::set_if_null(forceZero, TRUE)  # if diverging, use zero
+      domR::cat3("Forcing Zero",  show = showCat)
     } else {
-      forceZero <- domR::set_if_null(forceZero, FALSE)     # if same sign, no zero
-      # cat("\n not forcing Zero\n")
+      forceZero <- domR::set_if_null(forceZero, FALSE) # if same sign, no zero
+      domR::cat3("Not forcing Zero", show = showCat)
     }
 
     # Which intervals should be checked? ----
     baseIntervals  <- c(1:10, 12, 14, 15, 18, 25, 75)
     checkIntervals <- c()
-    for (ii in c((-vvPrec:-1), (1:vvPrec))) {
+    for (ii in c(((-vvPrec)-1):vvPrec)) {
       iiChecks <- baseIntervals * (10^ii)
       checkIntervals <- c(checkIntervals, iiChecks)
     }
@@ -104,15 +106,15 @@ calc_intervals <- function(v1, v2,
     checkIntervals <- checkIntervals[checkIntervals < vvDiff]
 
     # Find exact intervals ----
-    incIntervals <- c()          # preallocate to hold exact intervals
+    incIntervals <- c()                   # preallocate to hold exact intervals
     for (ii in checkIntervals) {
       iiRemains <- (vvDiff %% ii) |> round(vvPrec + 1)
-    # cat(ii, ", remainder:", iiRemains, "\n")
+      domR::cat3(ii, ", remainder:", iiRemains, show = showCat)
       if (iiRemains == 0) {
         incIntervals <- c(incIntervals, ii)
       }
     }
-    # domR::cat2(incIntervals)
+    domR::cat2(incIntervals, show = showCat)
 
     # Check intervals ----
     acceptInterval <- FALSE # will use a while soon
@@ -138,55 +140,56 @@ calc_intervals <- function(v1, v2,
       vLength <- length(vVector)
       vString <- as.character(vVector)
       vString <- round(vVector, vvPrec + 1) |> as.character()
-      # cat("Interval of:", incIntervals[ii], "= vector length:", vLength, "\n")
+      domR::cat3("Interval of:", incIntervals[ii], "= vector length:", vLength, show = showCat)
       # Is the vector suitable?
       if (vLength < intMin | vLength > intIdeal) {
-        # cat("Wrong length.\n")
+        domR::cat3("Wrong length.",  show = showCat)
         ii <- ii + 1
         acceptInterval <- FALSE
       } else if ( (isTRUE(forceZero)) & (as.character(0) %notIn% vString) ) {
-        # cat("No zero.\n")
+        domR::cat3("No zero.",  show = showCat)
         ii <- ii + 1
         acceptInterval <- FALSE
       } else if ( (as.character(v1) %notIn% vString) |
                   (as.character(v2) %notIn% vString) ) {
         # seq doesn't have to hit the limits, so check if the values do
-        # cat("Misses the limits!", vv, "not in", vString, "\n")
+        domR::cat3("Misses the limits!", vv, "not in", vString, "\n", show = showCat)
         ii <- ii + 1
         acceptInterval <- FALSE
       } else {
-        # cat("\n The solution is:", vVector, "\n\n")
+        domR::cat3("Looks good!", show = showCat)
+        domR::cat3("The solution is:", vVector, "\n", show = showCat)
         usesPretty     <- FALSE
         acceptInterval <- TRUE
       }
 
       # Handle if no acceptable interval in found ----
       if (ii > length(incIntervals)) {
-        # print("too long")
+        domR::cat3("Attempted all suitable intervals", show = showCat)
         if (is.null(intMax)) {
-          # print("is null")
+          domR::cat3("intMax is null", show = showCat)
           if (isTRUE(preferError)) {
-            # print("prefer error")
+            domR::cat3("Prefer an error", show = showCat)
             stop("No exact interval found!")
           } else if (isFALSE(preferError)) {
-            # print("prefer pretty")
+            domR::cat3("Prefer pretty", show = showCat)
             warning("Using pretty instead!\n")
-            # cat("\nGoing pretty instead! \n")
+            domR::cat3("Going pretty instead!", show = showCat)
             vVector        <- pretty(vv)
             usesPretty     <- TRUE
             acceptInterval <- TRUE
           }
         } else {
-          # print("not null")
+          domR::cat3("intMax is not null", show = showCat)
           ii <- 1                # reset and go again!
           if (intIdeal == intMax) {
-            # print("ideal and max match")
+            domR::cat3("intIdeal and intMax match", show = showCat)
             intMax <- NULL       # if it fails again, it goes to the block above
             acceptInterval <- FALSE
           } else {
-            # print("ideal and max don't match - resetting")
+            domR::cat3("intIdeal and intMax don't match - resetting intMax", show = showCat)
             warning("Ignoring intIdeal & trying again!\n")
-            # cat("\nIgnoring intIdeal & trying again! \n\n")
+            domR::cat3("\nIgnoring intIdeal & trying again! \n", show = showCat)
             intIdeal <- intMax
             acceptInterval <- FALSE
           }
