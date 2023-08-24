@@ -241,7 +241,7 @@ add_axis <- function(axis,
   # print_line(".  ")
 
   # Gridlines -----------------------------------------------------------------!
-  gridFirst <- domR::set_if_null(gridFirst, labelFirst)
+  gridFirst <- domR::set_if_null(gridFirst, 0)
   gridEvery <- domR::set_if_null(gridEvery, labelEvery)
   if (length(gridEvery) == 1) {
     gridLocations <- tickLocations[seq(gridFirst, length(tickLocations),
@@ -258,6 +258,12 @@ add_axis <- function(axis,
     vGrids <- switch(axis, gridLocations, NA, gridLocations, NA)
     graphics::abline(v = vGrids, h = hGrids,
                      col = gridKula, lwd = gridLwd, lty = gridType)
+
+    # Add darker lines on the labels
+    hGrids2 <- switch(axis, NA, labelLocations, NA, labelLocations)
+    vGrids2 <- switch(axis, labelLocations, NA, labelLocations, NA)
+    graphics::abline(v = vGrids2, h = hGrids2,
+                     col = gridKula, lwd = gridLwd + 0.5, lty = gridType)
   }
 
   # Add ticks ------------------------------------------------------------------
