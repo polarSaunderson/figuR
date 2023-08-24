@@ -15,10 +15,10 @@ pre_plot <- function(xLimits, yLimits,
                      xAxisSide       = 1,
                      xLabels         = NULL,
                      xLabelEvery     = NULL,
-                     xLabelFirst     = 1,
+                     xLabelFirst     = NULL,
                      xLabelOffset    = NULL,
                      xLabelCex       = 0.92,
-                     xLabelSrt       = -45,
+                     xLabelSrt       = 0,
                      xLabelKula      = "#4D4D4DFF",
 
                      xAxisLwd        = 1,
@@ -50,7 +50,7 @@ pre_plot <- function(xLimits, yLimits,
                      yAxisSide       = 2,
                      yLabels         = NULL,
                      yLabelEvery     = NULL,
-                     yLabelFirst     = 1,
+                     yLabelFirst     = NULL,
                      yLabelOffset    = NULL,
                      yLabelCex       = 0.92,
                      yLabelSrt       = NULL,
@@ -116,10 +116,15 @@ pre_plot <- function(xLimits, yLimits,
                                    preferError = TRUE) |> suppressWarnings()
       xLabels  <- xIntervals$vVector
       xTickSeq <- xIntervals$vSeq
+
+      # xIntervals <- 1
+      # xLabels    <- seq(xLimits[1], xLimits[2], 1)
+      # xTickSeq   <- 1
     }
   }
 
   xLabelEvery <- domR::set_if_null(xLabelEvery, ceiling(length(xLabels) / 8))
+  xLabelFirst <- domR::set_if_null(xLabelFirst, xLabelEvery)
 
   # Add to the plot
   xTickLocations <- add_axis(axis           = xAxisSide,
@@ -169,7 +174,8 @@ pre_plot <- function(xLimits, yLimits,
   # print(yLabels)
   # print_line(":")
 
-  yLabelEvery <- domR::set_if_null(yLabelEvery, ceiling(length(yLabels) / 12))
+  yLabelEvery <- domR::set_if_null(yLabelEvery, ceiling(length(yLabels) / 8))
+  yLabelFirst <- domR::set_if_null(yLabelFirst, yLabelEvery)
 
   # Add to the plot
   yTickLocations <- add_axis(axis           = yAxisSide,
