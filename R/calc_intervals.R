@@ -70,8 +70,6 @@ calc_intervals <- function(v1, v2,
   v1Prec <- domR::count_decimal_places(v1)
   v2Prec <- domR::count_decimal_places(v2)
   vvPrec <- max(v1Prec, v2Prec, na.rm = TRUE)
-  cat2(vv,  show = showCat)
-  cat2(vvPrec,  show = showCat)
 
   # Don't try to be too precise - `seq()` cannot handle such small intervals
   if (vvPrec > 5) {
@@ -114,7 +112,6 @@ calc_intervals <- function(v1, v2,
         incIntervals <- c(incIntervals, ii)
       }
     }
-    domR::cat2(incIntervals, show = showCat)
 
     # Check intervals ----
     acceptInterval <- FALSE # will use a while soon

@@ -150,6 +150,7 @@ The syntax and logic for axes in base R are not intuitive.
   ticks.
 }
 \examples{
+\dontrun{
   # Most simple implementation
   plot(1:10, xaxs = "i", yaxs = "i", axes = FALSE)
   add_axis(1, 1)
@@ -164,7 +165,9 @@ The syntax and logic for axes in base R are not intuitive.
              labelEvery = 2, labelFirst = 3, labelKula = "blue")
   add_axis_3(2, tickSeq = 1, gridEvery = 2, gridKula = "red",
              labelEvery = 2, labelKula = "red")
+}
 
+\dontrun{
   # Understand alignMidPoint argument; compare these three matrix plots
   # 1) doesn't align
   image(matrix(c(1:144), ncol = 12, byrow = TRUE),
@@ -180,5 +183,6 @@ The syntax and logic for axes in base R are not intuitive.
   image(matrix(c(1:144), ncol = 12, byrow = TRUE),
         xaxs = "i", yaxs = "i", axes = FALSE)
   add_axis(1, labels = month.abb[c(1:12, 1)], alignMidPoint = FALSE)
+}
 
 }

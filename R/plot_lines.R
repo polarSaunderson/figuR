@@ -103,17 +103,17 @@ plot_lines <- function(x, y = NULL,
     # print("x and y length don't match!")
     if (length(y) %% length(x) == 0) {
       # print("but y is an exact multiple of x!")
-      do.call(figuR::pre_plot, defArgs)
+      do.call(pre_plot, defArgs)
 
       # We'll loop through the multiples and plot each as a separate y series
       xRep <- length(y) / length(x)
       kk <- 1
       for (ii in 1:xRep) {
         iiData <- y[(ii * length(x) - (length(x) - 1)):(ii * length(x))]
-        lines(x, iiData, col = kulaQ(kk), lwd = 4)
+        graphics::lines(x, iiData, col = kulaR::kulaQ(kk), lwd = 4)
         if (isTRUE(addPoints)) {
-          borderKula <- domR::set_if_null(borderKula, kulaQ(kk))
-          points(x, iiData,
+          borderKula <- domR::set_if_null(borderKula, kulaR::kulaQ(kk))
+          graphics::points(x, iiData,
                  col = borderKula, bg = pointKula,
                  cex = cex, pch = pch,
                  xpd = xpd)
@@ -127,14 +127,14 @@ plot_lines <- function(x, y = NULL,
     }
   } else {
     # Plot normally if x and y lengths match
-    do.call(figuR::pre_plot, defArgs)
+    do.call(pre_plot, defArgs)
 
     # Add lines (and points if necessary)
-    lines(x, y, col = lineKula,
+    graphics::lines(x, y, col = lineKula,
           lwd = lwd, xpd = xpd)
     if (isTRUE(addPoints)) {
       borderKula <- domR::set_if_null(borderKula, lineKula)
-      points(x, y,
+      graphics::points(x, y,
             col = borderKula, bg = pointKula,
             cex = cex, pch = pch,
             xpd = xpd)

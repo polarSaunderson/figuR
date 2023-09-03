@@ -1,7 +1,7 @@
 Package: figuR
 Type: Package
 Title: Personal Approach to Plotting in R
-Version: 0.0.1.0
+Version: 0.0.1.1
 Authors@R: 
     person("Dominic", "Saunderson",
            role = c("aut", "cre"),
@@ -13,5 +13,10 @@ Description: A personal package that allows easier customisation of figures. It
 License: GPL (>= 2)
 Encoding: UTF-8
 RoxygenNote: 7.2.3
-Suggests: 
-    domR
+Imports:
+    methods,
+    graphics,
+    stats
+Suggests:
+    domR,
+    kulaR

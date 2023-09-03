@@ -54,7 +54,7 @@ plot_points <- function(x, y,
   }
 
   # run the function
-  do.call(figuR::pre_plot, dotArgs)
+  do.call(pre_plot, dotArgs)
 
   # Add points
   if (exists("xRep", inherits = FALSE)) {  # only search inside the function
@@ -62,8 +62,8 @@ plot_points <- function(x, y,
     kk <- 1
     for (ii in 1:xRep) {
       iiData <- y[(ii * length(x) - (length(x) - 1)):(ii * length(x))]
-      points(x, iiData,
-             col = kulaQ(kk), bg = pointKula,
+      graphics::points(x, iiData,
+             col = kulaR::kulaQ(kk), bg = pointKula,
              cex = cex, pch = pch,
              lwd = lwd, xpd = xpd)
       kk <- kk + 1
@@ -71,14 +71,10 @@ plot_points <- function(x, y,
     }
   } else {
     pch <- domR::set_if_null(pch, 21)
-    points(x, y,
+    graphics::points(x, y,
            col = borderKula, bg = pointKula,
            cex = cex, pch = pch,
            lwd = lwd, xpd = xpd)
-    # points(x, y,
-    #        col = "white", bg = pointKula,
-    #        cex = cex / 2.5, pch = 16,
-    #        lwd = lwd, xpd = xpd)
   }
 }
 

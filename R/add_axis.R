@@ -113,6 +113,7 @@ add_axis <- function(axis,
   #' @param gridKula What colour should the gridlines be?
   #'
   #' @examples
+  #' \dontrun{
   #'   # Most simple implementation
   #'   plot(1:10, xaxs = "i", yaxs = "i", axes = FALSE)
   #'   add_axis(1, 1)
@@ -127,8 +128,10 @@ add_axis <- function(axis,
   #'              labelEvery = 2, labelFirst = 3, labelKula = "blue")
   #'   add_axis_3(2, tickSeq = 1, gridEvery = 2, gridKula = "red",
   #'              labelEvery = 2, labelKula = "red")
+  #' }
   #'
   #' @examples
+  #' \dontrun{
   #'   # Understand alignMidPoint argument; compare these three matrix plots
   #'   # 1) doesn't align
   #'   image(matrix(c(1:144), ncol = 12, byrow = TRUE),
@@ -144,6 +147,7 @@ add_axis <- function(axis,
   #'   image(matrix(c(1:144), ncol = 12, byrow = TRUE),
   #'         xaxs = "i", yaxs = "i", axes = FALSE)
   #'   add_axis(1, labels = month.abb[c(1:12, 1)], alignMidPoint = FALSE)
+  #' }
   #'
   #' @export
 
@@ -213,7 +217,7 @@ add_axis <- function(axis,
   if (is.null(labels)) labels <- round(tickLocations,
                                        signif(tickLocations, 3) |>
                                          domR::count_decimal_places() |>
-                                         median())
+                                         stats::median())
 
   # if (is.null(labels)) labels <- round(tickLocations,
                                        # min(domR::count_decimal_places(tickLocations) + 1, 5))
