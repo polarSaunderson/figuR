@@ -1,7 +1,7 @@
 Package: figuR
 Type: Package
 Title: Personal Approach to Plotting in R
-Version: 0.0.0.5
+Version: 0.0.1.0
 Authors@R: 
     person("Dominic", "Saunderson",
            role = c("aut", "cre"),
@@ -9,7 +9,7 @@ Authors@R:
            comment = c(ORCID = "0000-0001-7440-0101"))
 Description: A personal package that allows easier customisation of figures. It
     uses base R, but the functions use a syntax that I find more intuitive, and 
-    thus it is more configurable whilst being essentially the same.
+    thus it is more configurable whilst being essentially the same. In progress!
 License: GPL (>= 2)
 Encoding: UTF-8
 RoxygenNote: 7.2.3
