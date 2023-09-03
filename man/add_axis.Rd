@@ -15,7 +15,7 @@ add_axis(
   tickKula = "#1A1A1AFF",
   labels = NULL,
   labelEvery = 2,
-  labelFirst = 1,
+  labelFirst = NULL,
   labelOffset = NULL,
   labelCex = 0.92,
   labelSrt = NULL,
@@ -88,7 +88,7 @@ values).}
 
 \item{labelFirst}{numeric: Which should be the first label shown? Works
 from the bottom on the y-axes and the left on the x-axes. Provide the
-index, not the tick value.}
+index, not the tick value. Defaults to match 'labelEvery'.}
 
 \item{labelOffset}{numeric: How far away from the axis should the labels be
 written? Works on the "offset" argument of `text()`.}

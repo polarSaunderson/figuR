@@ -13,11 +13,12 @@ The public version of this repo can be accessed at:
 ## To-Do
 ### 2023-08-13
 - [ ] Work on general arguments for pre_plot that can be overwritten
-  - [ ] e.g. nameCex, so x and y are both set, but can be xNameCex or yNameCex
+  - e.g. nameCex, so x and y are both set, but can be xNameCex or yNameCex
 
 ### 2023-08-02
 - [ ] Expand arguments & document `pre_plot()`
 - [X] Add `arrange_subplots()`
 - [ ] Document functions
-- [ ] Use `pre_plot()` in `kulaR` for creating kulaBars
-- [ ] Create `plot_points()`, `plot_lines()`, etc.
+- [-] Use `pre_plot()` in `kulaR` for creating kulaBars
+  - actually, that just uses a simple matrix and add_axis
+- [X] Create `plot_points()`, `plot_lines()`, etc.

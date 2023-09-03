@@ -98,7 +98,7 @@ calc_intervals <- function(v1, v2,
     # Which intervals should be checked? ----
     baseIntervals  <- c(1:10, 12, 14, 15, 18, 25, 75)
     checkIntervals <- c()
-    for (ii in c(((-vvPrec)-1):vvPrec)) {
+    for (ii in c(((-vvPrec) - 1):vvPrec)) {
       iiChecks <- baseIntervals * (10^ii)
       checkIntervals <- c(checkIntervals, iiChecks)
     }

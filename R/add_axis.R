@@ -8,7 +8,7 @@ add_axis <- function(axis,
                      tickKula       = "#1A1A1AFF",
                      labels         = NULL,
                      labelEvery     = 2,
-                     labelFirst     = 1,
+                     labelFirst     = NULL,
                      labelOffset    = NULL,
                      labelCex       = 0.92,
                      labelSrt       = NULL,
@@ -80,7 +80,7 @@ add_axis <- function(axis,
   #'   values).
   #' @param labelFirst numeric: Which should be the first label shown? Works
   #'   from the bottom on the y-axes and the left on the x-axes. Provide the
-  #'   index, not the tick value.
+  #'   index, not the tick value. Defaults to match 'labelEvery'.
   #' @param labelOffset numeric: How far away from the axis should the labels be
   #'   written? Works on the "offset" argument of `text()`.
   #' @param labelCex numeric: What font size should the label text be?
@@ -207,17 +207,16 @@ add_axis <- function(axis,
     }
   }
 
-  # Account for overzealous decimal points - think about this more!
-  tickDP <- domR::count_decimal_places(tickLocations)
-  tickDP[tickDP > 10] <- NA
-  tickPrec <- median(tickDP, na.rm = TRUE) |> ceiling()
-  tickLocations <- round(tickLocations, tickPrec + 1)
-  # cat("\n add axis line 215\n")
-  # print(tickLocations)
-  # print_line("@")
-
   # Labels --------------------------------------------------------------------!
-  if (is.null(labels)) labels <- tickLocations
+  labelFirst <- domR::set_if_null(labelFirst, labelEvery)
+
+  if (is.null(labels)) labels <- round(tickLocations,
+                                       signif(tickLocations, 3) |>
+                                         domR::count_decimal_places() |>
+                                         median())
+
+  # if (is.null(labels)) labels <- round(tickLocations,
+                                       # min(domR::count_decimal_places(tickLocations) + 1, 5))
   if (length(labelEvery) == 1) {
     # Option 1: Label every x ticks
     labels <- labels[seq(labelFirst, length(tickLocations), labelEvery)]
