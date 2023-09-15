@@ -5,8 +5,8 @@
 \title{Calculate pretty intervals and include the boundaries exactly}
 \usage{
 calc_intervals(
-  v1,
-  v2,
+  x0,
+  x1,
   intMin = 5,
   intIdeal = 12,
   intMax = 100,
@@ -15,13 +15,16 @@ calc_intervals(
 )
 }
 \arguments{
-\item{v1}{The first value. If less than v2, an ascending vector is
-returned; if greater than v2, a descending vector is returned. If a
-vector of length two is used, the second value will be used as v2. If a
-vector of length > 2 is used, a range will be calculated and an ascending
-vector returned.}
+\item{x0}{The first value for the interval.
 
-\item{v2}{The second value.}
+  If less than 'x1', an ascending vector is returned; if greater than 'x1',
+  a descending vector is returned. If a vector of length two is used, the
+  second value will be used as 'x1'. If a vector of length > 2 is used, a
+  range will be calculated from it; a descending vector is returned if the
+  first value is greater than the last value, otherwise an ascending vector
+  is returned.}
+
+\item{x1}{The second value.}
 
 \item{intMin}{The minimum number of numbers in the vector.}
 
@@ -31,10 +34,10 @@ vector.}
 \item{intMax}{The absolute maximum number of numbers in the vector. By
   default, vector lengths between 'intMin' and 'intIdeal' are searched for.
   If this argument is not NULL, the function will try again, after
-  resetting 'intIdeal' to 'intMax' (i.e. it ranges from 'intMin' to
+  resetting 'intIdeal' to 'intMax' (i.e. it then ranges from 'intMin' to
   'intMax'). If a suitable vector is still not found, 'preferError'
   determines what happens. If 'intMax' is NULL, 'intIdeal' is not reset,
-  and the function jumps straight the 'preferError' behaviour.
+  and the function jumps straight to the 'preferError' behaviour.
 
   Think about the use case; 100 intervals could be too many intervals for a
   colour bar, but on an axis, the labels may only need to be drawn every so
@@ -43,19 +46,23 @@ vector.}
   not selected here because the numbers were too "weird").}
 
 \item{forceZero}{Does zero have to be included in the vectors? By default,
-if v1 and v2 fall either side of 0, this will be TRUE; if both v1 and v2
-have the same sign, it will be FALSE. These defaults can be overwritten.}
+if 'x0' and 'x1' fall either side of 0, this will be TRUE; if both 'x0'
+and 'x1' have the same sign, it will be FALSE. These defaults can be
+overwritten.}
 
 \item{preferError}{If a suitable interval cannot be found using the
 'intMin' and 'intIdeal' or 'intMax' arguments (see 'intMax'), is it
-preferable to throw an error (TRUE), or default to using 'pretty()'? In
-some cases `pretty` is not acceptable because it doesn't guarantee that
-the exact limits are not included.-}
+preferable to throw an error (TRUE), or default to using [pretty()]? In
+some (many / most) cases [pretty()] will not be acceptable because it
+doesn't guarantee that the exact limits are not included in hte returned
+vector.}
 }
 \description{
-This function is my attempt at creating pretty intervals. It
-  differs from `pretty()` because it forces the min and max values to be
-  included in the returned vector. It also allows many more values to be
-  considered pretty (i.e. not just multiples of 1, 2, 5, but also values
-  such as e.g. 0.25, 0.75, and 4). It still needs further testing.
+This function is an alternative attempt at creating pretty
+  intervals. It differs from [pretty()] because it forces the min and max
+  values to be included in the returned vector. It also allows many more
+  values to be considered as "pretty" (i.e. not just multiples of 1, 2, 5,
+  but also values such as e.g. 0.25, 0.75, and 4).
+
+  It still needs further testing.
 }
