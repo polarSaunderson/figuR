@@ -45,6 +45,7 @@ calc_intervals <- function(v1, v2,
 
   # Code -----------------------------------------------------------------------
   showCat <- FALSE # for help with debugging
+  cat2(v1, show = showCat)
 
   # Handle if v1 and v2 are not numeric (i.e. they are labels) ----
   if ("character" %in% methods::is(v1)) {
@@ -63,6 +64,8 @@ calc_intervals <- function(v1, v2,
     v2 <- max(v1, na.rm = TRUE)
     v1 <- min(v1, na.rm = TRUE)
   }
+  cat2(v1, show = showCat)
+  cat2(v2, show = showCat)
 
   # Basic Set-Up ----
   vv     <- c(v1, v2)
@@ -70,6 +73,9 @@ calc_intervals <- function(v1, v2,
   v1Prec <- domR::count_decimal_places(v1)
   v2Prec <- domR::count_decimal_places(v2)
   vvPrec <- max(v1Prec, v2Prec, na.rm = TRUE)
+  cat2(vv, show = showCat)
+  cat2(vvPrec, show = showCat)
+  cat2(vvDiff, show = showCat)
 
   # Don't try to be too precise - `seq()` cannot handle such small intervals
   if (vvPrec > 5) {
@@ -82,7 +88,7 @@ calc_intervals <- function(v1, v2,
     }
   }
 
-  # The actual meat of this function
+  # The actual meat of this function ===========================================
   if (vvPrec <= 5) {
     # Should zero be forced into the vector? ----
     if ((v1 < 0 & v2 > 0) | c(v1 > 0 & v2 < 0)) {
@@ -106,7 +112,19 @@ calc_intervals <- function(v1, v2,
     # Find exact intervals ----
     incIntervals <- c()                   # preallocate to hold exact intervals
     for (ii in checkIntervals) {
-      iiRemains <- (vvDiff %% ii) |> round(vvPrec + 1)
+
+       # This bit is to handle if the values are less than 1
+       # I doubt it works all the time, it needs more rigourous testing
+       iiMag <- domR::calc_magnitude(ii)
+       if (iiMag < 0) {
+         ii2 <- ii * 10^(iiMag * -1)
+         vvDif2 <- vvDiff * 10^(iiMag * -1)
+       } else {
+         ii2 <- ii
+         vvDif2 <- vvDiff
+       }
+
+      iiRemains <- (vvDif2 %% ii2) |> round(vvPrec + 1)
       domR::cat3(ii, ", remainder:", iiRemains, show = showCat)
       if (iiRemains == 0) {
         incIntervals <- c(incIntervals, ii)
@@ -133,7 +151,8 @@ calc_intervals <- function(v1, v2,
     # Use while because we need to update based on the outcome
     while (isFALSE(acceptInterval)) {
       # Create the vector
-      vVector <- seq(v1, v2, incIntervals[ii]) |> round(vvPrec + 1)
+      # vVector <- seq(v1, v2, incIntervals[ii]) |> round(vvPrec + 1)
+      vVector <- seq(min(vv), max(vv), incIntervals[ii]) |> round(vvPrec + 1)
       vLength <- length(vVector)
       vString <- as.character(vVector)
       vString <- round(vVector, vvPrec + 1) |> as.character()
