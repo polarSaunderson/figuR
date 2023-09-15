@@ -37,61 +37,62 @@ add_axis(
 )
 }
 \arguments{
-\item{axis}{numeric: Which side to add the axis to? 1 bottom, 2 left, 3
-top, 4 right.}
-
-\item{tickSeq}{numeric: What interval is between the tick marks? See also
-the tickCount and labels arguments. Only one of the three can be used,
-with the priority being 1. labels, 2. tickSeq, 3. tickCount.}
+\item{axis}{numeric: Which side of the plot should the axis be add to? 1
+bottom, 2 left, 3 top, 4 right.}
 
 \item{tickCount}{numeric: How many ticks should be created? Include the
 ticks that would fall at the minimum and maximum values. See also the
-tickSeq and labels arguments. Only one of the three can be used, with the
-priority being 1. labels, 2. tickSeq, 3. tickCount.}
+'interval' and 'labels' arguments. Only one of these three can be used,
+with the priority being 1. 'labels', 2. 'interval', 3. 'tickCount'.}
 
-\item{alignMidPoints}{BINARY: Should the ticks be aligned midway between
-values? The default is FALSE, which is necessary for a scatter plot where
-the ticks line up with a single point value. However, on a matrix or a
-barchart, the ticks cany sit in the centre of the column, so this would
-be TRUE. See the examples for a visual explanation. If still unsure, call
-`plot()` using `axes = TRUE` and add dummy data to see what aligns and
-what makes sense.}
+\item{alignMidPoints}{BINARY: Should the scaffolding be aligned midway
+  between values? The default is FALSE, which is necessary for a scatter
+  plot - the ticks should line up with a single point value.
 
-\item{tickEvery}{numeric: Draw an actual tick mark every how many ticks? If
-null, matches 'labelEvery'; see there for details.}
+  Set as TRUE for a plot such as an image of a matrix or a barchart, where
+  the ticks can sometimes sit in the  centre of the column. See the
+  examples for a visual explanation. If still unsure, call [plot()] using
+  `axes = TRUE` and add dummy data to see what aligns and what makes sense.}
 
-\item{tickFirst}{numeric: WHich should be the first tick mark shown? Works
-from the bottom on the y-axes and the left on the x-axes. Provide the
-index, not the tick value.}
+\item{tickEvery}{numeric: Draw an actual tick mark every how many
+scaffolding poles? If null, matches 'labelEvery'; see there for details.}
 
-\item{tickLength}{numeric: How long should the tick mark be? Positive
-values go outwards from the axis. Works using `tcl`, so see par for more
+\item{tickFirst}{numeric: On which scaffolding pole should be the first
+tick mark be shown? Counts from the bottom on the y-axes and the left on
+the x-axes. Provide the index, not the corresponding label / value.}
+
+\item{tickLength}{numeric: How long should the tick marks be? Positive
+values go outwards from the axis. Works using `tcl`; see [par()] for more
 information.}
 
 \item{tickKula}{What colour should the ticks be?}
 
 \item{labels}{Which labels (i.e. axis values) should be displayed beside
-the tick marks? By default, this is NULL, and the true value are added.
-However, customisable labels can also be added. This argument can be a
-bit of a misnomer depending on how it is used - ticks are calculated
-based on the number of labels, so if you want empty ticks it is necessary
-to provide extra labels, and then exclude them with the "labelEvery"
-argument. See also the tickSeq and tickCount arguments. Only one of the
-three can be used, with the priority being 1. labels, 2. tickSeq, 3.
-tickCount.}
+  the scaffolding? By default, this is NULL, and the actual numeric values
+  are added. However, customisable labels can also be added.
 
-\item{labelEvery}{numeric: Add a label to every how many tick marks? If a
-single value is provided, it is sequenced into the labels in increments
-of that value (starting at the "labelFirst" argument). If a vector, it is
-indexed directly into the labels (i.e. provide the indices, not the
-values).}
+  This argument can be a bit of a misnomer depending on how it is used - if
+  labels are provided, the scaffolding is calculated based on the number of
+  labels. To leave parts of the axis empty, it is necessary to provide
+  labels for all possible scaffolding, but then exclude them with the
+  "labelEvery" argument.
 
-\item{labelFirst}{numeric: Which should be the first label shown? Works
-from the bottom on the y-axes and the left on the x-axes. Provide the
-index, not the tick value. Defaults to match 'labelEvery'.}
+  See also the 'interval' and 'tickCount' arguments. Only one of these
+  three can be used, with the priority being 1. 'labels', 2. 'interval', 3.
+  'tickCount'.}
+
+\item{labelEvery}{numeric: Add a label to every how many scaffold poles? If
+a single value is provided, it is sequenced into the provided labels in
+increments of that value (starting at the 'labelFirst' argument). If a
+vector, it is indexed directly into the labels (i.e. provide the indices,
+not the values).}
+
+\item{labelFirst}{numeric: Which should be the first label shown? Counts
+from the bottom up on the y-axes and the left across on the x-axes.
+Provide the index, not the tick value. Defaults to match 'labelEvery'.}
 
 \item{labelOffset}{numeric: How far away from the axis should the labels be
-written? Works on the "offset" argument of `text()`.}
+written? Works on the "offset" argument of [text()].}
 
 \item{labelCex}{numeric: What font size should the label text be?}
 
@@ -118,36 +119,45 @@ dot-dashed ; (5) long dashed ; and (6) dash-dotted.}
 
 \item{nameOffset}{numeric: How far from the axis should the name text be?
 Works as the second value in the vector for the 'adj' argument of
-`text()`; the first is 0.5, to centre the text.}
+[text()]; the first is 0.5, to centre the text.}
 
 \item{nameSrt}{What angle should the name text be? Positive values rotate
 the label clockwise (i.e. the top moves right).}
 
 \item{gridEvery}{numeric: Add a gridline across the full plot every how
-many ticks? If null, matches 'labelEvery'; see there for details.}
+many scaffolding bars? If NULL, matches 'labelEvery'; see there for
+details.}
 
-\item{gridFirst}{numeric: Which should be the first gridline shown? Works
-from the bottom on the y-axes and the left on the x-axes. Provide the
-index, not the tick value.}
+\item{gridFirst}{numeric: Which should be the first gridline shown? Counts
+from the bottom up on the y-axes and the left across on the x-axes.
+Provide the index, not the tick value.}
 
-\item{gridLwd}{numeric: How thick should the gridlines be? Set this or
-gridType as 0 to suppress any grid lines.}
+\item{gridLwd}{numeric: How thick should the grid lines be? Set this or
+'gridType' as 0 to suppress any grid lines.}
 
 \item{gridType}{numeric: What line type should the gridlines be? See the
-axisType argument. Set this or gridLwd as 0 to suppress grid lines.}
+'axisType' argument. Set this or gridLwd as 0 to suppress grid lines.}
 
 \item{gridKula}{What colour should the gridlines be?}
+
+\item{interval}{numeric: What interval is between the scaffolding mesh? See
+also the 'tickCount' and 'labels' arguments. Only one of these three can
+be used, with the priority being 1. 'labels', 2. 'interval', 3.
+'tickCount'.}
 }
 \description{
-The syntax and logic for axes in base R are not intuitive.
-  This function allows the different parts of the axis to be customised
-  more clearly (at least for me). This function only works properly if
-  called after a `plot()` call where `xaxs = "i"` and `yaxs = "i"`. See
-  examples. Everything is based on the concept of "ticks", the little marks
-  that come over the edge of the axis to show where the values fall
-  exactly; labels and grid lines can be added to align with these ticks (or
-  a subset of them). It is also possible to only draw tickmarks on certain
-  ticks.
+The syntax and logic for customising axes in base R are not
+  intuitive (to me). This function allows the different parts of the axis
+  to be customised more clearly.
+
+  This function only works properly if called after a [plot()] call where
+  `'xaxs' = "i"` and `'yaxs' = "i"`. See examples.
+
+  Everything is based on the concept of a scaffold, which is a mesh that
+  the tickmarks, gridlines, and labels align to. By deault, these tend to
+  align with each other, but they can be offset, or only a subset of them
+  included (for example, add a label every 4 scaffold locations, but a grid
+  line every 2, etc.)
 }
 \examples{
 \dontrun{

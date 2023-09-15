@@ -29,60 +29,69 @@ add_axis <- function(axis,
                      gridKula       = "#E6E6E6AA") {
   #' Add highly customisable axes to a plot
   #'
-  #' @description The syntax and logic for axes in base R are not intuitive.
-  #'   This function allows the different parts of the axis to be customised
-  #'   more clearly (at least for me). This function only works properly if
-  #'   called after a `plot()` call where `xaxs = "i"` and `yaxs = "i"`. See
-  #'   examples. Everything is based on the concept of "ticks", the little marks
-  #'   that come over the edge of the axis to show where the values fall
-  #'   exactly; labels and grid lines can be added to align with these ticks (or
-  #'   a subset of them). It is also possible to only draw tickmarks on certain
-  #'   ticks.
+  #' @description The syntax and logic for customising axes in base R are not
+  #'   intuitive (to me). This function allows the different parts of the axis
+  #'   to be customised more clearly.
   #'
-  #' @param axis numeric: Which side to add the axis to? 1 bottom, 2 left, 3
-  #'   top, 4 right.
-  #' @param tickSeq numeric: What interval is between the tick marks? See also
-  #'   the tickCount and labels arguments. Only one of the three can be used,
-  #'   with the priority being 1. labels, 2. tickSeq, 3. tickCount.
+  #'   This function only works properly if called after a [plot()] call where
+  #'   `'xaxs' = "i"` and `'yaxs' = "i"`. See examples.
+  #'
+  #'   Everything is based on the concept of a scaffold, which is a mesh that
+  #'   the tickmarks, gridlines, and labels align to. By deault, these tend to
+  #'   align with each other, but they can be offset, or only a subset of them
+  #'   included (for example, add a label every 4 scaffold locations, but a grid
+  #'   line every 2, etc.)
+  #' @param axis numeric: Which side of the plot should the axis be add to? 1
+  #'   bottom, 2 left, 3 top, 4 right.
+  #' @param interval numeric: What interval is between the scaffolding mesh? See
+  #'   also the 'tickCount' and 'labels' arguments. Only one of these three can
+  #'   be used, with the priority being 1. 'labels', 2. 'interval', 3.
+  #'   'tickCount'.
   #' @param tickCount numeric: How many ticks should be created? Include the
   #'   ticks that would fall at the minimum and maximum values. See also the
-  #'   tickSeq and labels arguments. Only one of the three can be used, with the
-  #'   priority being 1. labels, 2. tickSeq, 3. tickCount.
-  #' @param alignMidPoints BINARY: Should the ticks be aligned midway between
-  #'   values? The default is FALSE, which is necessary for a scatter plot where
-  #'   the ticks line up with a single point value. However, on a matrix or a
-  #'   barchart, the ticks cany sit in the centre of the column, so this would
-  #'   be TRUE. See the examples for a visual explanation. If still unsure, call
-  #'   `plot()` using `axes = TRUE` and add dummy data to see what aligns and
-  #'   what makes sense.
-  #' @param tickEvery numeric: Draw an actual tick mark every how many ticks? If
-  #'   null, matches 'labelEvery'; see there for details.
-  #' @param tickFirst numeric: WHich should be the first tick mark shown? Works
-  #'   from the bottom on the y-axes and the left on the x-axes. Provide the
-  #'   index, not the tick value.
-  #' @param tickLength numeric: How long should the tick mark be? Positive
-  #'   values go outwards from the axis. Works using `tcl`, so see par for more
+  #'   'interval' and 'labels' arguments. Only one of these three can be used,
+  #'   with the priority being 1. 'labels', 2. 'interval', 3. 'tickCount'.
+  #'
+  #' @param alignMidPoints BINARY: Should the scaffolding be aligned midway
+  #'   between values? The default is FALSE, which is necessary for a scatter
+  #'   plot - the ticks should line up with a single point value.
+  #'
+  #'   Set as TRUE for a plot such as an image of a matrix or a barchart, where
+  #'   the ticks can sometimes sit in the  centre of the column. See the
+  #'   examples for a visual explanation. If still unsure, call [plot()] using
+  #'   `axes = TRUE` and add dummy data to see what aligns and what makes sense.
+  #' @param tickEvery numeric: Draw an actual tick mark every how many
+  #'   scaffolding poles? If null, matches 'labelEvery'; see there for details.
+  #' @param tickFirst numeric: On which scaffolding pole should be the first
+  #'   tick mark be shown? Counts from the bottom on the y-axes and the left on
+  #'   the x-axes. Provide the index, not the corresponding label / value.
+  #' @param tickLength numeric: How long should the tick marks be? Positive
+  #'   values go outwards from the axis. Works using `tcl`; see [par()] for more
   #'   information.
   #' @param tickKula What colour should the ticks be?
   #' @param labels Which labels (i.e. axis values) should be displayed beside
-  #'   the tick marks? By default, this is NULL, and the true value are added.
-  #'   However, customisable labels can also be added. This argument can be a
-  #'   bit of a misnomer depending on how it is used - ticks are calculated
-  #'   based on the number of labels, so if you want empty ticks it is necessary
-  #'   to provide extra labels, and then exclude them with the "labelEvery"
-  #'   argument. See also the tickSeq and tickCount arguments. Only one of the
-  #'   three can be used, with the priority being 1. labels, 2. tickSeq, 3.
-  #'   tickCount.
-  #' @param labelEvery numeric: Add a label to every how many tick marks? If a
-  #'   single value is provided, it is sequenced into the labels in increments
-  #'   of that value (starting at the "labelFirst" argument). If a vector, it is
-  #'   indexed directly into the labels (i.e. provide the indices, not the
-  #'   values).
-  #' @param labelFirst numeric: Which should be the first label shown? Works
-  #'   from the bottom on the y-axes and the left on the x-axes. Provide the
-  #'   index, not the tick value. Defaults to match 'labelEvery'.
+  #'   the scaffolding? By default, this is NULL, and the actual numeric values
+  #'   are added. However, customisable labels can also be added.
+  #'
+  #'   This argument can be a bit of a misnomer depending on how it is used - if
+  #'   labels are provided, the scaffolding is calculated based on the number of
+  #'   labels. To leave parts of the axis empty, it is necessary to provide
+  #'   labels for all possible scaffolding, but then exclude them with the
+  #'   "labelEvery" argument.
+  #'
+  #'   See also the 'interval' and 'tickCount' arguments. Only one of these
+  #'   three can be used, with the priority being 1. 'labels', 2. 'interval', 3.
+  #'   'tickCount'.
+  #' @param labelEvery numeric: Add a label to every how many scaffold poles? If
+  #'   a single value is provided, it is sequenced into the provided labels in
+  #'   increments of that value (starting at the 'labelFirst' argument). If a
+  #'   vector, it is indexed directly into the labels (i.e. provide the indices,
+  #'   not the values).
+  #' @param labelFirst numeric: Which should be the first label shown? Counts
+  #'   from the bottom up on the y-axes and the left across on the x-axes.
+  #'   Provide the index, not the tick value. Defaults to match 'labelEvery'.
   #' @param labelOffset numeric: How far away from the axis should the labels be
-  #'   written? Works on the "offset" argument of `text()`.
+  #'   written? Works on the "offset" argument of [text()].
   #' @param labelCex numeric: What font size should the label text be?
   #' @param labelSrt numeric: What angle should the label text be? Positive
   #'   values rotate the label clockwise (i.e. the top moves right).
@@ -100,16 +109,17 @@ add_axis <- function(axis,
   #'   the label clockwise (i.e. the top moves right).
   #' @param nameOffset numeric: How far from the axis should the name text be?
   #'   Works as the second value in the vector for the 'adj' argument of
-  #'   `text()`; the first is 0.5, to centre the text.
+  #'   [text()]; the first is 0.5, to centre the text.
   #' @param gridEvery numeric: Add a gridline across the full plot every how
-  #'   many ticks? If null, matches 'labelEvery'; see there for details.
-  #' @param gridFirst numeric: Which should be the first gridline shown? Works
-  #'   from the bottom on the y-axes and the left on the x-axes. Provide the
-  #'   index, not the tick value.
-  #' @param gridLwd numeric: How thick should the gridlines be? Set this or
-  #'   gridType as 0 to suppress any grid lines.
+  #'   many scaffolding bars? If NULL, matches 'labelEvery'; see there for
+  #'   details.
+  #' @param gridFirst numeric: Which should be the first gridline shown? Counts
+  #'   from the bottom up on the y-axes and the left across on the x-axes.
+  #'   Provide the index, not the tick value.
+  #' @param gridLwd numeric: How thick should the grid lines be? Set this or
+  #'   'gridType' as 0 to suppress any grid lines.
   #' @param gridType numeric: What line type should the gridlines be? See the
-  #'   axisType argument. Set this or gridLwd as 0 to suppress grid lines.
+  #'   'axisType' argument. Set this or gridLwd as 0 to suppress grid lines.
   #' @param gridKula What colour should the gridlines be?
   #'
   #' @examples
@@ -151,8 +161,8 @@ add_axis <- function(axis,
   #'
   #' @export
 
-  # Code -----------------------------------------------------------------------
-  # Retrieve figure coordinates
+  # Code ----------------------------------------------------------------------
+  # Retrieve coordinates of the current figure
   figPoints <- graphics::par("usr")
   figLeft   <- figPoints[1]
   figRight  <- figPoints[2]
@@ -162,178 +172,177 @@ add_axis <- function(axis,
   figMidX   <- mean(c(figLeft, figRight))  # for axis name location
   figMidY   <- mean(c(figBottom, figTop))  # for axis name location
 
-  # Ticks ---------------------------------------------------------------------!
+  # Create scaffold ------------------------------------------------------------
+  # The idea is to create a scaffold that the other parts can be aligned with.
+  # The scaffold depends on the number of labels, or the interval, or number of
+  # ticks (preference is that order).
   if (is.null(labels)) {
-    if (is.null(tickSeq) & is.null(tickCount)) {
+    if (is.null(interval) & is.null(tickCount)) {
       stop("Either provide labels, or set the tickSeq or tickCount arguments")
     }
   } else {
     tickCount <- length(labels)
   }
 
-  if (isFALSE(alignMidPoints)) {
-  # Option 1: Ticks should align with the values (i.e. for a scatter plot)
+  # Calculate scaffold locations
+  if (isFALSE(alignMidPoints)) {       # ticks on the values (for line graph)
+    # Option 1: Ticks should align with the values (i.e. for a scatter plot)
     if (!is.null(tickCount)) {
-      tickLocations <- switch(axis,
-                              seq(figLeft,   figRight,  length = tickCount),
-                              seq(figBottom, figTop,    length = tickCount),
-                              seq(figLeft,   figRight,  length = tickCount),
-                              seq(figBottom, figTop,    length = tickCount))
+      scaffold <- switch(axis,
+                         seq(figLeft,   figRight,  length = tickCount),
+                         seq(figBottom, figTop,    length = tickCount),
+                         seq(figLeft,   figRight,  length = tickCount),
+                         seq(figBottom, figTop,    length = tickCount))
     } else if (!is.null(tickSeq)) {
-      tickLocations <- switch(axis,
-                              seq(figLeft,   figRight,  tickSeq),
-                              seq(figBottom, figTop,    tickSeq),
-                              seq(figLeft,   figRight,  tickSeq),
-                              seq(figBottom, figTop,    tickSeq))
+      scaffold <- switch(axis,
+                         seq(figLeft,   figRight,  interval),
+                         seq(figBottom, figTop,    interval),
+                         seq(figLeft,   figRight,  interval),
+                         seq(figBottom, figTop,    interval))
     }
-  } else if (isTRUE(alignMidPoints)) {
-    if (!is.null(tickCount)) {
-      tickLocations <- switch(axis,
-                              seq(figLeft,   figRight, length = tickCount + 1),
-                              seq(figBottom, figTop,   length = tickCount + 1),
-                              seq(figLeft,   figRight, length = tickCount + 1),
-                              seq(figBottom, figTop,   length = tickCount + 1))
+  } else if (isTRUE(alignMidPoints)) { # ticks offset (for bars / matrices)
+    # Option 2: Ticks should be offset (i.e. for a matric or bar chart)
+    if (!is.null(interval)) {
+      skOff <- tickSeq / 2       # offset by half, to the middle
+      scaffold <- switch(axis,
+                         seq(figLeft   + skOff, figRight - skOff, interval),
+                         seq(figBottom + skOff, figTop   - skOff, interval),
+                         seq(figLeft   + skOff, figRight - skOff, interval),
+                         seq(figBottom + skOff, figTop   - skOff, interval))
+    } else if (!is.null(tickCount)) {
+      # For a tick count, need to calculate the interval first to offset it, so
+      # add an extra tick, then "shift" the bar to exclude that extra one
+      scaffold <- switch(axis,
+                         seq(figLeft,   figRight, length = tickCount + 1),
+                         seq(figBottom, figTop,   length = tickCount + 1),
+                         seq(figLeft,   figRight, length = tickCount + 1),
+                         seq(figBottom, figTop,   length = tickCount + 1))
 
-      # But we need to offset them
-      tickOffset    <- (tickLocations[2] - tickLocations[1]) / 2
-      tickLocations <- switch(axis,
-                       seq(figLeft   + tickOffset, figRight - tickOffset, length = tickCount),
-                       seq(figBottom + tickOffset, figTop   - tickOffset, length = tickCount),
-                       seq(figLeft   + tickOffset, figRight - tickOffset, length = tickCount),
-                       seq(figBottom + tickOffset, figTop   - tickOffset, length = tickCount))
-    } else if (!is.null(tickSeq)) {
-      tickOffset <- tickSeq / 2
-      tickLocations <- switch(axis,
-                              seq(figLeft   + tickOffset, figRight - tickOffset, tickSeq),
-                              seq(figBottom + tickOffset, figTop   - tickOffset, tickSeq),
-                              seq(figLeft   + tickOffset, figRight - tickOffset, tickSeq),
-                              seq(figBottom + tickOffset, figTop   - tickOffset, tickSeq))
+      # But we need to offset by half an interval, so that they align
+      skOff    <- (scaffold[2] - scaffold[1]) / 2 # offset to middle
+      scaffold <- switch(axis,
+                         seq(figLeft   + skOff, figRight - skOff, length = tickCount),
+                         seq(figBottom + skOff, figTop   - skOff, length = tickCount),
+                         seq(figLeft   + skOff, figRight - skOff, length = tickCount),
+                         seq(figBottom + skOff, figTop   - skOff, length = tickCount))
     }
   }
 
-  # Labels --------------------------------------------------------------------!
+  # Labels ---------------------------------------------------------------------
   labelFirst <- domR::set_if_null(labelFirst, labelEvery)
 
-  if (is.null(labels)) labels <- round(tickLocations,
-                                       signif(tickLocations, 3) |>
-                                         domR::count_decimal_places() |>
-                                         stats::median())
+  # If no labels are provided, just use actual values calculated
+  if (is.null(labels)) labels <- round(scaffold,
+                                       signif(sd(scaffold), 3) |>
+                                         domR::count_decimal_places())
 
-  # if (is.null(labels)) labels <- round(tickLocations,
-                                       # min(domR::count_decimal_places(tickLocations) + 1, 5))
+  # Where do the labels go?
   if (length(labelEvery) == 1) {
     # Option 1: Label every x ticks
-    labels <- labels[seq(labelFirst, length(tickLocations), labelEvery)]
-    labelLocations <- tickLocations[seq(labelFirst, length(tickLocations), labelEvery)]
+    labels <- labels[seq(labelFirst, length(scaffold), labelEvery)]
+    labelLocations <- scaffold[seq(labelFirst, length(scaffold), labelEvery)]
   } else {
-    # Option 2: Label only specific ticks
+    # Options 2: Label only specific ticks (labelEvery is a vector of indices)
     labels <- labels[labelEvery]
-    labelLocations <- tickLocations[labelEvery]
+    labelLocations <- scaffold[labelEvery]
   }
 
-  # cat("\n add_axis line_231\n")
-  # print(labels)
-  # print_line(".")
-
-  # print(tickLocations)
-  # tt <- count_decimal_places(tickLocations)
-  # print(tt)
-  # print_line("0")
-  # t1 <- median(tt) |> floor()
-  # print(t1)
-  # print_line(".  ")
-
-  # Gridlines -----------------------------------------------------------------!
-  gridFirst <- domR::set_if_null(gridFirst, labelFirst)
-  gridEvery <- domR::set_if_null(gridEvery, labelEvery)
-
-  if (length(gridEvery) == 1) {
-    gridLocations <- tickLocations[seq(gridFirst, length(tickLocations),
-                                       gridEvery)]
-  } else {
-    gridLocations <- tickLocations[gridEvery]
-  }
-
-  # Display --------------------------------------------------------------------
-  # Add grid lines
-  if (gridLwd > 0) {
-    hGrids <- switch(axis, NA, gridLocations, NA, gridLocations)
-    vGrids <- switch(axis, gridLocations, NA, gridLocations, NA)
-    graphics::abline(v = vGrids, h = hGrids,
-                     col = gridKula, lwd = gridLwd, lty = gridType)
-
-    # Add darker lines on the labels
-    hGrids2 <- switch(axis, NA, labelLocations, NA, labelLocations)
-    vGrids2 <- switch(axis, labelLocations, NA, labelLocations, NA)
-    graphics::abline(v = vGrids2, h = hGrids2,
-                     col = gridKula, lwd = gridLwd + 0.5, lty = gridType)
-  }
-
-  # Add ticks ------------------------------------------------------------------
+  # Tickmarks ------------------------------------------------------------------
   tickFirst <- domR::set_if_null(tickFirst, labelFirst)
   tickEvery <- domR::set_if_null(tickEvery, labelEvery)
 
   if (length(tickEvery) == 1) {
-    # Option 1: Label every x ticks
-    tickMarks <- tickLocations[seq(tickFirst, length(tickLocations), tickEvery)]
+    # Options 1: Add ticks to every scaffold
+    tickMarks <- scaffold[seq(tickFirst, length(scaffold), tickEvery)]
   } else {
-    # Option 2: Label only specific ticks
-    tickMarks <- tickLocations[tickEvery]
+    tickMarks <- scaffold[tickEvery]
   }
 
-  axis(side   = axis,
-       at     = tickMarks,
-       labels = FALSE,            # no labels yet
-       tcl    = tickLength * -1,  # negative here so positive values go outwards
-       col    = tickKula)
+  # Gridlines ------------------------------------------------------------------
+  gridFirst <- domR::set_if_null(gridFirst, labelFirst)
+  gridEvery <- domR::set_if_null(gridEvery, labelEvery)
 
-  # Add labels ----!
-  labelLocationsX <- switch(axis,
-                            labelLocations, figLeft,
-                            labelLocations, figRight)
+  if (length(gridEvery) == 1) {
+    gridLocations <- scaffold[seq(gridFirst, length(scaffold), gridEvery)]
+  } else {
+    gridLocations <- scaffold[gridEvery]
+  }
 
-  labelLocationsY <- switch(axis,
-                            figBottom, labelLocations,
-                            figTop, labelLocations)
+  # Display ====================================================================
+  # Build up from the back: gridlines, tick marks, axis, labels, name
 
-  if (!is.null(labelSrt)) labelSrt <- labelSrt * -1 # rotate clockwise
+  # Add grid lines -------------------------------------------------------------
+  if (gridLwd > 0) {
+    # Base mesh background
+    vGrids <- switch(axis, gridLocations, NA, gridLocations, NA)
+    hGrids <- switch(axis, NA, gridLocations, NA, gridLocations)
+
+    # Darker lines to align with the labels
+    vGuide <- switch(axis, labelLocations, NA, labelLocations, NA)
+    hGuide <- switch(axis, NA, labelLocations, NA, labelLocations)
+
+    # Add them
+    graphics::abline(v = vGrids, h = hGrids,
+                     col = gridKula, lwd = gridLwd, lty = gridType)
+
+    graphics::abline(v = vGuide, h = hGuide,
+                     col = gridKula, lwd = gridLwd + 0.5, lty = gridType)
+  }
+
+  # Add tick marks -------------------------------------------------------------
+  graphics::axis(side   = axis,
+                 at     = tickMarks,
+                 labels = FALSE,           # will add later
+                 tcl    = tickLength * -1, # negative so positive is outwards
+                 col    = tickKula)
+
+  # Add axis -------------------------------------------------------------------
+  # The above axis only goes from the ticks, not necessarily the full length of
+  # the axis, so we'll add another one here
+  axisStart <- switch(axis, figLeft, figBottom, figLeft, figBottom)
+  axisEnd   <- switch(axis, figRight, figTop, figRight, figTop)
+  graphics::axis(side = axis, at = c(axisStart, axisEnd),
+                 labels = FALSE, tcl = 0,                       # no labels/ticks
+                 col = axisKula, lwd = axisLwd, lty = axisType) # custom
+
+  # Add labels -----------------------------------------------------------------
+  labelX <- switch(axis,
+                   labelLocations, figLeft,
+                   labelLocations, figRight)
+  labelY <- switch(axis,
+                   figBottom, labelLocations,
+                   figTop, labelLocations)
+
+  if (!is.null(labelSrt)) labelSrt <- labelSrt * -1 # so input rotation is clockwise
   labelOffset <- domR::set_if_null(labelOffset, 0.9)
 
-  graphics::text(x = labelLocationsX,
-                 y = labelLocationsY,
+  graphics::text(x = labelX, y = labelY,
                  labels = labels,
                  col = labelKula, srt = labelSrt, cex = labelCex,
                  offset = labelOffset, pos = axis,
                  xpd = TRUE)
 
-  # Add axis ----!
-  axisStart <- switch(axis, figLeft, figBottom, figLeft, figBottom)
-  axisEnd   <- switch(axis, figRight, figTop, figRight, figTop)
-  graphics::axis(side = axis, at = c(axisStart, axisEnd),
-                 labels = FALSE, tcl = 0,                       # no labels or ticks
-                 col = axisKula, lwd = axisLwd, lty = axisType) # custom options
-
-  # Add axis name ----!
+  # Add axis name --------------------------------------------------------------
   if (!is.null(name)) {
-    nameAxis <- domR::set_if_null(nameAxis, axis)  # default name side to axis side
-    figMidX <- switch(nameAxis, figMidX,   figLeft, figMidX, figRight)
-    figMidY <- switch(nameAxis, figBottom, figMidY, figTop,  figMidY)
-    nameSrt <- domR::set_if_null(nameSrt, switch(nameAxis, 0, 90, 0, 270))
+    # Location
+    namePos  <- switch(axis, 1, 3, 3, 3)
+    nameSide <- domR::set_if_null(nameSide, axis) # default is outside axis
+    figMidX  <- switch(nameSide, figMidX, figLeft, figMidX, figLeft)
+    figMidY  <- switch(nameSide, figBottom, figMidY, figBottom, figMidY)
+
+    nameSrt  <- domR::set_if_null(nameSrt, switch(nameSide, 0, 90, 0, 270))
     nameOffset <- switch(axis,
                          domR::set_if_null(nameOffset, 2.4),
                          domR::set_if_null(nameOffset, -2.2),
                          domR::set_if_null(nameOffset, 1.5),
                          domR::set_if_null(nameOffset, 1.75))
 
-    namePos <- switch(axis, 1, 3, 3, 3)
-
     graphics::text(x = figMidX,
                    y = figMidY,
                    labels = name,
                    xpd = TRUE,
-                   adj = c(0.5, nameOffset * -1),
+                   adj = c(0.5, nameOffset * -1), # positive outwards
                    cex = nameCex, srt = nameSrt, col = nameKula)
   }
-
-  return(invisible(list(tickLocations)))
+  return(invisible(list(scaffold)))
 }
