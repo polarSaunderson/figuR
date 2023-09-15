@@ -244,15 +244,15 @@ add_axis <- function(axis,
   # print_line(".  ")
 
   # Gridlines -----------------------------------------------------------------!
-  gridFirst <- domR::set_if_null(gridFirst, 0)
+  gridFirst <- domR::set_if_null(gridFirst, labelFirst)
   gridEvery <- domR::set_if_null(gridEvery, labelEvery)
+
   if (length(gridEvery) == 1) {
     gridLocations <- tickLocations[seq(gridFirst, length(tickLocations),
                                        gridEvery)]
   } else {
     gridLocations <- tickLocations[gridEvery]
   }
-
 
   # Display --------------------------------------------------------------------
   # Add grid lines
@@ -272,6 +272,7 @@ add_axis <- function(axis,
   # Add ticks ------------------------------------------------------------------
   tickFirst <- domR::set_if_null(tickFirst, labelFirst)
   tickEvery <- domR::set_if_null(tickEvery, labelEvery)
+
   if (length(tickEvery) == 1) {
     # Option 1: Label every x ticks
     tickMarks <- tickLocations[seq(tickFirst, length(tickLocations), tickEvery)]
@@ -330,7 +331,7 @@ add_axis <- function(axis,
                    y = figMidY,
                    labels = name,
                    xpd = TRUE,
-                   adj = c(0.5, nameOffset),
+                   adj = c(0.5, nameOffset * -1),
                    cex = nameCex, srt = nameSrt, col = nameKula)
   }
 
