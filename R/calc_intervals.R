@@ -109,7 +109,7 @@ calc_intervals <- function(x0, x1,
   } else {
     forceZero <- domR::set_if_null(forceZero, FALSE)  # if same sign, no zero
   }
-  domR::cat2(forceZero)
+  domR::cat2(forceZero, show = showCat)
 
   # Prepare intervals to check--------------------------------------------------
   baseIntervals <- c(1:10, 1.2, 1.5, 2.5, 7.5)
@@ -146,7 +146,7 @@ calc_intervals <- function(x0, x1,
     }
   }
   cat2(incIntervals, show = showCat)
-  print_line(">", show = showCat)
+  print_line("<", show = showCat)
 
   # Choose an interval ---------------------------------------------------------
   ## Prep
@@ -187,7 +187,7 @@ calc_intervals <- function(x0, x1,
       ii <- ii + 1
       acceptInt <- FALSE
     } else if ((isTRUE(forceZero)) & as.character(0) %notIn% xString) {
-      domR::cat3("No zero.")
+      domR::cat3("No zero.", show = showCat)
       ii <- ii + 1
       acceptInt <- FALSE
     } else if ( (as.character(x0) %notIn% xString) |

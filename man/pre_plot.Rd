@@ -2,7 +2,7 @@
 % Please edit documentation in R/pre_plot.R
 \name{pre_plot}
 \alias{pre_plot}
-\title{Fine-combed control for plots}
+\title{Easily customisable plot areas}
 \usage{
 pre_plot(
   xLimits,
@@ -10,64 +10,87 @@ pre_plot(
   main = "",
   mainOffset = 0.25,
   mainCex = 1.1,
-  xTickSeq = NULL,
-  xTickCount = NULL,
-  xTickFirst = NULL,
-  xTickEvery = NULL,
-  xAlignMidPoints = FALSE,
-  xTickLength = 0.2,
-  xTickKula = "#1A1A1AFF",
-  xAxisSide = 1,
   xLabels = NULL,
-  xLabelEvery = NULL,
-  xLabelFirst = NULL,
-  xLabelOffset = NULL,
-  xLabelCex = 0.92,
-  xLabelSrt = 0,
-  xLabelKula = "#4D4D4DFF",
-  xAxisLwd = 1,
-  xAxisType = 1,
-  xAxisKula = "#1A1A1AFF",
-  xName = NULL,
-  xNameAxis = NULL,
-  xNameKula = "#1A1A1AFF",
-  xNameCex = 1,
-  xNameOffset = NULL,
-  xNameSrt = NULL,
-  xGridEvery = NULL,
-  xGridFirst = NULL,
-  xGridLwd = 1,
-  xGridType = 1,
-  xGridKula = "#E6E6E6AA",
-  yTickSeq = NULL,
-  yTickCount = NULL,
-  yTickFirst = NULL,
-  yTickEvery = NULL,
-  yAlignMidPoints = FALSE,
-  yTickLength = 0.2,
-  yTickKula = "#1A1A1AFF",
-  yAxisSide = 2,
   yLabels = NULL,
-  yLabelEvery = NULL,
-  yLabelFirst = NULL,
-  yLabelOffset = NULL,
-  yLabelCex = 0.92,
-  yLabelSrt = NULL,
-  yLabelKula = "#4D4D4DFF",
-  yAxisLwd = 1,
-  yAxisType = 1,
-  yAxisKula = "#1A1A1AFF",
-  yName = NULL,
-  yNameAxis = NULL,
-  yNameKula = "#1A1A1AFF",
-  yNameCex = 1,
-  yNameOffset = NULL,
-  yNameSrt = NULL,
+  xInterval = NULL,
+  yInterval = NULL,
+  xTickCount = NULL,
+  yTickCount = NULL,
+  alignMidPoints = FALSE,
+  xAlignMidPoints = NULL,
+  yAlignMidPoints = NULL,
+  gridEvery = NULL,
+  xGridEvery = NULL,
   yGridEvery = NULL,
+  gridFirst = NULL,
+  xGridFirst = NULL,
   yGridFirst = NULL,
-  yGridLwd = 1,
-  yGridType = 1,
-  yGridKula = "#E6E6E6AA",
+  gridLwd = 1,
+  xGridLwd = NULL,
+  yGridLwd = NULL,
+  gridKula = "#E6E6E6AA",
+  xGridKula = NULL,
+  yGridKula = NULL,
+  gridType = 1,
+  xGridType = NULL,
+  yGridType = NULL,
+  tickFirst = NULL,
+  xTickFirst = NULL,
+  yTickFirst = NULL,
+  tickEvery = NULL,
+  xTickEvery = NULL,
+  yTickEvery = NULL,
+  tickLength = 0.2,
+  xTickLength = NULL,
+  yTickLength = NULL,
+  tickKula = "#1A1A1AFF",
+  xTickKula = NULL,
+  yTickKula = NULL,
+  xAxisSide = 1,
+  yAxisSide = 2,
+  axisLwd = 1,
+  xAxisLwd = NULL,
+  yAxisLwd = NULL,
+  axisType = 1,
+  xAxisType = NULL,
+  yAxisType = NULL,
+  axisKula = "#1A1A1AFF",
+  xAxisKula = NULL,
+  yAxisKula = NULL,
+  labelEvery = NULL,
+  xLabelEvery = NULL,
+  yLabelEvery = NULL,
+  labelFirst = NULL,
+  xLabelFirst = NULL,
+  yLabelFirst = NULL,
+  labelOffset = NULL,
+  xLabelOffset = NULL,
+  yLabelOffset = NULL,
+  labelCex = 0.92,
+  xLabelCex = NULL,
+  yLabelCex = NULL,
+  labelKula = "#4D4D4DFF",
+  xLabelKula = NULL,
+  yLabelKula = NULL,
+  labelSrt = NULL,
+  xLabelSrt = NULL,
+  yLabelSrt = NULL,
+  xName = NULL,
+  yName = NULL,
+  xNameSide = NULL,
+  yNameSide = NULL,
+  nameCex = 1,
+  xNameCex = NULL,
+  yNameCex = NULL,
+  nameKula = "#1A1A1AFF",
+  xNameKula = NULL,
+  yNameKula = NULL,
+  nameOffset = NULL,
+  xNameOffset = NULL,
+  yNameOffset = NULL,
+  nameSrt = NULL,
+  xNameSrt = NULL,
+  yNameSrt = NULL,
   addOrigin = TRUE,
   originLwd = 1,
   originType = 1,
@@ -79,6 +102,150 @@ pre_plot(
   mar = c(2.5, 3.5, 2.5, 1.5)
 )
 }
+\arguments{
+\item{xLimits, yLimits}{vector The min and max values for the x and y-axes;
+each vector is separately fed into [calc_intervals()] so see there for
+accepted inputs. These are the only two mandatory arguments for this
+function.}
+
+\item{main}{What is the title of the plot? Added above the plot, using
+[mtext()].}
+
+\item{mainOffset}{How far from the axis should the title be? Set using the
+'line' argument of [mtext()].}
+
+\item{mainCex}{What font size should the title text be?}
+
+\item{alignMidPoints}{BINARY: Should the scaffold mesh be aligned midway
+  between values? The default is FALSE, which is necessary for a scatter
+  plot and makes sure that the tickmarks line up with a single point value.
+
+  Set as TRUE for a plot such as an image of a matrix or a barchart, where
+  the ticks can sit in the  centre of the column.
+
+  See the examples for a visual explanation of this difference. If still
+  unsure, call [plot()] using `axes = TRUE` and add dummy data with this
+  function to see what aligns and what makes sense.}
+
+\item{gridEvery}{numeric: Gridlines across the full plot should be added
+every how many lines of the scaffold mesh? If NULL, matches 'labelEvery';
+see their for details on the accepted input.}
+
+\item{gridFirst}{numeric: Which line of the scaffold mesh should the first
+gridline be added to? 'gridEvery' subsequently counts mesh lines from
+this line. If NULL (default), matches 'labelFirst'; see there for details
+on the accepted input.}
+
+\item{gridLwd}{numeric: How thick should the gridlines be? If 0, the
+drawing of gridlines is suppressed.}
+
+\item{gridKula}{What colour should the gridlines be? Defaults to a
+mid-grey.}
+
+\item{gridType}{numeric: What line type should the gridlines be? See the
+'axisType' argument. If 0, the drawing of gridlines is suppressed.}
+
+\item{tickFirst}{numeric: Which line of the scaffold mesh should the first
+tickmark be added to? 'tickEvery' subsequently counts mesh lines from
+this line. If NULL (default), matches 'labelFirst'; see there for details
+on the accepted input.}
+
+\item{tickEvery}{Tickmarks should be drawn every how many lines of the
+scaffold mesh? If NULL, matches 'labelEvery'; see their for details on
+the accepted input.}
+
+\item{tickLength}{numeric: How long should the tickmarks be? Works based on
+the `tcl` argument of [axis()] (but reversed so positive values go away
+from the axis). See [par()] for more details.}
+
+\item{tickKula}{What colour should the tickmarks be? Defaults to black.}
+
+\item{axisLwd}{How thick should the axis line be?}
+
+\item{axisType}{numeric: What type of line should the axis line be? Use
+numeric values for (1) solid; (2) dashed; (3) dotted lines; (4)
+dot-dashed ; (5) long dashed ; and (6) dash-dotted.}
+
+\item{axisKula}{What colour should the axis line be?}
+
+\item{labelEvery}{numeric: Labels should be added every how many lines of
+  the scaffold mesh? If a single value is provided, it is sequenced into
+  the provided labels (or an automated calculation of them if labels is
+  NULL), starting from the 'labelFirst' argument. If a vector is provided,
+  it is used to directly index into the labels. Use the index of the
+  scaffold meshlines, **NOT** the actual values of the labels.
+
+  Meshlines are counted along y-axes from the bottom upwards, and along
+  x-axes from the left to the right.
+
+  By default, the function will set this as 2, unless that provides less
+  than 5 labels, in which case, it is set as 1.}
+
+\item{labelFirst}{numeric: Which line of the scaffold mesh should the first
+label be added to? 'labelEvery' subsequently counts mesh lines from this
+line. Provide the index, not the label value. Default is to match
+'labelEvery'.}
+
+\item{labelOffset}{numeric: How far from the axis should the labels be?
+Works on the 'offset' argument of [text()].}
+
+\item{labelCex}{numeric: What font size should the label text be?}
+
+\item{labelKula}{What colour should the label text be?}
+
+\item{labelSrt}{numeric: What angle should the label text be set at?
+Positive values rotate the text clockwise (i.e. the tops of the letters
+move right).}
+
+\item{nameCex}{numeric: What font size should the name text be?}
+
+\item{nameKula}{What colour should the name text be?}
+
+\item{nameOffset}{numeric: How far from the axis should the name be? Works
+as the second value in the vector for the 'adj' argument of [text()], but
+reversed so positive values move away from the axis; the first value in
+the vector is kept at 0.5 to centre the text.}
+
+\item{nameSrt}{numeric: What angle should the name text be set at?
+Positive values rotate the text clockwise (i.e. the tops of the letters
+move right).}
+
+\item{addOrigin}{Should origin lines be added? These are thicker than the
+  gridlines to help orient the reader.
+
+  If TRUE, lines are drawn at x = 0 and y = 0; provide a vector c(x, y) for
+  alternative values. IF FALSE, no origin is added to the plot.}
+
+\item{originLwd}{numeric: How thick should the origin lines be?}
+
+\item{originType}{What type of line should the origin lines be? See
+'axisType'.}
+
+\item{originKula}{What colour should the origin lines be?}
+
+\item{add121}{logical. Should a red line with a gradient of x:y = 1:1 be
+added to the plot?}
+
+\item{annotationLocation}{numeric: A c(x, y) vector indicating where the
+annotation text should go.}
+
+\item{annotationText}{"string": If not NULL, this text will be added to the
+plot. Useful for subplot numbers (e.g. "a)"). Be aware that subsequent data
+could cover this.}
+
+\item{annotationCex}{What font size should the 'annotationText' be?}
+
+\item{mar}{Set the margins around the plot. See [par()] for details.}
+}
 \description{
-Easily customisable plot areas
+An alternative to the default [plot()] that allows more clarity
+  in the customisation.
+
+  Most values can be set for the x and y axes separately (e.g. 'xGridLwd' and
+  'yGridLwd') or with a single argument that applies to both (e.g.
+  'gridLwd'). However, a single argument doesn't make sense for some
+  arguments (e.g. 'xLabels' and 'yLabels' are almost always different).
+
+  Many of these arguments are fed directly into [add_axis()] so see there for
+  an overview of how the axes work.
 }

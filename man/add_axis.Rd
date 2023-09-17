@@ -2,197 +2,199 @@
 % Please edit documentation in R/add_axis.R
 \name{add_axis}
 \alias{add_axis}
-\title{Add highly customisable axes to a plot}
+\title{Add easily customisable axes to a plot}
 \usage{
 add_axis(
   axis,
-  tickSeq = NULL,
+  labels = NULL,
+  interval = NULL,
   tickCount = NULL,
   alignMidPoints = FALSE,
-  tickEvery = NULL,
-  tickFirst = NULL,
-  tickLength = 0.2,
-  tickKula = "#1A1A1AFF",
-  labels = NULL,
-  labelEvery = 2,
-  labelFirst = NULL,
-  labelOffset = NULL,
-  labelCex = 0.92,
-  labelSrt = NULL,
-  labelKula = "#4D4D4DFF",
-  axisLwd = 1,
-  axisType = 1,
-  axisKula = "#1A1A1AFF",
-  name = NULL,
-  nameAxis = NULL,
-  nameKula = "#1A1A1AFF",
-  nameCex = 1,
-  nameOffset = NULL,
-  nameSrt = NULL,
   gridEvery = NULL,
   gridFirst = NULL,
+  gridKula = "#E6E6E6AA",
   gridLwd = 1,
   gridType = 1,
-  gridKula = "#E6E6E6AA"
+  tickEvery = NULL,
+  tickFirst = NULL,
+  tickKula = "#1A1A1AFF",
+  tickLength = 0.2,
+  axisKula = "#1A1A1AFF",
+  axisLwd = 1,
+  axisType = 1,
+  labelEvery = NULL,
+  labelFirst = NULL,
+  labelCex = 0.92,
+  labelKula = "#4D4D4DFF",
+  labelOffset = NULL,
+  labelSrt = NULL,
+  name = NULL,
+  nameSide = NULL,
+  nameCex = 1,
+  nameKula = "#1A1A1AFF",
+  nameOffset = NULL,
+  nameSrt = NULL
 )
 }
 \arguments{
-\item{axis}{numeric: Which side of the plot should the axis be add to? 1
-bottom, 2 left, 3 top, 4 right.}
-
-\item{tickCount}{numeric: How many ticks should be created? Include the
-ticks that would fall at the minimum and maximum values. See also the
-'interval' and 'labels' arguments. Only one of these three can be used,
-with the priority being 1. 'labels', 2. 'interval', 3. 'tickCount'.}
-
-\item{alignMidPoints}{BINARY: Should the scaffolding be aligned midway
-  between values? The default is FALSE, which is necessary for a scatter
-  plot - the ticks should line up with a single point value.
-
-  Set as TRUE for a plot such as an image of a matrix or a barchart, where
-  the ticks can sometimes sit in the  centre of the column. See the
-  examples for a visual explanation. If still unsure, call [plot()] using
-  `axes = TRUE` and add dummy data to see what aligns and what makes sense.}
-
-\item{tickEvery}{numeric: Draw an actual tick mark every how many
-scaffolding poles? If null, matches 'labelEvery'; see there for details.}
-
-\item{tickFirst}{numeric: On which scaffolding pole should be the first
-tick mark be shown? Counts from the bottom on the y-axes and the left on
-the x-axes. Provide the index, not the corresponding label / value.}
-
-\item{tickLength}{numeric: How long should the tick marks be? Positive
-values go outwards from the axis. Works using `tcl`; see [par()] for more
-information.}
-
-\item{tickKula}{What colour should the ticks be?}
+\item{axis}{Which side of the plot should the axis be added to? 1 = bottom;
+2 = left; 3 = top; 4 = right.}
 
 \item{labels}{Which labels (i.e. axis values) should be displayed beside
-  the scaffolding? By default, this is NULL, and the actual numeric values
-  are added. However, customisable labels can also be added.
+  the axis? By default (i.e. NULL), the actual numeric values are added.
+  However, customisable labels can also be added.
 
   This argument can be a bit of a misnomer depending on how it is used - if
   labels are provided, the scaffolding is calculated based on the number of
-  labels. To leave parts of the axis empty, it is necessary to provide
-  labels for all possible scaffolding, but then exclude them with the
-  "labelEvery" argument.
+  labels. To leave parts of the scaffold mesh empty, it is necessary to
+  provide labels for all possible scaffold lines in the mesh, but then
+  exclude them with the "labelEvery" argument.
 
   See also the 'interval' and 'tickCount' arguments. Only one of these
-  three can be used, with the priority being 1. 'labels', 2. 'interval', 3.
-  'tickCount'.}
+  three arguments can be used at once; the order of priority is 1.
+  'labels'; 2. 'interval'; and 3. 'tickCount'.}
 
-\item{labelEvery}{numeric: Add a label to every how many scaffold poles? If
-a single value is provided, it is sequenced into the provided labels in
-increments of that value (starting at the 'labelFirst' argument). If a
-vector, it is indexed directly into the labels (i.e. provide the indices,
-not the values).}
+\item{interval}{What interval is between the scaffolding meshlines? See
+also the 'tickCount' and 'labels' argument. Only one of these three
+arguments can be used at once; the order of priority is 1. 'labels'; 2.
+'interval'; and 3. 'tickCount'.}
 
-\item{labelFirst}{numeric: Which should be the first label shown? Counts
-from the bottom up on the y-axes and the left across on the x-axes.
-Provide the index, not the tick value. Defaults to match 'labelEvery'.}
+\item{tickCount}{numeric: How many ticks should be created? Include the
+ticks that would fall at the minimum and maximum values. See also the
+'interval' and 'labels' arguments. Only one of these three arguments can
+be used at once; the order of priority is 1. 'labels'; 2. 'interval'; and
+3. 'tickCount'.}
 
-\item{labelOffset}{numeric: How far away from the axis should the labels be
-written? Works on the "offset" argument of [text()].}
+\item{alignMidPoints}{BINARY: Should the scaffold mesh be aligned midway
+  between values? The default is FALSE, which is necessary for a scatter
+  plot and makes sure that the tickmarks line up with a single point value.
 
-\item{labelCex}{numeric: What font size should the label text be?}
+  Set as TRUE for a plot such as an image of a matrix or a barchart, where
+  the ticks can sit in the  centre of the column.
 
-\item{labelSrt}{numeric: What angle should the label text be? Positive
-values rotate the label clockwise (i.e. the top moves right).}
+  See the examples for a visual explanation of this difference. If still
+  unsure, call [plot()] using `axes = TRUE` and add dummy data with this
+  function to see what aligns and what makes sense.}
 
-\item{labelKula}{What colour should the label text be?}
+\item{gridEvery}{numeric: Gridlines across the full plot should be added
+every how many lines of the scaffold mesh? If NULL, matches 'labelEvery';
+see their for details on the accepted input.}
 
-\item{axisLwd}{numeric: How thick should the axis line be?}
+\item{gridFirst}{numeric: Which line of the scaffold mesh should the first
+gridline be added to? 'gridEvery' subsequently counts mesh lines from
+this line. If NULL (default), matches 'labelFirst'; see there for details
+on the accepted input.}
 
-\item{axisType}{numeric: What line type should the axis line be? Use
-numeric values for (1) solid; (2) dashed; (3) dotted lines; (4)
-dot-dashed ; (5) long dashed ; and (6) dash-dotted.}
+\item{gridKula}{What colour should the gridlines be? Defaults to a
+mid-grey.}
+
+\item{gridLwd}{numeric: How thick should the gridlines be? If 0, the
+drawing of gridlines is suppressed.}
+
+\item{gridType}{numeric: What line type should the gridlines be? See the
+'axisType' argument. If 0, the drawing of gridlines is suppressed.}
+
+\item{tickEvery}{Tickmarks should be drawn every how many lines of the
+scaffold mesh? If NULL, matches 'labelEvery'; see their for details on
+the accepted input.}
+
+\item{tickFirst}{numeric: Which line of the scaffold mesh should the first
+tickmark be added to? 'tickEvery' subsequently counts mesh lines from
+this line. If NULL (default), matches 'labelFirst'; see there for details
+on the accepted input.}
+
+\item{tickKula}{What colour should the tickmarks be? Defaults to black.}
+
+\item{tickLength}{numeric: How long should the tickmarks be? Works based on
+the `tcl` argument of [axis()] (but reversed so positive values go away
+from the axis). See [par()] for more details.}
 
 \item{axisKula}{What colour should the axis line be?}
 
-\item{name}{"string" What is the axis name?}
+\item{axisLwd}{How thick should the axis line be?}
 
-\item{nameAxis}{numeric: Which side of the axis should the name be added?}
+\item{axisType}{numeric: What type of line should the axis line be? Use
+numeric values for (1) solid; (2) dashed; (3) dotted lines; (4)
+dot-dashed ; (5) long dashed ; and (6) dash-dotted.}
+
+\item{labelEvery}{numeric: Labels should be added every how many lines of
+  the scaffold mesh? If a single value is provided, it is sequenced into
+  the provided labels (or an automated calculation of them if labels is
+  NULL), starting from the 'labelFirst' argument. If a vector is provided,
+  it is used to directly index into the labels. Use the index of the
+  scaffold meshlines, **NOT** the actual values of the labels.
+
+  Meshlines are counted along y-axes from the bottom upwards, and along
+  x-axes from the left to the right.
+
+  By default, the function will set this as 2, unless that provides less
+  than 5 labels, in which case, it is set as 1.}
+
+\item{labelFirst}{numeric: Which line of the scaffold mesh should the first
+label be added to? 'labelEvery' subsequently counts mesh lines from this
+line. Provide the index, not the label value. Default is to match
+'labelEvery'.}
+
+\item{labelCex}{numeric: What font size should the label text be?}
+
+\item{labelKula}{What colour should the label text be?}
+
+\item{labelOffset}{numeric: How far from the axis should the labels be?
+Works on the 'offset' argument of [text()].}
+
+\item{labelSrt}{numeric: What angle should the label text be set at?
+Positive values rotate the text clockwise (i.e. the tops of the letters
+move right).}
+
+\item{name}{"string": What does the axis show?}
+
+\item{nameSide}{numeric: Which side of the axis (**NOT** the plot), should
+the name be added? Default is to the outside of the axis.}
+
+\item{nameCex}{numeric: What font size should the name text be?}
 
 \item{nameKula}{What colour should the name text be?}
 
-\item{nameCex}{What font size should the name text be?}
+\item{nameOffset}{numeric: How far from the axis should the name be? Works
+as the second value in the vector for the 'adj' argument of [text()], but
+reversed so positive values move away from the axis; the first value in
+the vector is kept at 0.5 to centre the text.}
 
-\item{nameOffset}{numeric: How far from the axis should the name text be?
-Works as the second value in the vector for the 'adj' argument of
-[text()]; the first is 0.5, to centre the text.}
-
-\item{nameSrt}{What angle should the name text be? Positive values rotate
-the label clockwise (i.e. the top moves right).}
-
-\item{gridEvery}{numeric: Add a gridline across the full plot every how
-many scaffolding bars? If NULL, matches 'labelEvery'; see there for
-details.}
-
-\item{gridFirst}{numeric: Which should be the first gridline shown? Counts
-from the bottom up on the y-axes and the left across on the x-axes.
-Provide the index, not the tick value.}
-
-\item{gridLwd}{numeric: How thick should the grid lines be? Set this or
-'gridType' as 0 to suppress any grid lines.}
-
-\item{gridType}{numeric: What line type should the gridlines be? See the
-'axisType' argument. Set this or gridLwd as 0 to suppress grid lines.}
-
-\item{gridKula}{What colour should the gridlines be?}
-
-\item{interval}{numeric: What interval is between the scaffolding mesh? See
-also the 'tickCount' and 'labels' arguments. Only one of these three can
-be used, with the priority being 1. 'labels', 2. 'interval', 3.
-'tickCount'.}
+\item{nameSrt}{numeric: What angle should the name text be set at?
+Positive values rotate the text clockwise (i.e. the tops of the letters
+move right).}
 }
 \description{
-The syntax and logic for customising axes in base R are not
-  intuitive (to me). This function allows the different parts of the axis
-  to be customised more clearly.
+The syntax and logic for customising axes in R are not
+  intuitive to me. This function allows different parts of an axis to be
+  more customised with more clarity.
 
-  This function only works properly if called after a [plot()] call where
-  `'xaxs' = "i"` and `'yaxs' = "i"`. See examples.
+  **IMPORTANT** This function **ONLY** works correctly if called after
+  using [plot()] with the 'xaxs' and 'yaxs' **BOTH** set to "i". If not,
+  the numbers on the axis will not correspond correctly to the location of
+  the values. See examples.
 
-  Everything is based on the concept of a scaffold, which is a mesh that
-  the tickmarks, gridlines, and labels align to. By deault, these tend to
-  align with each other, but they can be offset, or only a subset of them
-  included (for example, add a label every 4 scaffold locations, but a grid
-  line every 2, etc.)
-}
-\examples{
-\dontrun{
-  # Most simple implementation
-  plot(1:10, xaxs = "i", yaxs = "i", axes = FALSE)
-  add_axis(1, 1)
+  Everything is based on a 'scaffold' mesh, which tickmarks, gridlines and
+  labels align to.
 
-  # Use different tick mark spacing
-  plot(1:10, xaxs = "i", yaxs = "i", axes = FALSE)
-  add_axis(2, tickSeq = 0.25, gridEvery = 2, labelEvery = 4)
+  **Labels**: The values that are indicated along the axis (e.g. 0, 1, 2,
+  ...)
 
-  # Compare labels and gridline offsetting (use the "labelFirst" argument)
-  plot(1:10, xaxs = "i", yaxs = "i", axes = FALSE)
-  add_axis_3(4, tickSeq = 0.5, gridKula = "blue", gridEvery = 2,
-             labelEvery = 2, labelFirst = 3, labelKula = "blue")
-  add_axis_3(2, tickSeq = 1, gridEvery = 2, gridKula = "red",
-             labelEvery = 2, labelKula = "red")
-}
+  **Ticks**: The notch along the axis that shows the precise location the
+  labels refer to.
 
-\dontrun{
-  # Understand alignMidPoint argument; compare these three matrix plots
-  # 1) doesn't align
-  image(matrix(c(1:144), ncol = 12, byrow = TRUE),
-        xaxs = "i", yaxs = "i", axes = FALSE)
-  add_axis(1, labels = month.abb[1:12], alignMidPoint = FALSE)
+  **Gridlines**: Lines that extend from the axis to the opposite side of
+  the plot. To suppress them and just add an axis, set 'gridLwd' as 0.
 
-  # 2) Aligned with midpoints
-  image(matrix(c(1:144), ncol = 12, byrow = TRUE),
-        xaxs = "i", yaxs = "i", axes = FALSE)
-  add_axis(1, labels = month.abb[1:12], alignMidPoint = FALSE)
+  By default, these tend to align with each other, but they can be offset,
+  or only a subset can be included. For example, tick marks can be included
+  every 4 locations along the scaffold mesh, gridlines every 2, and a label
+  every 1.
 
-  # 3) An extra label is added to align at the edges
-  image(matrix(c(1:144), ncol = 12, byrow = TRUE),
-        xaxs = "i", yaxs = "i", axes = FALSE)
-  add_axis(1, labels = month.abb[c(1:12, 1)], alignMidPoint = FALSE)
-}
+  Also keep in mind these definitions when reading this documentation:
 
+  **Axis**: The line along the side of the plot.
+
+  **Name**: The name of the axis indicates what the values refer to, for
+  example "Temperature (K)".
 }

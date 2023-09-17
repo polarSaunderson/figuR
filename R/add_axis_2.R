@@ -1,37 +1,38 @@
 add_axis_2 <- function(axis,
-                       axisLwd  = 1,
-                       axisType = 1,
-                       axisKula = "#1A1A1AFF",
 
-                       labels    = NULL,
-                       interval  = NULL,
-                       tickCount = NULL,
-                       alignMidPoints = FALSE,
+                     labels    = NULL,
+                     interval  = NULL,
+                     tickCount = NULL,
+                     alignMidPoints = FALSE,
 
-                       tickEvery  = NULL,
-                       tickFirst  = NULL,
-                       tickLength = 0.2,
-                       tickKula   = "#1A1A1AFF",
+                     gridEvery = NULL,
+                     gridFirst = NULL,
+                     gridKula  = "#E6E6E6AA",
+                     gridLwd   = 1,
+                     gridType  = 1,
 
-                       labelEvery  = 2,
-                       labelFirst  = NULL,
-                       labelOffset = NULL,
-                       labelCex    = 0.92,
-                       labelSrt    = NULL,
-                       labelKula   = "#4D4D4DFF",
+                     tickEvery  = NULL,
+                     tickFirst  = NULL,
+                     tickKula   = "#1A1A1AFF",
+                     tickLength = 0.2,
 
-                       name       = NULL,
-                       nameSide   = NULL,
-                       nameKula   = "#1A1A1AFF",
-                       nameCex    = 1,
-                       nameOffset = NULL,
-                       nameSrt    = NULL,
+                     axisLwd  = 1,
+                     axisType = 1,
+                     axisKula = "#1A1A1AFF",
 
-                       gridEvery = NULL,
-                       gridFirst = NULL,
-                       gridLwd   = 1,
-                       gridType  = 1,
-                       gridKula  = "#E6E6E6AA") {
+                     labelEvery  = NULL,
+                     labelFirst  = NULL,
+                     labelCex    = 0.92,
+                     labelKula   = "#4D4D4DFF",
+                     labelOffset = NULL,
+                     labelSrt    = NULL,
+
+                     name       = NULL,
+                     nameSide   = NULL,
+                     nameCex    = 1,
+                     nameKula   = "#1A1A1AFF",
+                     nameOffset = NULL,
+                     nameSrt    = NULL) {
   # Code ----------------------------------------------------------------------
   # Retrieve coordinates of the current figure
   figPoints <- graphics::par("usr")
@@ -49,7 +50,7 @@ add_axis_2 <- function(axis,
   # ticks (preference is that order).
   if (is.null(labels)) {
     if (is.null(interval) & is.null(tickCount)) {
-      stop("Either provide labels, or set the tickSeq or tickCount arguments")
+      stop("Either provide labels, or set the interval or tickCount arguments")
     }
   } else {
     tickCount <- length(labels)
@@ -64,7 +65,7 @@ add_axis_2 <- function(axis,
                          seq(figBottom, figTop,    length = tickCount),
                          seq(figLeft,   figRight,  length = tickCount),
                          seq(figBottom, figTop,    length = tickCount))
-    } else if (!is.null(tickSeq)) {
+    } else if (!is.null(interval)) {
       scaffold <- switch(axis,
                          seq(figLeft,   figRight,  interval),
                          seq(figBottom, figTop,    interval),
@@ -74,7 +75,7 @@ add_axis_2 <- function(axis,
   } else if (isTRUE(alignMidPoints)) { # ticks offset (for bars / matrices)
     # Option 2: Ticks should be offset (i.e. for a matric or bar chart)
     if (!is.null(interval)) {
-      skOff <- tickSeq / 2       # offset by half, to the middle
+      skOff <- interval / 2       # offset by half, to the middle
       scaffold <- switch(axis,
                          seq(figLeft   + skOff, figRight - skOff, interval),
                          seq(figBottom + skOff, figTop   - skOff, interval),
@@ -100,22 +101,35 @@ add_axis_2 <- function(axis,
   }
 
   # Labels ---------------------------------------------------------------------
-  labelFirst <- domR::set_if_null(labelFirst, labelEvery)
-
   # If no labels are provided, just use actual values calculated
   if (is.null(labels)) labels <- round(scaffold,
                                        signif(sd(scaffold), 3) |>
                                          domR::count_decimal_places())
 
   # Where do the labels go?
-  if (length(labelEvery) == 1) {
-    # Option 1: Label every x ticks
-    labels <- labels[seq(labelFirst, length(scaffold), labelEvery)]
+  if (!is.null(labelEvery)) {
+    # Option 1: Defaults, but we want at least 5 (if possible)
+    labelTest <- labels[seq(2, length(scaffold), 2)]
+    if (length(labelTest) < 5) {
+      labels <- labels[seq(1, length(scaffold), 1)]
+      labelEvery <- 1
+      labelFirst <- 1
+    } else {
+      labels <- labelTest
+      labelEvery <- 2
+      labelFirst <- 2
+    }
+    labelLocations <- scaffold[seq(labelFirst, length(scaffold), labelEvery)]
+  } else if (length(labelEvery) == 1) {
+    # Option 2: Label every x ticks (user-defined)
+    labelFirst <- domR::set_if_null(labelFirst, labelEvery)
+    labels     <- labels[seq(labelFirst, length(scaffold), labelEvery)]
     labelLocations <- scaffold[seq(labelFirst, length(scaffold), labelEvery)]
   } else {
-    # Options 2: Label only specific ticks (labelEvery is a vector of indices)
+    # Option 3: Label only specific ticks (labelEvery is a vector of indices)
     labels <- labels[labelEvery]
     labelLocations <- scaffold[labelEvery]
+    labelFirst <- domR::set_if_null(labelFirst, labelEvery[1]) # for others
   }
 
   # Tickmarks ------------------------------------------------------------------
@@ -185,7 +199,16 @@ add_axis_2 <- function(axis,
                    figTop, labelLocations)
 
   if (!is.null(labelSrt)) labelSrt <- labelSrt * -1 # so input rotation is clockwise
-  labelOffset <- domR::set_if_null(labelOffset, 0.9)
+  labelOffset <- domR::set_if_null(labelOffset,
+                                   switch(axis, 0.9, 0.5, 0.9, 0.5))
+  cat2(labelX)
+  cat2(labelY)
+  cat2(labels)
+  cat2(labelKula)
+  cat2(labelSrt)
+  cat2(labelCex)
+  cat2(labelOffset)
+  print_line(">")
 
   graphics::text(x = labelX, y = labelY,
                  labels = labels,

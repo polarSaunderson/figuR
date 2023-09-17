@@ -1,215 +1,384 @@
 pre_plot <- function(xLimits, yLimits,
 
-                     main = "",
-                     mainOffset = 0.25,
-                     mainCex = 1.1,
+                       main       = "",
+                       mainOffset = 0.25,
+                       mainCex    = 1.1,
 
-                     xTickSeq        = NULL,     # xSeq = NULL,
-                     xTickCount      = NULL,
-                     xTickFirst      = NULL,
-                     xTickEvery      = NULL,
-                     xAlignMidPoints = FALSE,
-                     xTickLength     = 0.2,
-                     xTickKula       = "#1A1A1AFF",
+                       xLabels = NULL,
+                       yLabels = NULL,
 
-                     xAxisSide       = 1,
-                     xLabels         = NULL,
-                     xLabelEvery     = NULL,
-                     xLabelFirst     = NULL,
-                     xLabelOffset    = NULL,
-                     xLabelCex       = 0.92,
-                     xLabelSrt       = 0,
-                     xLabelKula      = "#4D4D4DFF",
+                       xInterval = NULL,
+                       yInterval = NULL,
 
-                     xAxisLwd        = 1,
-                     xAxisType       = 1,
-                     xAxisKula       = "#1A1A1AFF",
+                       xTickCount  = NULL,
+                       yTickCount  = NULL,
 
-                     xName           = NULL,
-                     xNameAxis       = NULL,
-                     xNameKula       = "#1A1A1AFF",
-                     xNameCex        = 1,
-                     xNameOffset     = NULL,
-                     xNameSrt        = NULL,
+                       alignMidPoints  = FALSE,
+                       xAlignMidPoints = NULL,
+                       yAlignMidPoints = NULL,
 
-                     xGridEvery      = NULL,
-                     xGridFirst      = NULL,
-                     xGridLwd        = 1,
-                     xGridType       = 1,
-                     xGridKula       = "#E6E6E6AA",
+               gridEvery  = NULL,
+               xGridEvery = NULL,
+               yGridEvery = NULL,
 
+               gridFirst  = NULL,
+               xGridFirst = NULL,
+               yGridFirst = NULL,
 
-                     yTickSeq        = NULL,     # YSeq = NULL,
-                     yTickCount      = NULL,
-                     yTickFirst      = NULL,
-                     yTickEvery      = NULL,
-                     yAlignMidPoints = FALSE,
-                     yTickLength     = 0.2,
-                     yTickKula       = "#1A1A1AFF",
+               gridLwd    = 1,
+               xGridLwd   = NULL,
+               yGridLwd   = NULL,
 
-                     yAxisSide       = 2,
-                     yLabels         = NULL,
-                     yLabelEvery     = NULL,
-                     yLabelFirst     = NULL,
-                     yLabelOffset    = NULL,
-                     yLabelCex       = 0.92,
-                     yLabelSrt       = NULL,
-                     yLabelKula      = "#4D4D4DFF",
+               gridKula    = "#E6E6E6AA",
+               xGridKula  = NULL,
+               yGridKula  = NULL,
 
-                     yAxisLwd        = 1,
-                     yAxisType       = 1,
-                     yAxisKula       = "#1A1A1AFF",
+               gridType   = 1,
+               xGridType  = NULL,
+               yGridType  = NULL,
 
-                     yName           = NULL,
-                     yNameAxis       = NULL,
-                     yNameKula       = "#1A1A1AFF",
-                     yNameCex        = 1,
-                     yNameOffset     = NULL,
-                     yNameSrt        = NULL,
+                       tickFirst   = NULL,
+                       xTickFirst  = NULL,
+                       yTickFirst  = NULL,
 
-                     yGridEvery      = NULL,
-                     yGridFirst      = NULL,
-                     yGridLwd        = 1,
-                     yGridType       = 1,
-                     yGridKula       = "#E6E6E6AA",
+                       tickEvery   = NULL,
+                       xTickEvery  = NULL,
+                       yTickEvery  = NULL,
 
+                       tickLength  = 0.2,
+                       xTickLength = NULL,
+                       yTickLength = NULL,
 
-                     addOrigin       = TRUE,
-                     originLwd       = 1,
-                     originType      = 1,
-                     originKula      = "#B3B3B388",
+                       tickKula    = "#1A1A1AFF",
+                       xTickKula   = NULL,
+                       yTickKula   = NULL,
 
-                     add121          = FALSE,
+             xAxisSide = 1,
+             yAxisSide = 2,
 
-                     annotationLocation = c(0, 0),
-                     annotationText     = "",
-                     annotationCex      = 0.9,
+             axisLwd   = 1,
+             xAxisLwd  = NULL,
+             yAxisLwd  = NULL,
 
-                     mar = c(2.5, 3.5, 2.5, 1.5)) {
+             axisType  = 1,
+             xAxisType = NULL,
+             yAxisType = NULL,
 
-  #' Fine-combed control for plots
+             axisKula  = "#1A1A1AFF",
+             xAxisKula = NULL,
+             yAxisKula = NULL,
+
+                       labelEvery   = NULL,
+                       xLabelEvery  = NULL,
+                       yLabelEvery  = NULL,
+
+                       labelFirst   = NULL,
+                       xLabelFirst  = NULL,
+                       yLabelFirst  = NULL,
+
+                       labelOffset  = NULL,
+                       xLabelOffset = NULL,
+                       yLabelOffset = NULL,
+
+                       labelCex     = 0.92,
+                       xLabelCex    = NULL,
+                       yLabelCex    = NULL,
+
+                       labelKula    = "#4D4D4DFF",
+                       xLabelKula   = NULL,
+                       yLabelKula   = NULL,
+
+                       labelSrt  = NULL,
+                       xLabelSrt = NULL,
+                       yLabelSrt = NULL,
+
+               xName = NULL,
+               yName = NULL,
+
+               xNameSide   = NULL,
+               yNameSide   = NULL,
+
+               nameCex     = 1,
+               xNameCex    = NULL,
+               yNameCex    = NULL,
+
+               nameKula   = "#1A1A1AFF",
+               xNameKula  = NULL,
+               yNameKula  = NULL,
+
+               nameOffset  = NULL,
+               xNameOffset = NULL,
+               yNameOffset = NULL,
+
+               nameSrt     = NULL,
+               xNameSrt    = NULL,
+               yNameSrt    = NULL,
+
+                       addOrigin  = TRUE,
+                       originLwd  = 1,
+                       originType = 1,
+                       originKula = "#B3B3B388",
+
+                       add121          = FALSE,
+
+                       annotationLocation = c(0, 0),
+                       annotationText     = "",
+                       annotationCex      = 0.9,
+
+                       mar = c(2.5, 3.5, 2.5, 1.5)) {
+  #' Easily customisable plot areas
   #'
-  #' @description Easily customisable plot areas
+  #' @description An alternative to the default [plot()] that allows more clarity
+  #'   in the customisation.
+  #'
+  #'   Most values can be set for the x and y axes separately (e.g. 'xGridLwd' and
+  #'   'yGridLwd') or with a single argument that applies to both (e.g.
+  #'   'gridLwd'). However, a single argument doesn't make sense for some
+  #'   arguments (e.g. 'xLabels' and 'yLabels' are almost always different).
+  #'
+  #'   Many of these arguments are fed directly into [add_axis()] so see there for
+  #'   an overview of how the axes work.
+  #'
   #' @inheritParams add_axis
+  #' @param xLimits,yLimits vector The min and max values for the x and y-axes;
+  #'   each vector is separately fed into [calc_intervals()] so see there for
+  #'   accepted inputs. These are the only two mandatory arguments for this
+  #'   function.
+  #' @param main What is the title of the plot? Added above the plot, using
+  #'   [mtext()].
+  #' @param mainOffset How far from the axis should the title be? Set using the
+  #'   'line' argument of [mtext()].
+  #' @param mainCex What font size should the title text be?
+  #'
+  #' @param addOrigin Should origin lines be added? These are thicker than the
+  #'   gridlines to help orient the reader.
+  #'
+  #'   If TRUE, lines are drawn at x = 0 and y = 0; provide a vector c(x, y) for
+  #'   alternative values. IF FALSE, no origin is added to the plot.
+  #' @param originLwd numeric: How thick should the origin lines be?
+  #' @param originKula What colour should the origin lines be?
+  #' @param originType What type of line should the origin lines be? See
+  #'   'axisType'.
+  #'
+  #' @param add121 logical. Should a red line with a gradient of x:y = 1:1 be
+  #'   added to the plot?
+  #'
+  #' @param annotationLocation numeric: A c(x, y) vector indicating where the
+  #'   annotation text should go.
+  #' @param annotationText "string": If not NULL, this text will be added to the
+  #'   plot. Useful for subplot numbers (e.g. "a)"). Be aware that subsequent data
+  #'   could cover this.
+  #' @param annotationCex What font size should the 'annotationText' be?
+  #' @param mar Set the margins around the plot. See [par()] for details.
+  #'
   #' @export
 
   # Code -----------------------------------------------------------------------
+  # Handle defaults & matching x / y axes setting
+  xAlignMidPoints <- domR::set_if_null(xAlignMidPoints, alignMidPoints)
+  yAlignMidPoints <- domR::set_if_null(yAlignMidPoints, alignMidPoints)
+
+  ## Gridlines ----
+  xGridEvery <- domR::set_if_null(xGridEvery, gridEvery)
+  yGridEvery <- domR::set_if_null(yGridEvery, gridEvery)
+
+  xGridFirst <- domR::set_if_null(xGridFirst, gridFirst)
+  yGridFirst <- domR::set_if_null(yGridFirst, gridFirst)
+
+  xGridLwd <- domR::set_if_null(xGridLwd, gridLwd)
+  yGridLwd <- domR::set_if_null(yGridLwd, gridLwd)
+
+  xGridType <- domR::set_if_null(xGridType, gridType)
+  yGridType <- domR::set_if_null(yGridType, gridType)
+
+  xGridKula <- domR::set_if_null(xGridKula, gridKula)
+  yGridKula <- domR::set_if_null(yGridKula, gridKula)
+
+  ## Tickmarks ----
+  xTickFirst <- domR::set_if_null(xTickFirst, tickFirst)
+  yTickFirst <- domR::set_if_null(yTickFirst, tickFirst)
+
+  xTickEvery <- domR::set_if_null(xTickEvery, tickEvery)
+  yTickEvery <- domR::set_if_null(yTickEvery, tickEvery)
+
+  xTickLength <- domR::set_if_null(xTickLength, tickLength)
+  yTickLength <- domR::set_if_null(yTickLength, tickLength)
+
+  xTickKula <- domR::set_if_null(xTickKula, tickKula)
+  yTickKula <- domR::set_if_null(yTickKula, tickKula)
+
+  ## Axes ----
+  xAxisLwd <- domR::set_if_null(xAxisLwd, axisLwd)
+  yAxisLwd <- domR::set_if_null(yAxisLwd, axisLwd)
+
+  xAxisType <- domR::set_if_null(xAxisType, axisType)
+  yAxisType <- domR::set_if_null(yAxisType, axisType)
+
+  xAxisKula <- domR::set_if_null(xAxisKula, axisKula)
+  yAxisKula <- domR::set_if_null(yAxisKula, axisKula)
+
+  ## Labels ----
+  xLabelEvery <- domR::set_if_null(xLabelEvery, labelEvery)
+  yLabelEvery <- domR::set_if_null(yLabelEvery, labelEvery)
+
+  xLabelFirst <- domR::set_if_null(xLabelFirst, labelFirst)
+  yLabelFirst <- domR::set_if_null(yLabelFirst, labelFirst)
+
+  xLabelCex <- domR::set_if_null(xLabelCex, labelCex)
+  yLabelCex <- domR::set_if_null(yLabelCex, labelCex)
+
+  xLabelKula <- domR::set_if_null(xLabelKula, labelKula)
+  yLabelKula <- domR::set_if_null(yLabelKula, labelKula)
+
+  xLabelSrt <- domR::set_if_null(xLabelSrt, labelSrt)
+  yLabelSrt <- domR::set_if_null(yLabelSrt, labelSrt)
+
+  xLabelOffset <- domR::set_if_null(xLabelOffset, labelOffset)
+  yLabelOffset <- domR::set_if_null(yLabelOffset, labelOffset)
+
+  ## Names ----
+  xNameCex <- domR::set_if_null(xNameCex, nameCex)
+  yNameCex <- domR::set_if_null(xNameCex, nameCex)
+
+  xNameKula <- domR::set_if_null(xNameKula, nameKula)
+  yNameKula <- domR::set_if_null(xNameKula, nameKula)
+
+  xNameOffset <- domR::set_if_null(xNameOffset, nameOffset)
+  yNameOffset <- domR::set_if_null(xNameOffset, nameOffset)
+
+  xNameSrt <- domR::set_if_null(xNameSrt, nameSrt)
+  yNameSrt <- domR::set_if_null(xNameSrt, nameSrt)
+
+
+  # Basic Plot -----------------------------------------------------------------
   # Set margins
   graphics::par(mar = mar)
 
   # Blank plot area
-  graphics::plot(xLimits, yLimits,
-                 type = "n",
+  graphics::plot(xLimits, yLimits,                   # defines the bounds
                  xlim = xLimits, ylim = yLimits,
-                 xaxs = "i", yaxs = "i",
+                 type = "n",
+                 xaxs = "i", yaxs = "i",             # CRITICAL for add_axis
                  axes = FALSE,
-                 main = NA,
-                 ylab = "", xlab = "")
+                 main = NA, xlab = "", ylab = "")
 
-  graphics::mtext(main, side = 3, line = mainOffset, cex = mainCex)
+  # Add title
+  graphics::mtext(text = main,
+                  side = 3,
+                  line = mainOffset,
+                  cex  = mainCex)
 
   # x-axis ---------------------------------------------------------------------
   # Labels
+  # Calculate defaults if nothing is entered
   if (is.null(xLabels)) {
-    if (is.null(xTickSeq)) {
-      xIntervals <- calc_intervals(xLimits[1], xLimits[2], intMax = 256,
+    if (is.null(xInterval)) {
+      xAutomated <- calc_intervals(xLimits[1], xLimits[2], intMax = 256,
                                    preferError = TRUE) |> suppressWarnings()
-      xLabels  <- xIntervals$vVector
-      xTickSeq <- xIntervals$vSeq
-
-      # xIntervals <- 1
-      # xLabels    <- seq(xLimits[1], xLimits[2], 1)
-      # xTickSeq   <- 1
+      xLabels   <- xAutomated$vector
+      xInterval <- xAutomated$interval
     }
   }
 
+  # Where do the labels go?
   xLabelEvery <- domR::set_if_null(xLabelEvery, ceiling(length(xLabels) / 8))
   xLabelFirst <- domR::set_if_null(xLabelFirst, xLabelEvery)
 
-  # Add to the plot
-  xTickLocations <- add_axis(axis           = xAxisSide,
-                             tickSeq        = xTickSeq,
-                             tickCount      = xTickCount,
-                             tickEvery      = xTickEvery,
-                             tickFirst      = xTickFirst,
-                             alignMidPoints = xAlignMidPoints,
-                             tickLength     = xTickLength,
-                             tickKula       = xTickKula,
-                             labels         = xLabels,
-                             labelEvery     = xLabelEvery,
-                             labelFirst     = xLabelFirst,
-                             labelOffset    = xLabelOffset,
-                             labelCex       = xLabelCex,
-                             labelSrt       = xLabelSrt,
-                             labelKula      = xLabelKula,
-                             axisLwd        = xAxisLwd,
-                             axisType       = xAxisType,
-                             axisKula       = xAxisKula,
-                             name           = xName,
-                             nameAxis       = xNameAxis,
-                             nameKula       = xNameKula,
-                             nameCex        = xNameCex,
-                             nameOffset     = xNameOffset,
-                             nameSrt        = xNameSrt,
-                             gridEvery      = xGridEvery,
-                             gridFirst      = xGridFirst,
-                             gridLwd        = xGridLwd,
-                             gridType       = xGridType,
-                             gridKula       = xGridKula)
+  # The rest is just done via add_axis
+  xInfo <- add_axis_2(axis = xAxisSide,
+
+                      labels    = xLabels,
+                      interval  = xInterval,
+                      tickCount = xTickCount,
+
+                      alignMidPoints = xAlignMidPoints,
+
+                      gridEvery = xGridEvery,
+                      gridFirst = xGridFirst,
+                      gridKula  = xGridKula,
+                      gridLwd   = xGridLwd,
+                      gridType  = xGridType,
+
+                      tickEvery  = xTickEvery,
+                      tickFirst  = xTickFirst,
+                      tickKula   = xTickKula,
+                      tickLength = xTickLength,
+
+                      axisLwd  = xAxisLwd,
+                      axisType = xAxisType,
+                      axisKula = xAxisKula,
+
+                      labelEvery  = xLabelEvery,
+                      labelFirst  = xLabelFirst,
+                      labelCex    = xLabelCex,
+                      labelKula   = xLabelKula,
+                      labelOffset = xLabelOffset,
+                      labelSrt    = xLabelSrt,
+
+                      name       = xName,
+                      nameSide   = xNameSide,
+                      nameCex    = xNameCex,
+                      nameKula   = xNameKula,
+                      nameOffset = xNameOffset,
+                      nameSrt    = xNameSrt)
 
   # y-axis ---------------------------------------------------------------------
   # Labels
-  # cat("\n pre_plot line_157")
-  # print(yLabels)
-  # print_line(".")
+  # Calculate defaults if nothing is entered
   if (is.null(yLabels)) {
-    if (is.null(yTickSeq)) {
-      yIntervals <- calc_intervals(yLimits[1], yLimits[2], intMax = 256,
+    if (is.null(yInterval)) {
+      yAutomated <- calc_intervals(yLimits[1], yLimits[2], intMax = 256,
                                    preferError = TRUE) |> suppressWarnings()
-      yLabels  <- yIntervals$vVector
-      yTickSeq <- yIntervals$vSeq
+      yLabels   <- yAutomated$vector
+      yInterval <- yAutomated$interval
     }
   }
-  # cat("\n pre_plot line_168")
-  # print(yLabels)
-  # print_line(":")
 
+  # Where do the labels go?
   yLabelEvery <- domR::set_if_null(yLabelEvery, ceiling(length(yLabels) / 8))
   yLabelFirst <- domR::set_if_null(yLabelFirst, yLabelEvery)
 
-  # Add to the plot
-  yTickLocations <- add_axis(axis           = yAxisSide,
-                             tickSeq        = yTickSeq,
-                             tickCount      = yTickCount,
-                             tickEvery      = yTickEvery,
-                             tickFirst      = yTickFirst,
-                             alignMidPoints = yAlignMidPoints,
-                             tickLength     = yTickLength,
-                             tickKula       = yTickKula,
-                             labels         = yLabels,
-                             labelEvery     = yLabelEvery,
-                             labelFirst     = yLabelFirst,
-                             labelOffset    = yLabelOffset,
-                             labelCex       = yLabelCex,
-                             labelSrt       = yLabelSrt,
-                             labelKula      = yLabelKula,
-                             axisLwd        = yAxisLwd,
-                             axisType       = yAxisType,
-                             axisKula       = yAxisKula,
-                             name           = yName,
-                             nameAxis       = yNameAxis,
-                             nameKula       = yNameKula,
-                             nameCex        = yNameCex,
-                             nameOffset     = yNameOffset,
-                             nameSrt        = yNameSrt,
-                             gridEvery      = yGridEvery,
-                             gridFirst      = yGridFirst,
-                             gridLwd        = yGridLwd,
-                             gridType       = yGridType,
-                             gridKula       = yGridKula)
+  # The rest is just done via add_axis
+  yInfo <- add_axis_2(axis = yAxisSide,
 
-  # Additional Decoration ------------------------------------------------------
-  # Add origin
+                      labels    = yLabels,
+                      interval  = yInterval,
+                      tickCount = yTickCount,
+
+                      alignMidPoints = yAlignMidPoints,
+
+                      gridEvery = yGridEvery,
+                      gridFirst = yGridFirst,
+                      gridKula  = yGridKula,
+                      gridLwd   = yGridLwd,
+                      gridType  = yGridType,
+
+                      tickEvery  = yTickEvery,
+                      tickFirst  = yTickFirst,
+                      tickKula   = yTickKula,
+                      tickLength = yTickLength,
+
+                      axisLwd  = yAxisLwd,
+                      axisType = yAxisType,
+                      axisKula = yAxisKula,
+
+                      labelEvery  = yLabelEvery,
+                      labelFirst  = yLabelFirst,
+                      labelCex    = yLabelCex,
+                      labelKula   = yLabelKula,
+                      labelOffset = yLabelOffset,
+                      labelSrt    = yLabelSrt,
+
+                      name       = yName,
+                      nameSide   = yNameSide,
+                      nameCex    = yNameCex,
+                      nameKula   = yNameKula,
+                      nameOffset = yNameOffset,
+                      nameSrt    = yNameSrt)
+
+  # Addition Decoration --------------------------------------------------------
+  # Origin?
+  # Can be FALSE (no origin), TRUE (automated to 0,0) or set (e.g. c(x, y))
   if (!isFALSE(addOrigin)) {
     if (isTRUE(addOrigin)) {
       addOrigin <- c(0, 0)
@@ -218,20 +387,20 @@ pre_plot <- function(xLimits, yLimits,
                      col = originKula, lwd = originLwd, lty = originType)
   }
 
-  # Add line with a gradient of 1 (i.e. x:y = 1:1 (1 to 1) (1 2 1))
-  if (isTRUE(add121)) {
+  # Gradient line?
+  if (isTRUE(add121)) { # i.e. x:y = 1:1 line
     graphics::abline(c(0, 1), lty = 2, col = "#EE6677FF")
   }
 
-  # Add a subplot number
+  # Subplot Number
   graphics::text(x = annotationLocation[1],
                  y = annotationLocation[2],
                  annotationText,
                  cex = annotationCex)
 
-  # Add plot frame
+  # Frame
   add_plot_frame()
 
-  return(invisible(list("xTicks" = xTickLocations,
-                        "yTicks" = yTickLocations)))
+  return(invisible(list("xTicks" = xInfo,
+                        "yTicks" = yInfo)))
 }
