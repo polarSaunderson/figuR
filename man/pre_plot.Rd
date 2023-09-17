@@ -8,14 +8,14 @@ pre_plot(
   xLimits,
   yLimits,
   main = "",
-  mainOffset = 0.25,
+  mainOffset = 1,
   mainCex = 1.1,
   xLabels = NULL,
   yLabels = NULL,
   xInterval = NULL,
   yInterval = NULL,
-  xTickCount = NULL,
-  yTickCount = NULL,
+  xMeshlines = NULL,
+  yMeshlines = NULL,
   alignMidPoints = FALSE,
   xAlignMidPoints = NULL,
   yAlignMidPoints = NULL,
@@ -102,7 +102,7 @@ pre_plot(
   annotationLocation = c(0, 0),
   annotationText = "",
   annotationCex = 0.9,
-  mar = c(2.5, 3.5, 2.5, 1.5)
+  mar = c(3, 3.5, 2.5, 1.5)
 )
 }
 \arguments{
@@ -132,7 +132,7 @@ function.}
 
 \item{gridEvery}{numeric: Gridlines across the full plot should be added
 every how many lines of the scaffold mesh? If NULL, matches 'labelEvery';
-see their for details on the accepted input.}
+see there for details on the accepted input.}
 
 \item{gridFirst}{numeric: Which line of the scaffold mesh should the first
 gridline be added to? 'gridEvery' subsequently counts mesh lines from
@@ -154,7 +154,7 @@ this line. If NULL (default), matches 'labelFirst'; see there for details
 on the accepted input.}
 
 \item{tickEvery}{Tickmarks should be drawn every how many lines of the
-scaffold mesh? If NULL, matches 'labelEvery'; see their for details on
+scaffold mesh? If NULL, matches 'labelEvery'; see there for details on
 the accepted input.}
 
 \item{tickLength}{numeric: How long should the tickmarks be? Works based on
@@ -213,9 +213,9 @@ as the second value in the vector for the 'adj' argument of [text()], but
 reversed so positive values move away from the axis; the first value in
 the vector is kept at 0.5 to centre the text.}
 
-\item{nameSrt}{numeric: What angle should the name text be set at?
-Positive values rotate the text clockwise (i.e. the tops of the letters
-move right).}
+\item{nameSrt}{numeric: What angle should the name text be set at? Positive
+values rotate the text clockwise (i.e. the tops of the letters move
+right).}
 
 \item{addOrigin}{Should origin lines be added? These are thicker than the
   gridlines to help orient the reader.

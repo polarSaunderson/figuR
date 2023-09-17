@@ -1,7 +1,7 @@
 pre_plot <- function(xLimits, yLimits,
 
                        main       = "",
-                       mainOffset = 0.25,
+                       mainOffset = 1,
                        mainCex    = 1.1,
 
                        xLabels = NULL,
@@ -10,8 +10,8 @@ pre_plot <- function(xLimits, yLimits,
                        xInterval = NULL,
                        yInterval = NULL,
 
-                       xTickCount  = NULL,
-                       yTickCount  = NULL,
+                       xMeshlines  = NULL,
+                       yMeshlines  = NULL,
 
                        alignMidPoints  = FALSE,
                        xAlignMidPoints = NULL,
@@ -129,7 +129,7 @@ pre_plot <- function(xLimits, yLimits,
                        annotationText     = "",
                        annotationCex      = 0.9,
 
-                       mar = c(2.5, 3.5, 2.5, 1.5)) {
+                       mar = c(3, 3.5, 2.5, 1.5)) {
   #' Easily customisable plot areas
   #'
   #' @description An alternative to the default [plot()] that allows more clarity
@@ -249,17 +249,23 @@ pre_plot <- function(xLimits, yLimits,
 
   ## Names ----
   xNameCex <- domR::set_if_null(xNameCex, nameCex)
-  yNameCex <- domR::set_if_null(xNameCex, nameCex)
+  yNameCex <- domR::set_if_null(yNameCex, nameCex)
 
   xNameKula <- domR::set_if_null(xNameKula, nameKula)
-  yNameKula <- domR::set_if_null(xNameKula, nameKula)
+  yNameKula <- domR::set_if_null(yNameKula, nameKula)
 
   xNameOffset <- domR::set_if_null(xNameOffset, nameOffset)
-  yNameOffset <- domR::set_if_null(xNameOffset, nameOffset)
+  yNameOffset <- domR::set_if_null(yNameOffset, nameOffset)
 
   xNameSrt <- domR::set_if_null(xNameSrt, nameSrt)
-  yNameSrt <- domR::set_if_null(xNameSrt, nameSrt)
+  yNameSrt <- domR::set_if_null(yNameSrt, nameSrt)
 
+  ## Handle limits ----
+  xAuto <- calc_intervals(xLimits, intMax = 256, preferError = TRUE)
+  yAuto <- calc_intervals(yLimits, intMax = 256, preferError = TRUE)
+
+  xLimits <- xAuto$range
+  yLimits <- yAuto$range
 
   # Basic Plot -----------------------------------------------------------------
   # Set margins
@@ -280,27 +286,18 @@ pre_plot <- function(xLimits, yLimits,
                   cex  = mainCex)
 
   # x-axis ---------------------------------------------------------------------
-  # Labels
-  # Calculate defaults if nothing is entered
-  if (is.null(xLabels)) {
-    if (is.null(xInterval)) {
-      xAutomated <- calc_intervals(xLimits[1], xLimits[2], intMax = 256,
-                                   preferError = TRUE) |> suppressWarnings()
-      xLabels   <- xAutomated$vector
-      xInterval <- xAutomated$interval
-    }
+  # Define defaults if nothing is entered
+  if (is.null(xLabels) & is.null(xMeshlines) & is.null(xInterval)) {
+    xLabels   <- xAuto$vector
+    xInterval <- xAuto$interval
   }
-
-  # Where do the labels go?
-  xLabelEvery <- domR::set_if_null(xLabelEvery, ceiling(length(xLabels) / 8))
-  xLabelFirst <- domR::set_if_null(xLabelFirst, xLabelEvery)
 
   # The rest is just done via add_axis
   xInfo <- add_axis(axis = xAxisSide,
 
                     labels    = xLabels,
                     interval  = xInterval,
-                    tickCount = xTickCount,
+                    meshlines = xMeshlines,
 
                     alignMidPoints = xAlignMidPoints,
 
@@ -336,35 +333,29 @@ pre_plot <- function(xLimits, yLimits,
     add_axis(axis       = switch(xAxisSide, 3, NA, 1, NA),   # opposing side
              alignMidPoints = xAlignMidPoints,
              labels     = unlist(xInfo),
+             labelEvery = xLabelEvery,
+             labelFirst = xLabelFirst,
              labelKula  = "white", labelCex = 0.001,         # hide labels
              tickEvery  = xTickEvery,
              tickFirst  = xTickFirst,
              tickKula   = xTickKula,
-             tickLength = xTickLength)
+             tickLength = xTickLength,
+             gridLwd = 0)
   }
 
   # y-axis ---------------------------------------------------------------------
-  # Labels
-  # Calculate defaults if nothing is entered
-  if (is.null(yLabels)) {
-    if (is.null(yInterval)) {
-      yAutomated <- calc_intervals(yLimits[1], yLimits[2], intMax = 256,
-                                   preferError = TRUE) |> suppressWarnings()
-      yLabels   <- yAutomated$vector
-      yInterval <- yAutomated$interval
-    }
+  # Define defaults if nothing is entered
+  if (is.null(yLabels) & is.null(yMeshlines) & is.null(yInterval)) {
+    yLabels   <- yAuto$vector
+    yInterval <- yAuto$interval
   }
-
-  # Where do the labels go?
-  yLabelEvery <- domR::set_if_null(yLabelEvery, ceiling(length(yLabels) / 8))
-  yLabelFirst <- domR::set_if_null(yLabelFirst, yLabelEvery)
 
   # The rest is just done via add_axis
   yInfo <- add_axis(axis = yAxisSide,
 
                     labels    = yLabels,
                     interval  = yInterval,
-                    tickCount = yTickCount,
+                    meshlines = yMeshlines,
 
                     alignMidPoints = yAlignMidPoints,
 
@@ -401,16 +392,18 @@ pre_plot <- function(xLimits, yLimits,
     add_axis(axis       = switch(yAxisSide, NA, 4, NA, 2),   # opposing side
              alignMidPoints = yAlignMidPoints,
              labels     = unlist(yInfo),
+             labelEvery = yLabelEvery,
+             labelFirst = yLabelFirst,
              labelKula  = "white", labelCex = 0.001,         # hide the labels
              tickEvery  = yTickEvery,
              tickFirst  = yTickFirst,
              tickKula   = yTickKula,
-             tickLength = yTickLength)
+             tickLength = yTickLength,
+             gridLwd = 0)
   }
 
   # Addition Decoration --------------------------------------------------------
-  # Origin?
-  # Can be FALSE (no origin), TRUE (automated to 0,0) or set (e.g. c(x, y))
+  # Origin? FALSE = no origin; TRUE is automated to 0,0; or set (i.e. c(x, y))
   if (!isFALSE(addOrigin)) {
     if (isTRUE(addOrigin)) {
       addOrigin <- c(0, 0)
