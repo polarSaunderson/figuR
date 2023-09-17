@@ -125,23 +125,23 @@ pre_plot <- function(xLimits, yLimits,
 
                        add121          = FALSE,
 
-                       annotationLocation = c(0, 0),
-                       annotationText     = "",
-                       annotationCex      = 0.9,
+                       tagLocation = NULL,
+                       tagText     = NULL,
+                       tagCex      = 1,
 
                        mar = c(3, 3.5, 2.5, 1.5)) {
   #' Easily customisable plot areas
   #'
-  #' @description An alternative to the default [plot()] that allows more clarity
-  #'   in the customisation.
+  #' @description An alternative to the default [plot()] that allows more
+  #'   clarity in the customisation.
   #'
-  #'   Most values can be set for the x and y axes separately (e.g. 'xGridLwd' and
-  #'   'yGridLwd') or with a single argument that applies to both (e.g.
+  #'   Most values can be set for the x and y axes separately (e.g. 'xGridLwd'
+  #'   and 'yGridLwd') or with a single argument that applies to both (e.g.
   #'   'gridLwd'). However, a single argument doesn't make sense for some
   #'   arguments (e.g. 'xLabels' and 'yLabels' are almost always different).
   #'
-  #'   Many of these arguments are fed directly into [add_axis()] so see there for
-  #'   an overview of how the axes work.
+  #'   Many of these arguments are fed directly into [add_axis()] so see there
+  #'   for an overview of how the axes work.
   #'
   #' @inheritParams add_axis
   #' @param xLimits,yLimits vector The min and max values for the x and y-axes;
@@ -155,14 +155,14 @@ pre_plot <- function(xLimits, yLimits,
   #' @param mainCex What font size should the title text be?
   #'
   #' @param tickBoth Should tick marks be added to the opposing axis? For
-  #'   example, if the y-axis is on the left (2), should tickmarks also be
-  #'   added to the right axis (4)?
+  #'   example, if the y-axis is on the left (2), should tickmarks also be added
+  #'   to the right axis (4)?
   #'
   #' @param addOrigin Should origin lines be added? These are thicker than the
   #'   gridlines to help orient the reader.
   #'
-  #'   If TRUE, lines are drawn at x = 0 and y = 0; provide a vector c(x, y) for
-  #'   alternative values. IF FALSE, no origin is added to the plot.
+  #'   If TRUE, lines are drawn at x = 0 and y = 0; provide a `c(x, y)` vector
+  #'   for alternative values. IF FALSE, no origin is added to the plot.
   #' @param originLwd numeric: How thick should the origin lines be?
   #' @param originKula What colour should the origin lines be?
   #' @param originType What type of line should the origin lines be? See
@@ -171,12 +171,12 @@ pre_plot <- function(xLimits, yLimits,
   #' @param add121 logical. Should a red line with a gradient of x:y = 1:1 be
   #'   added to the plot?
   #'
-  #' @param annotationLocation numeric: A c(x, y) vector indicating where the
-  #'   annotation text should go.
-  #' @param annotationText "string": If not NULL, this text will be added to the
-  #'   plot. Useful for subplot numbers (e.g. "a)"). Be aware that subsequent data
-  #'   could cover this.
-  #' @param annotationCex What font size should the 'annotationText' be?
+  #' @param tagText "string": If not NULL, this text will be added to the plot.
+  #'   Useful for "tagging" subplots with letters/numbers (e.g. `"a)"`). Be
+  #'   aware that subsequent plotting of data could cover this.
+  #' @param tagLocation numeric: A `c(x, y)` vector indicating where the
+  #'   'tagText' should go.
+  #' @param tagCex What font size should the 'tagText' be?
   #' @param mar Set the margins around the plot. See [par()] for details.
   #'
   #' @export
@@ -261,8 +261,10 @@ pre_plot <- function(xLimits, yLimits,
   yNameSrt <- domR::set_if_null(yNameSrt, nameSrt)
 
   ## Handle limits ----
-  xAuto <- calc_intervals(xLimits, intMax = 256, preferError = TRUE)
-  yAuto <- calc_intervals(yLimits, intMax = 256, preferError = TRUE)
+  xAuto <- calc_intervals(xLimits, intMax = 256,
+                          preferError = TRUE) |> suppressWarnings()
+  yAuto <- calc_intervals(yLimits, intMax = 256,
+                          preferError = TRUE) |> suppressWarnings()
 
   xLimits <- xAuto$range
   yLimits <- yAuto$range
@@ -418,11 +420,16 @@ pre_plot <- function(xLimits, yLimits,
   }
 
   # Subplot Number
-  if (!is.null(annotationText)) {
-    graphics::text(x = annotationLocation[1],
-                   y = annotationLocation[2],
-                   annotationText,
-                   cex = annotationCex)
+  if (!is.null(tagText)) {
+    if (is.null(tagLocation)) {
+      tagLocation <- c(xLimits[1] + ((xLimits[2] - xLimits[1]) * 0.035),
+                       yLimits[1] + ((yLimits[2] - yLimits[1]) * 0.9))
+    }
+
+    graphics::text(x = tagLocation[1],
+                   y = tagLocation[2],
+                   tagText,
+                   cex = tagCex)
   }
 
   # Frame

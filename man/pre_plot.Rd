@@ -99,9 +99,9 @@ pre_plot(
   originType = 1,
   originKula = "#B3B3B388",
   add121 = FALSE,
-  annotationLocation = c(0, 0),
-  annotationText = "",
-  annotationCex = 0.9,
+  tagLocation = NULL,
+  tagText = NULL,
+  tagCex = 1,
   mar = c(3, 3.5, 2.5, 1.5)
 )
 }
@@ -164,8 +164,8 @@ from the axis). See [par()] for more details.}
 \item{tickKula}{What colour should the tickmarks be? Defaults to black.}
 
 \item{tickBoth}{Should tick marks be added to the opposing axis? For
-example, if the y-axis is on the left (2), should tickmarks also be
-added to the right axis (4)?}
+example, if the y-axis is on the left (2), should tickmarks also be added
+to the right axis (4)?}
 
 \item{axisLwd}{How thick should the axis line be?}
 
@@ -220,8 +220,8 @@ right).}
 \item{addOrigin}{Should origin lines be added? These are thicker than the
   gridlines to help orient the reader.
 
-  If TRUE, lines are drawn at x = 0 and y = 0; provide a vector c(x, y) for
-  alternative values. IF FALSE, no origin is added to the plot.}
+  If TRUE, lines are drawn at x = 0 and y = 0; provide a `c(x, y)` vector
+  for alternative values. IF FALSE, no origin is added to the plot.}
 
 \item{originLwd}{numeric: How thick should the origin lines be?}
 
@@ -233,26 +233,26 @@ right).}
 \item{add121}{logical. Should a red line with a gradient of x:y = 1:1 be
 added to the plot?}
 
-\item{annotationLocation}{numeric: A c(x, y) vector indicating where the
-annotation text should go.}
+\item{tagLocation}{numeric: A `c(x, y)` vector indicating where the
+'tagText' should go.}
 
-\item{annotationText}{"string": If not NULL, this text will be added to the
-plot. Useful for subplot numbers (e.g. "a)"). Be aware that subsequent data
-could cover this.}
+\item{tagText}{"string": If not NULL, this text will be added to the plot.
+Useful for "tagging" subplots with letters/numbers (e.g. `"a)"`). Be
+aware that subsequent plotting of data could cover this.}
 
-\item{annotationCex}{What font size should the 'annotationText' be?}
+\item{tagCex}{What font size should the 'tagText' be?}
 
 \item{mar}{Set the margins around the plot. See [par()] for details.}
 }
 \description{
-An alternative to the default [plot()] that allows more clarity
-  in the customisation.
+An alternative to the default [plot()] that allows more
+  clarity in the customisation.
 
-  Most values can be set for the x and y axes separately (e.g. 'xGridLwd' and
-  'yGridLwd') or with a single argument that applies to both (e.g.
+  Most values can be set for the x and y axes separately (e.g. 'xGridLwd'
+  and 'yGridLwd') or with a single argument that applies to both (e.g.
   'gridLwd'). However, a single argument doesn't make sense for some
   arguments (e.g. 'xLabels' and 'yLabels' are almost always different).
 
-  Many of these arguments are fed directly into [add_axis()] so see there for
-  an overview of how the axes work.
+  Many of these arguments are fed directly into [add_axis()] so see there
+  for an overview of how the axes work.
 }

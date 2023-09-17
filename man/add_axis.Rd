@@ -186,8 +186,8 @@ The syntax and logic for customising axes in R are not
   the numbers on the axis will not correspond correctly to the location of
   the values. See examples.
 
-  Everything is based on a 'scaffold' mesh, which tickmarks, gridlines and
-  labels align to.
+  Everything is based on a 'scaffold' of meshlines, which tickmarks,
+  gridlines and labels all align to.
 
   **Labels**: The values that are indicated along the axis (e.g. 0, 1, 2,
   ...)
@@ -198,12 +198,13 @@ The syntax and logic for customising axes in R are not
   **Gridlines**: Lines that extend from the axis to the opposite side of
   the plot. To suppress them and just add an axis, set 'gridLwd' as 0.
 
-  By default, these tend to align with each other, but they can be offset,
-  or only a subset can be included. For example, tick marks can be included
-  every 4 locations along the scaffold mesh, gridlines every 2, and a label
-  every 1.
+  By default, these three all tend to align with each other, but they can
+  be offset, or only a subset can be included. For example, tick marks can
+  be included every 4 meshlines along the scaffolding, gridlines every 2,
+  and a label every 1.
 
-  Also keep in mind these definitions when reading this documentation:
+  Additionally, keep in mind these definitions when reading this
+  documentation:
 
   **Axis**: The line along the side of the plot.
 
