@@ -2,7 +2,7 @@ add_axis <- function(axis,
 
                      labels    = NULL,
                      interval  = NULL,
-                     tickCount = NULL,
+                     meshlines = NULL,
                      alignMidPoints = FALSE,
 
                      gridEvery = NULL,
@@ -71,30 +71,42 @@ add_axis <- function(axis,
   #' @param axis Which side of the plot should the axis be added to? 1 = bottom;
   #'   2 = left; 3 = top; 4 = right.
   #'
-  #' @param interval What interval is between the scaffolding meshlines? See
-  #'   also the 'tickCount' and 'labels' argument. Only one of these three
+  #' @param labels Which labels should be displayed beside the axis? If
+  #'   provided, this argument is also used to define the number of scaffold
+  #'   meshlines. It usually makes most sense to provide a vector of numbers,
+  #'   but strings can also be provided, which allows values such as "<0" on the
+  #'   axis, for example.
+  #'
+  #'   **NOTE** The function assumes that all values in the 'labels' vector are
+  #'   equally spaced. For example, both `c(2, 4, 6, 8)` and `c(-1, "a", 0,
+  #'   7.7)` would create 4 equally split meshlines in the same locations. The
+  #'   difference would just be the label beside the meshline. There is no check
+  #'   that the values entered correspond to the real value of the location. The
+  #'   labels should therefore be considered as decorative features.
+  #'
+  #'   **NOTE**: The name of this argument can be a misnomer depending on how it
+  #'   is used. For example, if 'labelEvery' is not 1, then some of the values
+  #'   entered as 'labels' will be skipped over. It is necessary to provide all
+  #'   possible labels (e.g. `c(1:8)`), and then use 'labelEvery' and
+  #'   'labelFirst' to establish which should be displayed.
+  #'
+  #'   If this argument is not provided, and the scaffold is built using the
+  #'   'meshlines' or 'interval' arguments, then the labels will default to
+  #'   their true values. Only one of these three arguments can be used at once;
+  #'   the order of priority is 1. 'labels'; 2. 'interval'; and 3. 'meshlines'.
+  #'
+  #' @param interval What interval is between the scaffolding meshlines?
+  #'   Automatically identifies the minimum and maximum values of the plot's
+  #'   axis and uses [seq()] to calculate the intermediate tick locations. See
+  #'   also the 'meshlines' and 'labels' argument. Only one of these three
   #'   arguments can be used at once; the order of priority is 1. 'labels'; 2.
-  #'   'interval'; and 3. 'tickCount'.
+  #'   'interval'; and 3. 'meshlines'.
   #'
-  #' @param tickCount numeric: How many ticks should be created? Include the
-  #'   ticks that would fall at the minimum and maximum values. See also the
-  #'   'interval' and 'labels' arguments. Only one of these three arguments can
-  #'   be used at once; the order of priority is 1. 'labels'; 2. 'interval'; and
-  #'   3. 'tickCount'.
-  #'
-  #' @param labels Which labels (i.e. axis values) should be displayed beside
-  #'   the axis? By default (i.e. NULL), the actual numeric values are added.
-  #'   However, customisable labels can also be added.
-  #'
-  #'   This argument can be a bit of a misnomer depending on how it is used - if
-  #'   labels are provided, the scaffolding is calculated based on the number of
-  #'   labels. To leave parts of the scaffold mesh empty, it is necessary to
-  #'   provide labels for all possible scaffold lines in the mesh, but then
-  #'   exclude them with the "labelEvery" argument.
-  #'
-  #'   See also the 'interval' and 'tickCount' arguments. Only one of these
-  #'   three arguments can be used at once; the order of priority is 1.
-  #'   'labels'; 2. 'interval'; and 3. 'tickCount'.
+  #' @param meshlines numeric: How many ticks should be created? Include all
+  #'   possible ticks, including those that would fall at the minimum and
+  #'   maximum values. See also the 'interval' and 'labels' arguments. Only one
+  #'   of these three arguments can be used at once; the order of priority is 1.
+  #'   'labels'; 2. 'interval'; and 3. 'meshlines'.
   #'
   #' @param alignMidPoints BINARY: Should the scaffold mesh be aligned midway
   #'   between values? The default is FALSE, which is necessary for a scatter
@@ -109,7 +121,7 @@ add_axis <- function(axis,
   #'
   #' @param gridEvery numeric: Gridlines across the full plot should be added
   #'   every how many lines of the scaffold mesh? If NULL, matches 'labelEvery';
-  #'   see their for details on the accepted input.
+  #'   see there for details on the accepted input.
   #' @param gridFirst numeric: Which line of the scaffold mesh should the first
   #'   gridline be added to? 'gridEvery' subsequently counts mesh lines from
   #'   this line. If NULL (default), matches 'labelFirst'; see there for details
@@ -122,7 +134,7 @@ add_axis <- function(axis,
   #'   'axisType' argument. If 0, the drawing of gridlines is suppressed.
   #'
   #' @param tickEvery Tickmarks should be drawn every how many lines of the
-  #'   scaffold mesh? If NULL, matches 'labelEvery'; see their for details on
+  #'   scaffold mesh? If NULL, matches 'labelEvery'; see there for details on
   #'   the accepted input.
   #' @param tickFirst numeric: Which line of the scaffold mesh should the first
   #'   tickmark be added to? 'tickEvery' subsequently counts mesh lines from
@@ -174,9 +186,9 @@ add_axis <- function(axis,
   #'   as the second value in the vector for the 'adj' argument of [text()], but
   #'   reversed so positive values move away from the axis; the first value in
   #'   the vector is kept at 0.5 to centre the text.
-  #' @param nameSrt numeric: What angle should the name text be set at?
-  #'   Positive values rotate the text clockwise (i.e. the tops of the letters
-  #'   move right).
+  #' @param nameSrt numeric: What angle should the name text be set at? Positive
+  #'   values rotate the text clockwise (i.e. the tops of the letters move
+  #'   right).
   #'
   #' @export
 
@@ -196,22 +208,22 @@ add_axis <- function(axis,
   # The scaffold depends on the number of labels, or the interval, or number of
   # ticks (preference is that order).
   if (is.null(labels)) {
-    if (is.null(interval) & is.null(tickCount)) {
-      stop("Either provide labels, or set the interval or tickCount arguments")
+    if (is.null(interval) & is.null(meshlines)) {
+      stop("Either provide labels, or set the interval or meshlines arguments")
     }
   } else {
-    tickCount <- length(labels)
+    meshlines <- length(labels)
   }
 
   # Calculate scaffold locations
   if (isFALSE(alignMidPoints)) {       # ticks on the values (for line graph)
     # Option 1: Ticks should align with the values (i.e. for a scatter plot)
-    if (!is.null(tickCount)) {
+    if (!is.null(meshlines)) {
       scaffold <- switch(axis,
-                         seq(figLeft,   figRight,  length = tickCount),
-                         seq(figBottom, figTop,    length = tickCount),
-                         seq(figLeft,   figRight,  length = tickCount),
-                         seq(figBottom, figTop,    length = tickCount))
+                         seq(figLeft,   figRight,  length = meshlines),
+                         seq(figBottom, figTop,    length = meshlines),
+                         seq(figLeft,   figRight,  length = meshlines),
+                         seq(figBottom, figTop,    length = meshlines))
     } else if (!is.null(interval)) {
       scaffold <- switch(axis,
                          seq(figLeft,   figRight,  interval),
@@ -228,22 +240,22 @@ add_axis <- function(axis,
                          seq(figBottom + skOff, figTop   - skOff, interval),
                          seq(figLeft   + skOff, figRight - skOff, interval),
                          seq(figBottom + skOff, figTop   - skOff, interval))
-    } else if (!is.null(tickCount)) {
+    } else if (!is.null(meshlines)) {
       # For a tick count, need to calculate the interval first to offset it, so
       # add an extra tick, then "shift" the bar to exclude that extra one
       scaffold <- switch(axis,
-                         seq(figLeft,   figRight, length = tickCount + 1),
-                         seq(figBottom, figTop,   length = tickCount + 1),
-                         seq(figLeft,   figRight, length = tickCount + 1),
-                         seq(figBottom, figTop,   length = tickCount + 1))
+                         seq(figLeft,   figRight, length = meshlines + 1),
+                         seq(figBottom, figTop,   length = meshlines + 1),
+                         seq(figLeft,   figRight, length = meshlines + 1),
+                         seq(figBottom, figTop,   length = meshlines + 1))
 
       # But we need to offset by half an interval, so that they align
       skOff    <- (scaffold[2] - scaffold[1]) / 2 # offset to middle
       scaffold <- switch(axis,
-                         seq(figLeft   + skOff, figRight - skOff, length = tickCount),
-                         seq(figBottom + skOff, figTop   - skOff, length = tickCount),
-                         seq(figLeft   + skOff, figRight - skOff, length = tickCount),
-                         seq(figBottom + skOff, figTop   - skOff, length = tickCount))
+                         seq(figLeft   + skOff, figRight - skOff, length = meshlines),
+                         seq(figBottom + skOff, figTop   - skOff, length = meshlines),
+                         seq(figLeft   + skOff, figRight - skOff, length = meshlines),
+                         seq(figBottom + skOff, figTop   - skOff, length = meshlines))
     }
   }
 
@@ -255,16 +267,19 @@ add_axis <- function(axis,
 
   # Where do the labels go?
   if (is.null(labelEvery)) {
-    # Option 1: Defaults, but we want at least 5 (if possible)
-    labelTest <- labels[seq(2, length(scaffold), 2)]
-    if (length(labelTest) < 5) {
-      labels <- labels[seq(1, length(scaffold), 1)]
+    # Option 1: Defaults, but we want at least 5 (if possible) and less than 10
+    labelEvery <- 2
+    labelFirst <- domR::set_if_null(labelFirst, labelEvery)
+    labelTest <- labels[seq(2, length(scaffold), labelEvery)]
+
+    if (length(labelTest) <= 5) {
       labelEvery <- 1
       labelFirst <- 1
-    } else {
+    } else if (length(labelTest) > 10) {
       labels <- labelTest
-      labelEvery <- 2
-      labelFirst <- 2
+      if (length(labelTest) > 10) {
+        labelEvery <- ceiling(length(labelTest) / 8)
+      }
     }
     labelLocations <- scaffold[seq(labelFirst, length(scaffold), labelEvery)]
   } else if (length(labelEvery) == 1) {
@@ -310,8 +325,9 @@ add_axis <- function(axis,
     hGrids <- switch(axis, NA, gridLocations, NA, gridLocations)
 
     # Darker lines to align with the labels
-    vGuide <- switch(axis, labelLocations, NA, labelLocations, NA)
-    hGuide <- switch(axis, NA, labelLocations, NA, labelLocations)
+    guides <- labelLocations[which(labelLocations %in% gridLocations)]
+    vGuide <- switch(axis, guides, NA, guides, NA)
+    hGuide <- switch(axis, NA, guides, NA, guides)
 
     # Add them
     graphics::abline(v = vGrids, h = hGrids,
@@ -347,7 +363,7 @@ add_axis <- function(axis,
 
   if (!is.null(labelSrt)) labelSrt <- labelSrt * -1 # so input rotation is clockwise
   labelOffset <- domR::set_if_null(labelOffset,
-                                   switch(axis, 0.9, 0.5, 0.9, 0.5))
+                                   switch(axis, 0.75, 0.5, 0.65, 0.5))
 
   graphics::text(x = labelX, y = labelY,
                  labels = labels,
@@ -360,21 +376,22 @@ add_axis <- function(axis,
     # Location
     namePos  <- switch(axis, 1, 3, 3, 3)
     nameSide <- domR::set_if_null(nameSide, axis) # default is outside axis
-    figMidX  <- switch(nameSide, figMidX, figLeft, figMidX, figLeft)
-    figMidY  <- switch(nameSide, figBottom, figMidY, figBottom, figMidY)
+    nameX  <- switch(nameSide, figMidX, figLeft, figMidX, figRight)
+    nameY  <- switch(nameSide, figBottom, figMidY, figTop, figMidY)
 
     nameSrt  <- domR::set_if_null(nameSrt, switch(nameSide, 0, 90, 0, 270))
     nameOffset <- switch(axis,
-                         domR::set_if_null(nameOffset, 2.4),
-                         domR::set_if_null(nameOffset, -2.2),
+                         domR::set_if_null(nameOffset, 3.75),
+                         domR::set_if_null(nameOffset, 3.5),
                          domR::set_if_null(nameOffset, 1.5),
                          domR::set_if_null(nameOffset, 1.75))
+    if (axis == 2) nameOffset <- nameOffset * -1  # positive is outwards for all
 
-    graphics::text(x = figMidX,
-                   y = figMidY,
+    graphics::text(x = nameX,
+                   y = nameY,
                    labels = name,
                    xpd = TRUE,
-                   adj = c(0.5, nameOffset * -1), # positive outwards
+                   adj = c(0.5, nameOffset),
                    cex = nameCex, srt = nameSrt, col = nameKula)
   }
 

@@ -8,7 +8,7 @@ add_axis(
   axis,
   labels = NULL,
   interval = NULL,
-  tickCount = NULL,
+  meshlines = NULL,
   alignMidPoints = FALSE,
   gridEvery = NULL,
   gridFirst = NULL,
@@ -40,30 +40,42 @@ add_axis(
 \item{axis}{Which side of the plot should the axis be added to? 1 = bottom;
 2 = left; 3 = top; 4 = right.}
 
-\item{labels}{Which labels (i.e. axis values) should be displayed beside
-  the axis? By default (i.e. NULL), the actual numeric values are added.
-  However, customisable labels can also be added.
+\item{labels}{Which labels should be displayed beside the axis? If
+  provided, this argument is also used to define the number of scaffold
+  meshlines. It usually makes most sense to provide a vector of numbers,
+  but strings can also be provided, which allows values such as "<0" on the
+  axis, for example.
 
-  This argument can be a bit of a misnomer depending on how it is used - if
-  labels are provided, the scaffolding is calculated based on the number of
-  labels. To leave parts of the scaffold mesh empty, it is necessary to
-  provide labels for all possible scaffold lines in the mesh, but then
-  exclude them with the "labelEvery" argument.
+  **NOTE** The function assumes that all values in the 'labels' vector are
+  equally spaced. For example, both `c(2, 4, 6, 8)` and `c(-1, "a", 0,
+  7.7)` would create 4 equally split meshlines in the same locations. The
+  difference would just be the label beside the meshline. There is no check
+  that the values entered correspond to the real value of the location. The
+  labels should therefore be considered as decorative features.
 
-  See also the 'interval' and 'tickCount' arguments. Only one of these
-  three arguments can be used at once; the order of priority is 1.
-  'labels'; 2. 'interval'; and 3. 'tickCount'.}
+  **NOTE**: The name of this argument can be a misnomer depending on how it
+  is used. For example, if 'labelEvery' is not 1, then some of the values
+  entered as 'labels' will be skipped over. It is necessary to provide all
+  possible labels (e.g. `c(1:8)`), and then use 'labelEvery' and
+  'labelFirst' to establish which should be displayed.
 
-\item{interval}{What interval is between the scaffolding meshlines? See
-also the 'tickCount' and 'labels' argument. Only one of these three
+  If this argument is not provided, and the scaffold is built using the
+  'meshlines' or 'interval' arguments, then the labels will default to
+  their true values. Only one of these three arguments can be used at once;
+  the order of priority is 1. 'labels'; 2. 'interval'; and 3. 'meshlines'.}
+
+\item{interval}{What interval is between the scaffolding meshlines?
+Automatically identifies the minimum and maximum values of the plot's
+axis and uses [seq()] to calculate the intermediate tick locations. See
+also the 'meshlines' and 'labels' argument. Only one of these three
 arguments can be used at once; the order of priority is 1. 'labels'; 2.
-'interval'; and 3. 'tickCount'.}
+'interval'; and 3. 'meshlines'.}
 
-\item{tickCount}{numeric: How many ticks should be created? Include the
-ticks that would fall at the minimum and maximum values. See also the
-'interval' and 'labels' arguments. Only one of these three arguments can
-be used at once; the order of priority is 1. 'labels'; 2. 'interval'; and
-3. 'tickCount'.}
+\item{meshlines}{numeric: How many ticks should be created? Include all
+possible ticks, including those that would fall at the minimum and
+maximum values. See also the 'interval' and 'labels' arguments. Only one
+of these three arguments can be used at once; the order of priority is 1.
+'labels'; 2. 'interval'; and 3. 'meshlines'.}
 
 \item{alignMidPoints}{BINARY: Should the scaffold mesh be aligned midway
   between values? The default is FALSE, which is necessary for a scatter
@@ -78,7 +90,7 @@ be used at once; the order of priority is 1. 'labels'; 2. 'interval'; and
 
 \item{gridEvery}{numeric: Gridlines across the full plot should be added
 every how many lines of the scaffold mesh? If NULL, matches 'labelEvery';
-see their for details on the accepted input.}
+see there for details on the accepted input.}
 
 \item{gridFirst}{numeric: Which line of the scaffold mesh should the first
 gridline be added to? 'gridEvery' subsequently counts mesh lines from
@@ -95,7 +107,7 @@ drawing of gridlines is suppressed.}
 'axisType' argument. If 0, the drawing of gridlines is suppressed.}
 
 \item{tickEvery}{Tickmarks should be drawn every how many lines of the
-scaffold mesh? If NULL, matches 'labelEvery'; see their for details on
+scaffold mesh? If NULL, matches 'labelEvery'; see there for details on
 the accepted input.}
 
 \item{tickFirst}{numeric: Which line of the scaffold mesh should the first
@@ -160,9 +172,9 @@ as the second value in the vector for the 'adj' argument of [text()], but
 reversed so positive values move away from the axis; the first value in
 the vector is kept at 0.5 to centre the text.}
 
-\item{nameSrt}{numeric: What angle should the name text be set at?
-Positive values rotate the text clockwise (i.e. the tops of the letters
-move right).}
+\item{nameSrt}{numeric: What angle should the name text be set at? Positive
+values rotate the text clockwise (i.e. the tops of the letters move
+right).}
 }
 \description{
 The syntax and logic for customising axes in R are not
