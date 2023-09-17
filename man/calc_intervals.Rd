@@ -6,7 +6,7 @@
 \usage{
 calc_intervals(
   x0,
-  x1,
+  x1 = NULL,
   intMin = 5,
   intIdeal = 12,
   intMax = 100,

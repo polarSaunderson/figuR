@@ -1,4 +1,4 @@
-calc_intervals <- function(x0, x1,
+calc_intervals <- function(x0, x1 = NULL,
                            intMin = 5, intIdeal = 12, intMax = 100,
                            forceZero = NULL,
                            preferError = FALSE) {
@@ -55,7 +55,7 @@ calc_intervals <- function(x0, x1,
 
   # Handle if labels (character strings) are provided instead of numbers -------
   if ("character" %in% methods::is(x0)) {
-    x0    <- length(xStart)
+    x0  <- length(x0)
     x1  <- 1
     xLabels <- TRUE        # add to metadata; for other functions
   } else {
@@ -63,10 +63,10 @@ calc_intervals <- function(x0, x1,
   }
 
   # Handle if more than one value is provided as v1 ----------------------------
-  if (length(x0) == 2) {                # xStart is c(xStart, xEnd)
+  if (length(x0) == 2) {                # x0 is c(x0, x1)
     x1 <- x0[2]
     x0 <- x0[1]
-  } else if (length(x0) > 2) {          # xStart is a full vector
+  } else if (length(x0) > 2) {          # x0 is a full vector
     if (x0[1] > x0[length(x0)]) {
       x1 <- min(x0, na.rm = TRUE)
       x0 <- max(x0, na.rm = TRUE)
@@ -241,13 +241,15 @@ calc_intervals <- function(x0, x1,
   }
 
   # Change from ascending to descending?
+  xRange <- range(xVector)
   if (x0 > x1) {
     xVector <- rev(xVector)
+    xRange  <- rev(xRange)
   }
 
   # Return with metadata for other functions to understand what happened here!
   return(list("vector"     = xVector,
-              "range"      = range(xVector),
+              "range"      = xRange,
               "labels"     = xLabels,
               "interval"   = xVector[2] - xVector[1],
               "usesPretty" = usesPretty))
