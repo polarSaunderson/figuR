@@ -377,5 +377,6 @@ add_axis <- function(axis,
                    adj = c(0.5, nameOffset * -1), # positive outwards
                    cex = nameCex, srt = nameSrt, col = nameKula)
   }
+
   return(invisible(list(scaffold)))
 }

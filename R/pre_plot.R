@@ -56,6 +56,10 @@ pre_plot <- function(xLimits, yLimits,
              xAxisSide = 1,
              yAxisSide = 2,
 
+             tickBoth = FALSE,
+             xTickBoth = NULL,
+             yTickBoth = NULL,
+
              axisLwd   = 1,
              xAxisLwd  = NULL,
              yAxisLwd  = NULL,
@@ -150,6 +154,10 @@ pre_plot <- function(xLimits, yLimits,
   #'   'line' argument of [mtext()].
   #' @param mainCex What font size should the title text be?
   #'
+  #' @param tickBoth Should tick marks be added to the opposing axis? For
+  #'   example, if the y-axis is on the left (2), should tickmarks also be
+  #'   added to the right axis (4)?
+  #'
   #' @param addOrigin Should origin lines be added? These are thicker than the
   #'   gridlines to help orient the reader.
   #'
@@ -206,6 +214,9 @@ pre_plot <- function(xLimits, yLimits,
 
   xTickKula <- domR::set_if_null(xTickKula, tickKula)
   yTickKula <- domR::set_if_null(yTickKula, tickKula)
+
+  xTickBoth <- domR::set_if_null(xTickBoth, tickBoth)
+  yTickBoth <- domR::set_if_null(yTickBoth, tickBoth)
 
   ## Axes ----
   xAxisLwd <- domR::set_if_null(xAxisLwd, axisLwd)
@@ -321,6 +332,16 @@ pre_plot <- function(xLimits, yLimits,
                     nameKula   = xNameKula,
                     nameOffset = xNameOffset,
                     nameSrt    = xNameSrt)
+  if (isTRUE(xTickBoth)) {
+    add_axis(axis       = switch(xAxisSide, 3, NA, 1, NA),   # opposing side
+             alignMidPoints = xAlignMidPoints,
+             labels     = unlist(xInfo),
+             labelKula  = "white", labelCex = 0.001,         # hide labels
+             tickEvery  = xTickEvery,
+             tickFirst  = xTickFirst,
+             tickKula   = xTickKula,
+             tickLength = xTickLength)
+  }
 
   # y-axis ---------------------------------------------------------------------
   # Labels
@@ -375,6 +396,17 @@ pre_plot <- function(xLimits, yLimits,
                     nameKula   = yNameKula,
                     nameOffset = yNameOffset,
                     nameSrt    = yNameSrt)
+
+  if (isTRUE(yTickBoth)) {
+    add_axis(axis       = switch(yAxisSide, NA, 4, NA, 2),   # opposing side
+             alignMidPoints = yAlignMidPoints,
+             labels     = unlist(yInfo),
+             labelKula  = "white", labelCex = 0.001,         # hide the labels
+             tickEvery  = yTickEvery,
+             tickFirst  = yTickFirst,
+             tickKula   = yTickKula,
+             tickLength = yTickLength)
+  }
 
   # Addition Decoration --------------------------------------------------------
   # Origin?

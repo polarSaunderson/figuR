@@ -48,6 +48,9 @@ pre_plot(
   yTickKula = NULL,
   xAxisSide = 1,
   yAxisSide = 2,
+  tickBoth = FALSE,
+  xTickBoth = NULL,
+  yTickBoth = NULL,
   axisLwd = 1,
   xAxisLwd = NULL,
   yAxisLwd = NULL,
@@ -159,6 +162,10 @@ the `tcl` argument of [axis()] (but reversed so positive values go away
 from the axis). See [par()] for more details.}
 
 \item{tickKula}{What colour should the tickmarks be? Defaults to black.}
+
+\item{tickBoth}{Should tick marks be added to the opposing axis? For
+example, if the y-axis is on the left (2), should tickmarks also be
+added to the right axis (4)?}
 
 \item{axisLwd}{How thick should the axis line be?}
 
