@@ -254,7 +254,7 @@ add_axis <- function(axis,
                                          domR::count_decimal_places())
 
   # Where do the labels go?
-  if (!is.null(labelEvery)) {
+  if (is.null(labelEvery)) {
     # Option 1: Defaults, but we want at least 5 (if possible)
     labelTest <- labels[seq(2, length(scaffold), 2)]
     if (length(labelTest) < 5) {

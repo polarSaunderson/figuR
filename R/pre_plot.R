@@ -285,42 +285,42 @@ pre_plot <- function(xLimits, yLimits,
   xLabelFirst <- domR::set_if_null(xLabelFirst, xLabelEvery)
 
   # The rest is just done via add_axis
-  xInfo <- add_axis_2(axis = xAxisSide,
+  xInfo <- add_axis(axis = xAxisSide,
 
-                      labels    = xLabels,
-                      interval  = xInterval,
-                      tickCount = xTickCount,
+                    labels    = xLabels,
+                    interval  = xInterval,
+                    tickCount = xTickCount,
 
-                      alignMidPoints = xAlignMidPoints,
+                    alignMidPoints = xAlignMidPoints,
 
-                      gridEvery = xGridEvery,
-                      gridFirst = xGridFirst,
-                      gridKula  = xGridKula,
-                      gridLwd   = xGridLwd,
-                      gridType  = xGridType,
+                    gridEvery = xGridEvery,
+                    gridFirst = xGridFirst,
+                    gridKula  = xGridKula,
+                    gridLwd   = xGridLwd,
+                    gridType  = xGridType,
 
-                      tickEvery  = xTickEvery,
-                      tickFirst  = xTickFirst,
-                      tickKula   = xTickKula,
-                      tickLength = xTickLength,
+                    tickEvery  = xTickEvery,
+                    tickFirst  = xTickFirst,
+                    tickKula   = xTickKula,
+                    tickLength = xTickLength,
 
-                      axisLwd  = xAxisLwd,
-                      axisType = xAxisType,
-                      axisKula = xAxisKula,
+                    axisLwd  = xAxisLwd,
+                    axisType = xAxisType,
+                    axisKula = xAxisKula,
 
-                      labelEvery  = xLabelEvery,
-                      labelFirst  = xLabelFirst,
-                      labelCex    = xLabelCex,
-                      labelKula   = xLabelKula,
-                      labelOffset = xLabelOffset,
-                      labelSrt    = xLabelSrt,
+                    labelEvery  = xLabelEvery,
+                    labelFirst  = xLabelFirst,
+                    labelCex    = xLabelCex,
+                    labelKula   = xLabelKula,
+                    labelOffset = xLabelOffset,
+                    labelSrt    = xLabelSrt,
 
-                      name       = xName,
-                      nameSide   = xNameSide,
-                      nameCex    = xNameCex,
-                      nameKula   = xNameKula,
-                      nameOffset = xNameOffset,
-                      nameSrt    = xNameSrt)
+                    name       = xName,
+                    nameSide   = xNameSide,
+                    nameCex    = xNameCex,
+                    nameKula   = xNameKula,
+                    nameOffset = xNameOffset,
+                    nameSrt    = xNameSrt)
 
   # y-axis ---------------------------------------------------------------------
   # Labels
@@ -339,42 +339,42 @@ pre_plot <- function(xLimits, yLimits,
   yLabelFirst <- domR::set_if_null(yLabelFirst, yLabelEvery)
 
   # The rest is just done via add_axis
-  yInfo <- add_axis_2(axis = yAxisSide,
+  yInfo <- add_axis(axis = yAxisSide,
 
-                      labels    = yLabels,
-                      interval  = yInterval,
-                      tickCount = yTickCount,
+                    labels    = yLabels,
+                    interval  = yInterval,
+                    tickCount = yTickCount,
 
-                      alignMidPoints = yAlignMidPoints,
+                    alignMidPoints = yAlignMidPoints,
 
-                      gridEvery = yGridEvery,
-                      gridFirst = yGridFirst,
-                      gridKula  = yGridKula,
-                      gridLwd   = yGridLwd,
-                      gridType  = yGridType,
+                    gridEvery = yGridEvery,
+                    gridFirst = yGridFirst,
+                    gridKula  = yGridKula,
+                    gridLwd   = yGridLwd,
+                    gridType  = yGridType,
 
-                      tickEvery  = yTickEvery,
-                      tickFirst  = yTickFirst,
-                      tickKula   = yTickKula,
-                      tickLength = yTickLength,
+                    tickEvery  = yTickEvery,
+                    tickFirst  = yTickFirst,
+                    tickKula   = yTickKula,
+                    tickLength = yTickLength,
 
-                      axisLwd  = yAxisLwd,
-                      axisType = yAxisType,
-                      axisKula = yAxisKula,
+                    axisLwd  = yAxisLwd,
+                    axisType = yAxisType,
+                    axisKula = yAxisKula,
 
-                      labelEvery  = yLabelEvery,
-                      labelFirst  = yLabelFirst,
-                      labelCex    = yLabelCex,
-                      labelKula   = yLabelKula,
-                      labelOffset = yLabelOffset,
-                      labelSrt    = yLabelSrt,
+                    labelEvery  = yLabelEvery,
+                    labelFirst  = yLabelFirst,
+                    labelCex    = yLabelCex,
+                    labelKula   = yLabelKula,
+                    labelOffset = yLabelOffset,
+                    labelSrt    = yLabelSrt,
 
-                      name       = yName,
-                      nameSide   = yNameSide,
-                      nameCex    = yNameCex,
-                      nameKula   = yNameKula,
-                      nameOffset = yNameOffset,
-                      nameSrt    = yNameSrt)
+                    name       = yName,
+                    nameSide   = yNameSide,
+                    nameCex    = yNameCex,
+                    nameKula   = yNameKula,
+                    nameOffset = yNameOffset,
+                    nameSrt    = yNameSrt)
 
   # Addition Decoration --------------------------------------------------------
   # Origin?
@@ -393,10 +393,12 @@ pre_plot <- function(xLimits, yLimits,
   }
 
   # Subplot Number
-  graphics::text(x = annotationLocation[1],
-                 y = annotationLocation[2],
-                 annotationText,
-                 cex = annotationCex)
+  if (!is.null(annotationText)) {
+    graphics::text(x = annotationLocation[1],
+                   y = annotationLocation[2],
+                   annotationText,
+                   cex = annotationCex)
+  }
 
   # Frame
   add_plot_frame()

@@ -14,37 +14,19 @@ calc_plot_limits <- function(x, y, expandLimits = TRUE) {
 
   # Code -----------------------------------------------------------------------
   xVector <- calc_intervals(x) |> suppressWarnings()
-  xxLim   <- xVector$vRange
+  xxLim   <- xVector$range
   if (isTRUE(expandLimits)) {
     xxLim <- range(pretty(xxLim))
-    # xxPrec <- domR::count_decimal_places(xxLim) |> max()
-    # if (xxPrec != 0) {
-    #   xxPrec <- 10^(xxPrec - 1)
-    #   xxLim <- c((floor(min(xVector$vRange) * xxPrec )) / xxPrec,
-    #             (ceiling(max(xVector$vRange) * xxPrec)) / xxPrec)
-    # } else {
-    #   xxLim <- c(floor(min(xVector$vRange)),
-    #            ceiling(max(xVector$vRange)))
-    # }
   }
 
   yVector <- calc_intervals(y) |> suppressWarnings()
-  yyLim   <- yVector$vRange
+  yyLim   <- yVector$range
   if (isTRUE(expandLimits)) {
     yyLim <- range(pretty(yyLim))
-    # yyPrec <- domR::count_decimal_places(yyLim) |> max()
-    # if (yyPrec != 0) {
-    #   yyPrec <- 10^(yyPrec - 1)
-    #   yyLim <- c((floor(min(yVector$vRange) * yyPrec )) / yyPrec,
-    #             (ceiling(max(yVector$vRange) * yyPrec)) / yyPrec)
-    # } else {
-    #   yyLim <- c(floor(min(yVector$vRange)),
-    #            ceiling(max(yVector$vRange)))
-    # }
   }
 
   return(list("xxLim" = xxLim,
               "yyLim" = yyLim,
-              "xLabels" = xVector$vLabels,
-              "yLabels" = yVector$vLabels))
+              "xLabels" = xVector$labels,
+              "yLabels" = yVector$labels))
 }
