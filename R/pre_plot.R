@@ -292,9 +292,9 @@ pre_plot <- function(xLimits, yLimits,
   yNameSrt <- set_if_null(yNameSrt, nameSrt)
 
   ## Handle limits ----
-  xAuto <- calc_intervals(xLimits, intMax = 256,
+  xAuto <- calc_intervals(xLimits, intMax = 200000,
                           preferError = TRUE) |> suppressWarnings()
-  yAuto <- calc_intervals(yLimits, intMax = 256,
+  yAuto <- calc_intervals(yLimits, intMax = 200000,
                           preferError = TRUE) |> suppressWarnings()
 
   xLimits <- xAuto$range
