@@ -51,8 +51,6 @@ calc_intervals <- function(x0, x1 = NULL,
   #' @export
 
   # Code -----------------------------------------------------------------------
-  showCat <- FALSE # for help with debugging
-
   # Handle if labels (character strings) are provided instead of numbers -------
   if ("character" %in% methods::is(x0)) {
     x0  <- length(x0)
@@ -75,41 +73,24 @@ calc_intervals <- function(x0, x1 = NULL,
       x0 <- min(x0, na.rm = TRUE)
     }
   }
-  domR::cat2(x0, show = showCat)
-  domR::cat2(x1, show = showCat)
 
   # Basic Set-Up ---------------------------------------------------------------
   # We need to know a few things at the offset
   xx <- c(x0, x1)
-  domR::cat2(xx, show = showCat)
 
-  x0prec <- domR::count_decimal_places(x0)
-  x1prec <- domR::count_decimal_places(x1)
+  x0prec <- count_decimal_places(x0)
+  x1prec <- count_decimal_places(x1)
   xxPrec <- max(x0prec, x1prec, na.rm = TRUE)
-  domR::cat2(xxPrec, show = showCat)
 
   xxDiff <- (max(xx, na.rm = TRUE) - min(xx, na.rm = TRUE)) |>
     round(xxPrec + 1) # range
-  domR::cat2(xxDiff, show = showCat)
-
-  # We can't be too precise for a fit
-  # if (xxPrec > 5) {
-  #   if (isTRUE(preferError)) {
-  #     stop("Values are too precise to calculate exact intervals!")
-  #   } else {
-  #     warning("Values are too precise! Ignoring exact bounds & using `pretty()`\n")
-  #     vVector    <- pretty(vv)
-  #     usesPretty <- TRUE
-  #   }
-  # }
 
   # Is it necessary to add a 0? ------------------------------------------------
   if ((x0 < 0 & x1 > 0) | (x0 > 0 & x1 < 0)) {
-    forceZero <- domR::set_if_null(forceZero, TRUE)   # if diverging, use a zero
+    forceZero <- set_if_null(forceZero, TRUE)   # if diverging, use a zero
   } else {
-    forceZero <- domR::set_if_null(forceZero, FALSE)  # if same sign, no zero
+    forceZero <- set_if_null(forceZero, FALSE)  # if same sign, no zero
   }
-  domR::cat2(forceZero, show = showCat)
 
   # Prepare intervals to check--------------------------------------------------
   baseIntervals <- c(1:10, 1.2, 1.5, 2.5, 7.5)
@@ -124,7 +105,7 @@ calc_intervals <- function(x0, x1 = NULL,
   # Check each possible base interval
   for (ii in toCheck) {
     # Decimals don't work well with modulo, so multiply up magnitudes to compare
-    iiPrec <- max(domR::count_decimal_places(ii), xxPrec)
+    iiPrec <- max(count_decimal_places(ii), xxPrec)
 
     if (iiPrec != 0) {
       iiCheck <- ii * 10^(iiPrec)   #
@@ -137,16 +118,12 @@ calc_intervals <- function(x0, x1 = NULL,
     # Check if it is exact
     iiRemains <- (ixDiff %% iiCheck)
     iiRemain2 <- round(iiRemains, xxPrec + 1)   # matches within tolerance
-    domR::cat3(ii, ";", iiCheck, ixDiff, ", remainder:",
-               iiRemain2, iiRemains, show = showCat)
 
     # Store if it is exact
     if (iiRemain2 == 0) {
       incIntervals <- c(incIntervals, ii)
     }
   }
-  cat2(incIntervals, show = showCat)
-  print_line("<", show = showCat)
 
   # Choose an interval ---------------------------------------------------------
   ## Prep
@@ -178,61 +155,41 @@ calc_intervals <- function(x0, x1 = NULL,
     # To check if zero (sidesteps rounding / floating errors)
     xString <- as.character(xVector)
 
-    domR::cat3("Interval of:", incIntervals[ii], "; vector length:", xLength,
-               show = showCat)
-
     # Is the vector suitable?
     if (xLength < intMin | xLength > intIdeal) {
-      domR::cat3("Wrong length.", show = showCat)
-      ii <- ii + 1
+       ii <- ii + 1
       acceptInt <- FALSE
     } else if ((isTRUE(forceZero)) & as.character(0) %notIn% xString) {
-      domR::cat3("No zero.", show = showCat)
       ii <- ii + 1
       acceptInt <- FALSE
     } else if ( (as.character(x0) %notIn% xString) |
                 (as.character(x1) %notIn% xString) ) {
       # `seq()` doesn't have to hit the limits, so check if our values are used
-      domR::cat3("Misses the limits!", xx, "are not in", xString, "\n",
-                 show = showCat)
       ii <- ii + 1
       acceptInt <- FALSE
     } else {
-      domR::cat3("Interval looks good!", show = showCat)
-      domR::cat3("The best solution is an interval of", incIntervals[ii],
-                 show = showCat)
       usesPretty <- FALSE     # for metadata
       acceptInt  <- TRUE      # end the while loop
     }
 
     # Handle if no acceptable intervals are found ------------------------------
     if (ii > length(incIntervals)) {
-      domR::cat3("Attempted all exact intervals", show = showCat)
-      if (is.null(intMax)) {
-        domR::cat3("intMax is null", show = showCat)
-        if (isTRUE(preferError)) {
-          domR::cat3("Prefer an error", show = showCat)
-          stop("No exact interval found!")
+       if (is.null(intMax)) {
+         if (isTRUE(preferError)) {
+           stop("No exact interval found!")
         } else if (isFALSE(preferError)) {
-          domR::cat3("Prefer pretty", show = showCat)
-          warning("Using pretty instead!\n")
-          domR::cat3("Going pretty instead!", show = showCat)
-          xVector    <- pretty(xx)
-          usesPretty <- TRUE
-          acceptInt  <- TRUE
+           warning("Using pretty instead!\n")
+           xVector    <- pretty(xx)
+           usesPretty <- TRUE
+           acceptInt  <- TRUE
         }
       } else {
-        domR::cat3("intMax is not null", show = showCat)
         ii <- 1                # reset and go again!
         if (intIdeal == intMax) {
-          domR::cat3("intIdeal and intMax match", show = showCat)
           intMax    <- NULL    # if it fails again, it goes to the block above
           acceptInt <- FALSE
         } else {
-          domR::cat3("intIdeal and intMax don't match - resetting intMax",
-                     show = showCat)
           warning("Ignoring intIdeal & trying again!\n")
-          domR::cat3("\nIgnoring intIdeal & trying again! \n", show = showCat)
           intIdeal  <- intMax
           acceptInt <- FALSE
         }

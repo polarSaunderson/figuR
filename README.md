@@ -18,9 +18,10 @@ The public version of this repo can be accessed at:
 ## To-Do
 ### 2023-09-03
 - [ ] Think about fallback if kulaR is not available
-- [ ] Should `%notIn%` & `set_if_null` be added here? They are definitely 
+- [x] Should `%notIn%` & `set_if_null` be added here? They are definitely 
       necessary, but should we make the user download `domR` for them? Or just 
       copy them over?
+      - I've created "utils.R" for them.
 
 ### 2023-08-13
 - [ ] Work on general arguments for pre_plot that can be overwritten

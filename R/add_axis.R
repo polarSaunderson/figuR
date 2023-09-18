@@ -263,14 +263,14 @@ add_axis <- function(axis,
   # Labels ---------------------------------------------------------------------
   # If no labels are provided, just use actual values calculated
   if (is.null(labels)) labels <- round(scaffold,
-                                       signif(sd(scaffold), 3) |>
-                                         domR::count_decimal_places())
+                                       signif(stats::sd(scaffold), 3) |>
+                                         count_decimal_places())
 
   # Where do the labels go?
   if (is.null(labelEvery)) {
     # Option 1: Defaults, but we want at least 5 (if possible) and less than 10
     labelEvery <- 2
-    labelFirst <- domR::set_if_null(labelFirst, labelEvery)
+    labelFirst <- set_if_null(labelFirst, labelEvery)
     labelTest <- labels[seq(2, length(scaffold), labelEvery)]
 
     if (length(labelTest) <= 5) {
@@ -285,19 +285,19 @@ add_axis <- function(axis,
     labelLocations <- scaffold[seq(labelFirst, length(scaffold), labelEvery)]
   } else if (length(labelEvery) == 1) {
     # Option 2: Label every x ticks (user-defined)
-    labelFirst <- domR::set_if_null(labelFirst, labelEvery)
+    labelFirst <- set_if_null(labelFirst, labelEvery)
     labels     <- labels[seq(labelFirst, length(scaffold), labelEvery)]
     labelLocations <- scaffold[seq(labelFirst, length(scaffold), labelEvery)]
   } else {
     # Option 3: Label only specific ticks (labelEvery is a vector of indices)
     labels <- labels[labelEvery]
     labelLocations <- scaffold[labelEvery]
-    labelFirst <- domR::set_if_null(labelFirst, labelEvery[1]) # for others
+    labelFirst <- set_if_null(labelFirst, labelEvery[1]) # for others
   }
 
   # Tickmarks ------------------------------------------------------------------
-  tickFirst <- domR::set_if_null(tickFirst, labelFirst)
-  tickEvery <- domR::set_if_null(tickEvery, labelEvery)
+  tickFirst <- set_if_null(tickFirst, labelFirst)
+  tickEvery <- set_if_null(tickEvery, labelEvery)
 
   if (length(tickEvery) == 1) {
     # Options 1: Add ticks to every scaffold
@@ -307,8 +307,8 @@ add_axis <- function(axis,
   }
 
   # Gridlines ------------------------------------------------------------------
-  gridFirst <- domR::set_if_null(gridFirst, labelFirst)
-  gridEvery <- domR::set_if_null(gridEvery, labelEvery)
+  gridFirst <- set_if_null(gridFirst, labelFirst)
+  gridEvery <- set_if_null(gridEvery, labelEvery)
 
   if (length(gridEvery) == 1) {
     gridLocations <- scaffold[seq(gridFirst, length(scaffold), gridEvery)]
@@ -363,7 +363,7 @@ add_axis <- function(axis,
                    figTop, labelLocations)
 
   if (!is.null(labelSrt)) labelSrt <- labelSrt * -1 # so input rotation is clockwise
-  labelOffset <- domR::set_if_null(labelOffset,
+  labelOffset <- set_if_null(labelOffset,
                                    switch(axis, 0.75, 0.5, 0.65, 0.5))
 
   graphics::text(x = labelX, y = labelY,
@@ -376,16 +376,16 @@ add_axis <- function(axis,
   if (!is.null(name)) {
     # Location
     namePos  <- switch(axis, 1, 3, 3, 3)
-    nameSide <- domR::set_if_null(nameSide, axis) # default is outside axis
+    nameSide <- set_if_null(nameSide, axis) # default is outside axis
     nameX  <- switch(nameSide, figMidX, figLeft, figMidX, figRight)
     nameY  <- switch(nameSide, figBottom, figMidY, figTop, figMidY)
 
-    nameSrt  <- domR::set_if_null(nameSrt, switch(nameSide, 0, 90, 0, 270))
+    nameSrt  <- set_if_null(nameSrt, switch(nameSide, 0, 90, 0, 270))
     nameOffset <- switch(axis,
-                         domR::set_if_null(nameOffset, 3.75),
-                         domR::set_if_null(nameOffset, 3.5),
-                         domR::set_if_null(nameOffset, 2),
-                         domR::set_if_null(nameOffset, 3.75))
+                         set_if_null(nameOffset, 3.75),
+                         set_if_null(nameOffset, 3.5),
+                         set_if_null(nameOffset, 2),
+                         set_if_null(nameOffset, 3.75))
     if (axis  %in% c(2, 4)) nameOffset <- nameOffset * -1  # positive is outwards for all
 
     graphics::text(x = nameX,

@@ -94,14 +94,14 @@ pre_plot(
   nameSrt = NULL,
   xNameSrt = NULL,
   yNameSrt = NULL,
+  tagText = NULL,
+  tagLocation = NULL,
+  tagCex = 1,
   addOrigin = TRUE,
   originLwd = 1,
   originType = 1,
   originKula = "#B3B3B388",
   add121 = FALSE,
-  tagLocation = NULL,
-  tagText = NULL,
-  tagCex = 1,
   mar = c(3, 3.5, 2.5, 1.5)
 )
 }
@@ -119,6 +119,12 @@ function.}
 
 \item{mainCex}{What font size should the title text be?}
 
+\item{xLabels, yLabels}{Labels for the x and y axes. See [add_axis()].}
+
+\item{xInterval, yInterval}{Intervals for the x and y axes. See [add_axis()].}
+
+\item{xMeshlines, yMeshlines}{Meshlines for the x and y axes. See [add_axis()].}
+
 \item{alignMidPoints}{BINARY: Should the scaffold mesh be aligned midway
   between values? The default is FALSE, which is necessary for a scatter
   plot and makes sure that the tickmarks line up with a single point value.
@@ -130,50 +136,80 @@ function.}
   unsure, call [plot()] using `axes = TRUE` and add dummy data with this
   function to see what aligns and what makes sense.}
 
+\item{xAlignMidPoints, yAlignMidPoints}{Use to set x and y separately.}
+
 \item{gridEvery}{numeric: Gridlines across the full plot should be added
 every how many lines of the scaffold mesh? If NULL, matches 'labelEvery';
 see there for details on the accepted input.}
+
+\item{xGridEvery, yGridEvery}{Use to set x and y separately.}
 
 \item{gridFirst}{numeric: Which line of the scaffold mesh should the first
 gridline be added to? 'gridEvery' subsequently counts mesh lines from
 this line. If NULL (default), matches 'labelFirst'; see there for details
 on the accepted input.}
 
+\item{xGridFirst, yGridFirst}{Use to set x and y separately.}
+
 \item{gridLwd}{numeric: How thick should the gridlines be? If 0, the
 drawing of gridlines is suppressed.}
+
+\item{xGridLwd, yGridLwd}{Use to set x and y separately.}
 
 \item{gridKula}{What colour should the gridlines be? Defaults to a
 mid-grey.}
 
+\item{xGridKula, yGridKula}{Use to set x and y separately.}
+
 \item{gridType}{numeric: What line type should the gridlines be? See the
 'axisType' argument. If 0, the drawing of gridlines is suppressed.}
+
+\item{xGridType, yGridType}{Use to set x and y separately.}
 
 \item{tickFirst}{numeric: Which line of the scaffold mesh should the first
 tickmark be added to? 'tickEvery' subsequently counts mesh lines from
 this line. If NULL (default), matches 'labelFirst'; see there for details
 on the accepted input.}
 
+\item{xTickFirst, yTickFirst}{Use to set x and y separately.}
+
 \item{tickEvery}{Tickmarks should be drawn every how many lines of the
 scaffold mesh? If NULL, matches 'labelEvery'; see there for details on
 the accepted input.}
+
+\item{xTickEvery, yTickEvery}{Use to set x and y separately.}
 
 \item{tickLength}{numeric: How long should the tickmarks be? Works based on
 the `tcl` argument of [axis()] (but reversed so positive values go away
 from the axis). See [par()] for more details.}
 
+\item{xTickLength, yTickLength}{Use to set x and y separately.}
+
 \item{tickKula}{What colour should the tickmarks be? Defaults to black.}
+
+\item{xTickKula, yTickKula}{Use to set x and y separately.}
+
+\item{xAxisSide, yAxisSide}{Use to set x and y separately.}
 
 \item{tickBoth}{Should tick marks be added to the opposing axis? For
 example, if the y-axis is on the left (2), should tickmarks also be added
 to the right axis (4)?}
 
+\item{xTickBoth, yTickBoth}{Use to set x and y separately.}
+
 \item{axisLwd}{How thick should the axis line be?}
+
+\item{xAxisLwd, yAxisLwd}{Use to set x and y separately.}
 
 \item{axisType}{numeric: What type of line should the axis line be? Use
 numeric values for (1) solid; (2) dashed; (3) dotted lines; (4)
 dot-dashed ; (5) long dashed ; and (6) dash-dotted.}
 
+\item{xAxisType, yAxisType}{Use to set x and y separately.}
+
 \item{axisKula}{What colour should the axis line be?}
+
+\item{xAxisKula, yAxisKula}{Use to set x and y separately.}
 
 \item{labelEvery}{numeric: Labels should be added every how many lines of
   the scaffold mesh? If a single value is provided, it is sequenced into
@@ -188,34 +224,67 @@ dot-dashed ; (5) long dashed ; and (6) dash-dotted.}
   By default, the function will set this as 2, unless that provides less
   than 5 labels, in which case, it is set as 1.}
 
+\item{xLabelEvery, yLabelEvery}{Use to set x and y separately.}
+
 \item{labelFirst}{numeric: Which line of the scaffold mesh should the first
 label be added to? 'labelEvery' subsequently counts mesh lines from this
 line. Provide the index, not the label value. Default is to match
 'labelEvery'.}
 
+\item{xLabelFirst, yLabelFirst}{Use to set x and y separately.}
+
 \item{labelOffset}{numeric: How far from the axis should the labels be?
 Works on the 'offset' argument of [text()].}
 
+\item{xLabelOffset, yLabelOffset}{Use to set x and y separately.}
+
 \item{labelCex}{numeric: What font size should the label text be?}
 
+\item{xLabelCex, yLabelCex}{Use to set x and y separately.}
+
 \item{labelKula}{What colour should the label text be?}
+
+\item{xLabelKula, yLabelKula}{Use to set x and y separately.}
 
 \item{labelSrt}{numeric: What angle should the label text be set at?
 Positive values rotate the text clockwise (i.e. the tops of the letters
 move right).}
 
+\item{xLabelSrt, yLabelSrt}{Use to set x and y separately.}
+
+\item{xName, yName}{The names of the x and y axes.}
+
+\item{xNameSide, yNameSide}{Use to set x and y separately.}
+
 \item{nameCex}{numeric: What font size should the name text be?}
 
+\item{xNameCex, yNameCex}{Use to set x and y separately.}
+
 \item{nameKula}{What colour should the name text be?}
+
+\item{xNameKula, yNameKula}{Use to set x and y separately.}
 
 \item{nameOffset}{numeric: How far from the axis should the name be? Works
 as the second value in the vector for the 'adj' argument of [text()], but
 reversed so positive values move away from the axis; the first value in
 the vector is kept at 0.5 to centre the text.}
 
+\item{xNameOffset, yNameOffset}{Use to set x and y separately.}
+
 \item{nameSrt}{numeric: What angle should the name text be set at? Positive
 values rotate the text clockwise (i.e. the tops of the letters move
 right).}
+
+\item{xNameSrt, yNameSrt}{Use to set x and y separately.}
+
+\item{tagText}{"string": If not NULL, this text will be added to the plot.
+Useful for "tagging" subplots with letters/numbers (e.g. `"a)"`). Be
+aware that subsequent plotting of data could cover this.}
+
+\item{tagLocation}{numeric: A `c(x, y)` vector indicating where the
+'tagText' should go.}
+
+\item{tagCex}{What font size should the 'tagText' be?}
 
 \item{addOrigin}{Should origin lines be added? These are thicker than the
   gridlines to help orient the reader.
@@ -232,15 +301,6 @@ right).}
 
 \item{add121}{logical. Should a red line with a gradient of x:y = 1:1 be
 added to the plot?}
-
-\item{tagLocation}{numeric: A `c(x, y)` vector indicating where the
-'tagText' should go.}
-
-\item{tagText}{"string": If not NULL, this text will be added to the plot.
-Useful for "tagging" subplots with letters/numbers (e.g. `"a)"`). Be
-aware that subsequent plotting of data could cover this.}
-
-\item{tagCex}{What font size should the 'tagText' be?}
 
 \item{mar}{Set the margins around the plot. See [par()] for details.}
 }

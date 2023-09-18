@@ -20,6 +20,7 @@ plot_points <- function(x, y,
   #' @param pch What style should the marker be?
   #' @param lwd How thick should the marker boundary be?
   #' @param xpd Can the markers be plotted off the chart?
+  #' @param ... Any arguments that can be fed into `pre_plot()`.
   #'
   #' @export
 
@@ -58,60 +59,22 @@ plot_points <- function(x, y,
 
   # Add points
   if (exists("xRep", inherits = FALSE)) {  # only search inside the function
-    pch <- domR::set_if_null(pch, 16)
+    pch <- set_if_null(pch, 16)
     kk <- 1
     for (ii in 1:xRep) {
       iiData <- y[(ii * length(x) - (length(x) - 1)):(ii * length(x))]
       graphics::points(x, iiData,
-             col = kulaR::kulaQ(kk), bg = pointKula,
-             cex = cex, pch = pch,
-             lwd = lwd, xpd = xpd)
+                       col = kulaR::kulaQ(kk), bg = pointKula,
+                       cex = cex, pch = pch,
+                       lwd = lwd, xpd = xpd)
       kk <- kk + 1
       if (kk > 7) {kk <- 1}
     }
   } else {
-    pch <- domR::set_if_null(pch, 21)
+    pch <- set_if_null(pch, 21)
     graphics::points(x, y,
-           col = borderKula, bg = pointKula,
-           cex = cex, pch = pch,
-           lwd = lwd, xpd = xpd)
+                     col = borderKula, bg = pointKula,
+                     cex = cex, pch = pch,
+                     lwd = lwd, xpd = xpd)
   }
 }
-
-
-
-
-# xx <- sample(1:100, 25)
-# yy <- sample(-100:99, 25)
-# #
-# plot_points <- function(x, y,
-#                         borderKula = "red",
-#                         pointKula  = "white",
-#                         cex = 1, pch = 21,
-#                         lwd = 1, ...) {
-#   xInfo <- kulaR::get_kulaInfo(xx)
-#   xlim <- c(xInfo$zRange[1] - xInfo$zIncrements,
-#             xInfo$zRange[2] + xInfo$zIncrements)
-#
-#   yInfo <- kulaR::get_kulaInfo(yy)
-#   ylim <- c(yInfo$zRange[1] - yInfo$zIncrements,
-#             yInfo$zRange[2] + yInfo$zIncrements)
-#
-#   pre_plot(xlim, ylim,
-#            xTickSeq = xInfo$zIncrements,
-#            xTickFirst = 2, xTickEvery = 2,
-#            xGridFirst = 2, xGridEvery = 2,
-#            xLabelFirst = 2, xLabelEvery = 2,
-#            yTickSeq = yInfo$zIncrements,
-#            yTickFirst = 2, yTickEvery = 2,
-#            yGridFirst = 2,  yGridEvery = 2,
-#            yLabelFirst = 2, yLabelEvery = 2, ...)
-#
-#   points(xx, yy,
-#          col = borderKula, bg = pointKula,
-#          cex = cex, pch = pch,
-#          lwd = lwd, xpd = TRUE)
-# }
-#
-# plot_points(xx, yy, addOrigin = FALSE)
-# plot(xx, yy)

@@ -35,6 +35,7 @@ plot_lines <- function(x, y = NULL,
   #' @param ... Any arguments that can be fed into `pre_plot()`.
   #'
   #' @examples
+  #' \dontrun{
   #'   # Data
   #'   x  <- c(1:6)
   #'   y1 <- c(1:6)
@@ -42,6 +43,7 @@ plot_lines <- function(x, y = NULL,
   #'   y3 <- c(8:3)
   #'
   #'   # Plots
+  #'   par(mar = c(5, 5, 5, 5))
   #'   plot_lines(x = x, y = y1)
   #'   plot_lines(x = x, y = c(y1, y2, y3))
   #'   plot_lines(x = x, y = y2, xName = "newXname")
@@ -52,7 +54,7 @@ plot_lines <- function(x, y = NULL,
   #'   # But beware here - the following won't plot what you'd hope for
   #'   plot_lines(x = c("Jan", "Feb", "Mar", "Jan", "Feb", "Mar"),
   #'              y = 1:6, xLabelEvery = 1)
-  #'
+  #' }
   #' @export
 
   # Code -----------------------------------------------------------------------
@@ -64,9 +66,6 @@ plot_lines <- function(x, y = NULL,
 
   # Create xxLimits & yyLimits for xLimits and yLimits (both mandatory for pre_plot)
   xyLimits <- calc_plot_limits(x, y, expandLimits)
-  # cat("\n plot_lines_57\n")
-  # print(xyLimits)
-  # print_line(".")
   xxLimits <- xyLimits$xxLim
   yyLimits <- xyLimits$yyLim
 
@@ -112,11 +111,11 @@ plot_lines <- function(x, y = NULL,
         iiData <- y[(ii * length(x) - (length(x) - 1)):(ii * length(x))]
         graphics::lines(x, iiData, col = kulaR::kulaQ(kk), lwd = 4)
         if (isTRUE(addPoints)) {
-          borderKula <- domR::set_if_null(borderKula, kulaR::kulaQ(kk))
+          borderKula <- set_if_null(borderKula, kulaR::kulaQ(kk))
           graphics::points(x, iiData,
-                 col = borderKula, bg = pointKula,
-                 cex = cex, pch = pch,
-                 xpd = xpd)
+                           col = borderKula, bg = pointKula,
+                           cex = cex, pch = pch,
+                           xpd = xpd)
         }
         # There are only so many colours in the world!
         kk <- kk + 1
@@ -133,11 +132,11 @@ plot_lines <- function(x, y = NULL,
     graphics::lines(x, y, col = lineKula,
           lwd = lwd, xpd = xpd)
     if (isTRUE(addPoints)) {
-      borderKula <- domR::set_if_null(borderKula, lineKula)
+      borderKula <- set_if_null(borderKula, lineKula)
       graphics::points(x, y,
-            col = borderKula, bg = pointKula,
-            cex = cex, pch = pch,
-            xpd = xpd)
+                       col = borderKula, bg = pointKula,
+                       cex = cex, pch = pch,
+                       xpd = xpd)
     }
   }
 }

@@ -59,6 +59,7 @@ This is the figuR equivalent of `plot(x, y, type = "l")` to
   create a simple line chart.
 }
 \examples{
+\dontrun{
   # Data
   x  <- c(1:6)
   y1 <- c(1:6)
@@ -66,6 +67,7 @@ This is the figuR equivalent of `plot(x, y, type = "l")` to
   y3 <- c(8:3)
 
   # Plots
+  par(mar = c(5, 5, 5, 5))
   plot_lines(x = x, y = y1)
   plot_lines(x = x, y = c(y1, y2, y3))
   plot_lines(x = x, y = y2, xName = "newXname")
@@ -76,5 +78,5 @@ This is the figuR equivalent of `plot(x, y, type = "l")` to
   # But beware here - the following won't plot what you'd hope for
   plot_lines(x = c("Jan", "Feb", "Mar", "Jan", "Feb", "Mar"),
              y = 1:6, xLabelEvery = 1)
-
+}
 }

@@ -118,16 +118,16 @@ pre_plot <- function(xLimits, yLimits,
                xNameSrt    = NULL,
                yNameSrt    = NULL,
 
+                       tagText     = NULL,
+                       tagLocation = NULL,
+                       tagCex      = 1,
+
                        addOrigin  = TRUE,
                        originLwd  = 1,
                        originType = 1,
                        originKula = "#B3B3B388",
 
                        add121          = FALSE,
-
-                       tagLocation = NULL,
-                       tagText     = NULL,
-                       tagCex      = 1,
 
                        mar = c(3, 3.5, 2.5, 1.5)) {
   #' Easily customisable plot areas
@@ -178,87 +178,118 @@ pre_plot <- function(xLimits, yLimits,
   #'   'tagText' should go.
   #' @param tagCex What font size should the 'tagText' be?
   #' @param mar Set the margins around the plot. See [par()] for details.
+
+  #' @param xLabels,yLabels Labels for the x and y axes. See [add_axis()].
+  #' @param xInterval,yInterval Intervals for the x and y axes. See [add_axis()].
+  #' @param xMeshlines,yMeshlines Meshlines for the x and y axes. See [add_axis()].
+  #' @param xAlignMidPoints,yAlignMidPoints Use to set x and y separately.
+  #' @param xGridEvery,yGridEvery Use to set x and y separately.
+  #' @param xGridFirst,yGridFirst Use to set x and y separately.
+  #' @param xGridLwd,yGridLwd Use to set x and y separately.
+  #' @param xGridKula,yGridKula Use to set x and y separately.
+  #' @param xGridType,yGridType Use to set x and y separately.
+  #' @param xTickFirst,yTickFirst Use to set x and y separately.
+  #' @param xTickEvery,yTickEvery Use to set x and y separately.
+  #' @param xTickLength,yTickLength Use to set x and y separately.
+  #' @param xTickKula,yTickKula Use to set x and y separately.
+  #' @param xAxisSide,yAxisSide Use to set x and y separately.
+  #' @param xTickBoth,yTickBoth Use to set x and y separately.
+  #' @param xAxisLwd,yAxisLwd  Use to set x and y separately.
+  #' @param xAxisType,yAxisType Use to set x and y separately.
+  #' @param xAxisKula,yAxisKula  Use to set x and y separately.
+  #' @param xLabelEvery,yLabelEvery Use to set x and y separately.
+  #' @param xLabelFirst,yLabelFirst Use to set x and y separately.
+  #' @param xLabelOffset,yLabelOffset Use to set x and y separately.
+  #' @param xLabelCex,yLabelCex Use to set x and y separately.
+  #' @param xLabelKula,yLabelKula Use to set x and y separately.
+  #' @param xLabelSrt,yLabelSrt Use to set x and y separately.
+  #' @param xName,yName The names of the x and y axes.
+  #' @param xNameSide,yNameSide Use to set x and y separately.
+  #' @param xNameCex,yNameCex Use to set x and y separately.
+  #' @param xNameKula,yNameKula Use to set x and y separately.
+  #' @param xNameOffset,yNameOffset  Use to set x and y separately.
+  #' @param xNameSrt,yNameSrt Use to set x and y separately.
   #'
   #' @export
 
   # Code -----------------------------------------------------------------------
   # Handle defaults & matching x / y axes setting
-  xAlignMidPoints <- domR::set_if_null(xAlignMidPoints, alignMidPoints)
-  yAlignMidPoints <- domR::set_if_null(yAlignMidPoints, alignMidPoints)
+  xAlignMidPoints <- set_if_null(xAlignMidPoints, alignMidPoints)
+  yAlignMidPoints <- set_if_null(yAlignMidPoints, alignMidPoints)
 
   ## Gridlines ----
-  xGridEvery <- domR::set_if_null(xGridEvery, gridEvery)
-  yGridEvery <- domR::set_if_null(yGridEvery, gridEvery)
+  xGridEvery <- set_if_null(xGridEvery, gridEvery)
+  yGridEvery <- set_if_null(yGridEvery, gridEvery)
 
-  xGridFirst <- domR::set_if_null(xGridFirst, gridFirst)
-  yGridFirst <- domR::set_if_null(yGridFirst, gridFirst)
+  xGridFirst <- set_if_null(xGridFirst, gridFirst)
+  yGridFirst <- set_if_null(yGridFirst, gridFirst)
 
-  xGridLwd <- domR::set_if_null(xGridLwd, gridLwd)
-  yGridLwd <- domR::set_if_null(yGridLwd, gridLwd)
+  xGridLwd <- set_if_null(xGridLwd, gridLwd)
+  yGridLwd <- set_if_null(yGridLwd, gridLwd)
 
-  xGridType <- domR::set_if_null(xGridType, gridType)
-  yGridType <- domR::set_if_null(yGridType, gridType)
+  xGridType <- set_if_null(xGridType, gridType)
+  yGridType <- set_if_null(yGridType, gridType)
 
-  xGridKula <- domR::set_if_null(xGridKula, gridKula)
-  yGridKula <- domR::set_if_null(yGridKula, gridKula)
+  xGridKula <- set_if_null(xGridKula, gridKula)
+  yGridKula <- set_if_null(yGridKula, gridKula)
 
   ## Tickmarks ----
-  xTickFirst <- domR::set_if_null(xTickFirst, tickFirst)
-  yTickFirst <- domR::set_if_null(yTickFirst, tickFirst)
+  xTickFirst <- set_if_null(xTickFirst, tickFirst)
+  yTickFirst <- set_if_null(yTickFirst, tickFirst)
 
-  xTickEvery <- domR::set_if_null(xTickEvery, tickEvery)
-  yTickEvery <- domR::set_if_null(yTickEvery, tickEvery)
+  xTickEvery <- set_if_null(xTickEvery, tickEvery)
+  yTickEvery <- set_if_null(yTickEvery, tickEvery)
 
-  xTickLength <- domR::set_if_null(xTickLength, tickLength)
-  yTickLength <- domR::set_if_null(yTickLength, tickLength)
+  xTickLength <- set_if_null(xTickLength, tickLength)
+  yTickLength <- set_if_null(yTickLength, tickLength)
 
-  xTickKula <- domR::set_if_null(xTickKula, tickKula)
-  yTickKula <- domR::set_if_null(yTickKula, tickKula)
+  xTickKula <- set_if_null(xTickKula, tickKula)
+  yTickKula <- set_if_null(yTickKula, tickKula)
 
-  xTickBoth <- domR::set_if_null(xTickBoth, tickBoth)
-  yTickBoth <- domR::set_if_null(yTickBoth, tickBoth)
+  xTickBoth <- set_if_null(xTickBoth, tickBoth)
+  yTickBoth <- set_if_null(yTickBoth, tickBoth)
 
   ## Axes ----
-  xAxisLwd <- domR::set_if_null(xAxisLwd, axisLwd)
-  yAxisLwd <- domR::set_if_null(yAxisLwd, axisLwd)
+  xAxisLwd <- set_if_null(xAxisLwd, axisLwd)
+  yAxisLwd <- set_if_null(yAxisLwd, axisLwd)
 
-  xAxisType <- domR::set_if_null(xAxisType, axisType)
-  yAxisType <- domR::set_if_null(yAxisType, axisType)
+  xAxisType <- set_if_null(xAxisType, axisType)
+  yAxisType <- set_if_null(yAxisType, axisType)
 
-  xAxisKula <- domR::set_if_null(xAxisKula, axisKula)
-  yAxisKula <- domR::set_if_null(yAxisKula, axisKula)
+  xAxisKula <- set_if_null(xAxisKula, axisKula)
+  yAxisKula <- set_if_null(yAxisKula, axisKula)
 
   ## Labels ----
-  xLabelEvery <- domR::set_if_null(xLabelEvery, labelEvery)
-  yLabelEvery <- domR::set_if_null(yLabelEvery, labelEvery)
+  xLabelEvery <- set_if_null(xLabelEvery, labelEvery)
+  yLabelEvery <- set_if_null(yLabelEvery, labelEvery)
 
-  xLabelFirst <- domR::set_if_null(xLabelFirst, labelFirst)
-  yLabelFirst <- domR::set_if_null(yLabelFirst, labelFirst)
+  xLabelFirst <- set_if_null(xLabelFirst, labelFirst)
+  yLabelFirst <- set_if_null(yLabelFirst, labelFirst)
 
-  xLabelCex <- domR::set_if_null(xLabelCex, labelCex)
-  yLabelCex <- domR::set_if_null(yLabelCex, labelCex)
+  xLabelCex <- set_if_null(xLabelCex, labelCex)
+  yLabelCex <- set_if_null(yLabelCex, labelCex)
 
-  xLabelKula <- domR::set_if_null(xLabelKula, labelKula)
-  yLabelKula <- domR::set_if_null(yLabelKula, labelKula)
+  xLabelKula <- set_if_null(xLabelKula, labelKula)
+  yLabelKula <- set_if_null(yLabelKula, labelKula)
 
-  xLabelSrt <- domR::set_if_null(xLabelSrt, labelSrt)
-  yLabelSrt <- domR::set_if_null(yLabelSrt, labelSrt)
+  xLabelSrt <- set_if_null(xLabelSrt, labelSrt)
+  yLabelSrt <- set_if_null(yLabelSrt, labelSrt)
 
-  xLabelOffset <- domR::set_if_null(xLabelOffset, labelOffset)
-  yLabelOffset <- domR::set_if_null(yLabelOffset, labelOffset)
+  xLabelOffset <- set_if_null(xLabelOffset, labelOffset)
+  yLabelOffset <- set_if_null(yLabelOffset, labelOffset)
 
   ## Names ----
-  xNameCex <- domR::set_if_null(xNameCex, nameCex)
-  yNameCex <- domR::set_if_null(yNameCex, nameCex)
+  xNameCex <- set_if_null(xNameCex, nameCex)
+  yNameCex <- set_if_null(yNameCex, nameCex)
 
-  xNameKula <- domR::set_if_null(xNameKula, nameKula)
-  yNameKula <- domR::set_if_null(yNameKula, nameKula)
+  xNameKula <- set_if_null(xNameKula, nameKula)
+  yNameKula <- set_if_null(yNameKula, nameKula)
 
-  xNameOffset <- domR::set_if_null(xNameOffset, nameOffset)
-  yNameOffset <- domR::set_if_null(yNameOffset, nameOffset)
+  xNameOffset <- set_if_null(xNameOffset, nameOffset)
+  yNameOffset <- set_if_null(yNameOffset, nameOffset)
 
-  xNameSrt <- domR::set_if_null(xNameSrt, nameSrt)
-  yNameSrt <- domR::set_if_null(yNameSrt, nameSrt)
+  xNameSrt <- set_if_null(xNameSrt, nameSrt)
+  yNameSrt <- set_if_null(yNameSrt, nameSrt)
 
   ## Handle limits ----
   xAuto <- calc_intervals(xLimits, intMax = 256,

@@ -36,6 +36,8 @@ after 7 y "series").}
 \item{lwd}{How thick should the marker boundary be?}
 
 \item{xpd}{Can the markers be plotted off the chart?}
+
+\item{...}{Any arguments that can be fed into `pre_plot()`.}
 }
 \description{
 This is the figuR equivalent of `plot(x, y)` to create a

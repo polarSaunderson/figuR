@@ -16,6 +16,7 @@ Using functionality like bquote never really makes sense.
   creates a basic plot, and shows how the text is displayed.
 }
 \examples{
+\dontrun{
   test_plot_title(bquote("W"~m^2~ "(magic)"))
-
+}
 }

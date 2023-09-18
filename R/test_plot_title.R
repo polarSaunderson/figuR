@@ -9,8 +9,9 @@ test_plot_title <- function(text) {
   #' @param text "string": The plot title to test
   #'
   #' @examples
+  #' \dontrun{
   #'   test_plot_title(bquote("W"~m^2~ "(magic)"))
-  #'
+  #' }
   #' @export
 
   # Code -----------------------------------------------------------------------
