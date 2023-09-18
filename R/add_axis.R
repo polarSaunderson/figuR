@@ -277,12 +277,10 @@ add_axis <- function(axis,
       labelEvery <- 1
       labelFirst <- 1
     } else if (length(labelTest) > 10) {
-      labels <- labelTest
-      if (length(labelTest) > 10) {
-        labelEvery <- ceiling(length(labelTest) / 8)
-      }
+      labelEvery <- ceiling(length(labels) / 8)
     }
     labelLocations <- scaffold[seq(labelFirst, length(scaffold), labelEvery)]
+    labels <- labels[seq(labelFirst, length(scaffold), labelEvery)]
   } else if (length(labelEvery) == 1) {
     # Option 2: Label every x ticks (user-defined)
     labelFirst <- set_if_null(labelFirst, labelEvery)
