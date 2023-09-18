@@ -1,6 +1,6 @@
-arrange_subplots <- function(locations,
-                             useSize   = FALSE,
-                             plotOrder = NULL) {
+arrange_panels <- function(locations,
+                           useSize   = FALSE,
+                           plotOrder = NULL) {
   #' Creates a layout for subplots with fine-grained control
   #'
   #' @description This function is largely a wrapper around the `layout()`
