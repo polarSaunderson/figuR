@@ -6,7 +6,7 @@
 \usage{
 plot_points(
   x,
-  y,
+  y = NULL,
   borderKula = "#004488FF",
   pointKula = "white",
   cex = 1.25,

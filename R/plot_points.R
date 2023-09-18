@@ -1,4 +1,4 @@
-plot_points <- function(x, y,
+plot_points <- function(x, y = NULL,
                         borderKula = "#004488FF",
                         pointKula  = "white",
                         cex = 1.25, pch = NULL,
@@ -25,6 +25,12 @@ plot_points <- function(x, y,
   #' @export
 
   # Code -----------------------------------------------------------------------
+  # Handle if only a single vector is provided
+  if (is.null(y)) {
+    y <- x
+    x <- seq_along(x)
+  }
+
   # Create xxLim & yyLim for xLimits and yLimits (both mandatory for pre_plot)
   xyLimits <- calc_plot_limits(x, y)
   xxLimits <- xyLimits$xxLim
