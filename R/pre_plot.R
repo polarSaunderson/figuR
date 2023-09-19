@@ -368,7 +368,7 @@ pre_plot <- function(xLimits, yLimits,
              labels     = unlist(xInfo),
              labelEvery = xLabelEvery,
              labelFirst = xLabelFirst,
-             labelKula  = "white", labelCex = 0.001,         # hide labels
+             labelKula  = "#00000000", labelCex = 0.001,     # hide labels
              tickEvery  = xTickEvery,
              tickFirst  = xTickFirst,
              tickKula   = xTickKula,
@@ -427,7 +427,7 @@ pre_plot <- function(xLimits, yLimits,
              labels     = unlist(yInfo),
              labelEvery = yLabelEvery,
              labelFirst = yLabelFirst,
-             labelKula  = "white", labelCex = 0.001,         # hide the labels
+             labelKula  = "#00000000", labelCex = 0.001,     # hide the labels
              tickEvery  = yTickEvery,
              tickFirst  = yTickFirst,
              tickKula   = yTickKula,
@@ -464,7 +464,10 @@ pre_plot <- function(xLimits, yLimits,
   }
 
   # Frame
-  add_plot_frame()
+  add_plot_frame(sides = c(1, 3),
+                 kula = yAxisKula, type = yAxisType, lwd = yAxisLwd)
+  add_plot_frame(sides = c(2, 4),
+                 kula = xAxisKula, type = xAxisType, lwd = xAxisLwd)
 
   return(invisible(list("xTicks" = xInfo,
                         "yTicks" = yInfo)))

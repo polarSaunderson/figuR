@@ -9,14 +9,16 @@ plot_matrix(
   kulas = NULL,
   range = NULL,
   breaks = NULL,
+  ...,
   xMarks = NULL,
   yMarks = NULL,
   markPch = 3,
   markCex = 0.5,
+  xMarkOffset = NULL,
+  yMarkOffset = NULL,
   xyGuides = NULL,
   xyKulas = "black",
-  xyLwd = 1,
-  ...
+  xyLwd = 1
 )
 }
 \arguments{
@@ -26,16 +28,27 @@ plot_matrix(
 
 \item{range}{c(vector) The min and max values to plot.}
 
+\item{...}{Any arguments (except 'xLimits' and 'yLimits') that can be added
+to [pre_plot()].}
+
 \item{xMarks, yMarks}{If both of these are not NULL (the default), guide
- "marks" are added over the matrix image. The values should be vectors
-that respectively refer to the x and y coordinates of the guide marks. A}
+"marks" are added over the matrix image. The values should be vectors
+that respectively refer to the x and y coordinates of the guide marks, in
+relation to the number of underlying scaffolding meshlines. A mark is
+added to each x coordinate for every y coordinate entered.}
 
 \item{markPch}{What symbol should the marks be?}
 
 \item{markCex}{How large should the mark symbol be?}
 
-\item{xyGuides}{If 'xMarks' and 'yMarks' are not NULL, this argument can
-be used to add guidelines across the plot. Set as "xy" for both, "x" just
+\item{xMarkOffset}{How much should xMarks and xGuides be offset? Unit is
+fractions of the meshlines separation. Positive is right.}
+
+\item{yMarkOffset}{How much should yMarks and yGuides be offset? Unit is
+fractions of the meshlines separation. Positive is up.}
+
+\item{xyGuides}{If 'xMarks' and 'yMarks' are not NULL, this argument can be
+used to add guidelines across the plot. Set as "xy" for both, "x" just
 for vertical lines rising from the x-axis, and "y" for horizontal lines
 stemming from the y-axis.}
 
@@ -46,9 +59,6 @@ colour is used for the xGuide, and the second for the yGuide.}
 \item{xyLwd}{How thick should the 'xyGuides' be? If a single value is
 provided, it is used for both the x and y; if a longer vector, the first
 value is used for the xGuide, and the second for the yGuide.}
-
-\item{...}{Any arguments (except 'xLimits' and 'yLimits') that can be added
-to [pre_plot()].}
 }
 \description{
 Plots matrices (using [graphics::image()], but on top of a

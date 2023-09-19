@@ -91,11 +91,12 @@ calc_intervals <- function(x0, x1 = NULL,
   } else {
     forceZero <- set_if_null(forceZero, FALSE)  # if same sign, no zero
   }
+  # cat2(forceZero)
 
   # Prepare intervals to check--------------------------------------------------
   baseIntervals <- c(1:10, 1.2, 1.5, 2.5, 7.5)
   toCheck <- lapply(baseIntervals, `*`,
-                    10^((-xxPrec - 1):(xxPrec + 1))) |> unlist()
+                    10^((-xxPrec - 2):(xxPrec + 2))) |> unlist()
   toCheck <- unique(toCheck) |> sort(TRUE)  # sort so will stop at largest first
   toCheck <- toCheck[toCheck < xxDiff]      # interval must be less than range
 
@@ -106,6 +107,8 @@ calc_intervals <- function(x0, x1 = NULL,
   for (ii in toCheck) {
     # Decimals don't work well with modulo, so multiply up magnitudes to compare
     iiPrec <- max(count_decimal_places(ii), xxPrec)
+    # cat2(ii)
+    # cat2(iiPrec)
 
     if (iiPrec != 0) {
       iiCheck <- ii * 10^(iiPrec)   #
@@ -114,16 +117,20 @@ calc_intervals <- function(x0, x1 = NULL,
       iiCheck <- ii
       ixDiff  <- xxDiff
     }
+    # cat2(iiCheck)
+    # cat2(ixDiff)
 
     # Check if it is exact
     iiRemains <- (ixDiff %% iiCheck)
     iiRemain2 <- round(iiRemains, xxPrec + 1)   # matches within tolerance
+    # cat3(ii, "remainder of", iiRemains)
 
     # Store if it is exact
     if (iiRemain2 == 0) {
       incIntervals <- c(incIntervals, ii)
     }
   }
+  # cat2(incIntervals)
 
   # Choose an interval ---------------------------------------------------------
   ## Prep
@@ -158,9 +165,11 @@ calc_intervals <- function(x0, x1 = NULL,
     # Is the vector suitable?
     if (xLength < intMin | xLength > intIdeal) {
        ii <- ii + 1
+       # cat3("wrong length")
       acceptInt <- FALSE
     } else if ((isTRUE(forceZero)) & as.character(0) %notIn% xString) {
       ii <- ii + 1
+       # cat3("no zero")
       acceptInt <- FALSE
     } else if ( (as.character(x0) %notIn% xString) |
                 (as.character(x1) %notIn% xString) ) {

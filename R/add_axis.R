@@ -341,7 +341,10 @@ add_axis <- function(axis,
                  at     = tickMarks,
                  labels = FALSE,           # will add later
                  tcl    = tickLength * -1, # negative so positive is outwards
-                 col    = tickKula)
+                 col.ticks = tickKula,
+                 col    = axisKula,
+                 lwd    = axisLwd,
+                 lty    = axisType)
 
   # Add axis -------------------------------------------------------------------
   # The above axis only goes from the ticks, not necessarily the full length of
@@ -380,11 +383,12 @@ add_axis <- function(axis,
 
     nameSrt  <- set_if_null(nameSrt, switch(nameSide, 0, 90, 0, 270))
     nameOffset <- switch(axis,
-                         set_if_null(nameOffset, 3.75),
+                         set_if_null(nameOffset, -3.75),
                          set_if_null(nameOffset, 3.5),
-                         set_if_null(nameOffset, 2),
+                         set_if_null(nameOffset, -2),
                          set_if_null(nameOffset, 3.75))
     if (axis  %in% c(2, 4)) nameOffset <- nameOffset * -1  # positive is outwards for all
+    if (axis  %in% c(1, 3)) nameOffset <- nameOffset * -1  # positive is outwards for all
 
     graphics::text(x = nameX,
                    y = nameY,
