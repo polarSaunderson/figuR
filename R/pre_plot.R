@@ -7,6 +7,7 @@ pre_plot <- function(xLimits, yLimits,
                        xLabels = NULL,
                        yLabels = NULL,
 
+                       interval  = NULL,
                        xInterval = NULL,
                        yInterval = NULL,
 
@@ -216,6 +217,9 @@ pre_plot <- function(xLimits, yLimits,
   # Handle defaults & matching x / y axes setting
   xAlignMidPoints <- set_if_null(xAlignMidPoints, alignMidPoints)
   yAlignMidPoints <- set_if_null(yAlignMidPoints, alignMidPoints)
+
+  xInterval <- set_if_null(xInterval, interval)
+  yInterval <- set_if_null(yInterval, interval)
 
   ## Gridlines ----
   xGridEvery <- set_if_null(xGridEvery, gridEvery)

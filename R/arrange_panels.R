@@ -29,17 +29,17 @@ arrange_panels <- function(locations,
   #'   t1 <- list(c(1, 2, 1, 2),
   #'              c(50, 70, 50, 80),
   #'              c(88, 94, 89, 100))
-  #'   arrange_subplots(t1, useSize = FALSE) # uses the 4 coordinates
+  #'   arrange_panels(t1, useSize = FALSE) # uses the 4 coordinates
   #'   layout.show(length(t1))
   #'
   #'   t2 <- list(c(1, 1, 1, 1),
   #'              c(50, 50, 20, 30),
   #'              c(88, 89, 6, 11))
-  #'   arrange_subplots(t2, useSize = TRUE) # uses top-left, width & height
+  #'   arrange_panels(t2, useSize = TRUE) # uses top-left, width & height
   #'   layout.show(length(t2))
   #'
   #'   # Demonstrating plotOrder; compare with above
-  #'   arrange_subplots(t1, plotOrder = c(3, 1, 2))
+  #'   arrange_panels(t1, plotOrder = c(3, 1, 2))
   #'   layout.show(length(t1))
   #'
   #' @export

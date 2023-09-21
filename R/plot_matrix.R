@@ -35,6 +35,7 @@ plot_matrix <- function(x, kulas = NULL, range = NULL, breaks = NULL,
   #'   fractions of the meshlines separation. Positive is up.
   #' @param ... Any arguments (except 'xLimits' and 'yLimits') that can be added
   #'   to [pre_plot()].
+  #' @param breaks Fed directly into [graphics::image()] if not NULL.
   #'
   #' @export
 
@@ -86,8 +87,8 @@ plot_matrix <- function(x, kulas = NULL, range = NULL, breaks = NULL,
       if (length(xyKulas) == 1) xyKulas <- rep(xyKulas, 2)
       if (length(xyLwd) == 1) xyLwd <- rep(xyLwd, 2)
       xyGuides <- strsplit(xyGuides, "") |> unlist()
-      if ("x" %in% xyGuides) abline(v = xx, col = xyKulas[1], lwd = xyLwd[1])
-      if ("y" %in% xyGuides) abline(h = yy, col = xyKulas[2], lwd = xyLwd[2])
+      if ("x" %in% xyGuides) graphics::abline(v = xx, col = xyKulas[1], lwd = xyLwd[1])
+      if ("y" %in% xyGuides) graphics::abline(h = yy, col = xyKulas[2], lwd = xyLwd[2])
     }
     graphics::points(xx, yy, pch = markPch, cex = markCex, xpd = TRUE)
   }

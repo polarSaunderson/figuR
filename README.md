@@ -1,36 +1,44 @@
 # figuR
 
-**PRIVATE BRANCH OF THE pkg03_figuR PACKAGE**
-
 ## Overview
-The figuR package is a personal package that allows easier customisation of figures. 
-It uses base R, but the functions use a syntax that I find more intuitive, and thus it is more configurable whilst being essentially the same.
+`figuR` is a personal package to easier customisation of figures. 
+It uses base R and graphics, but the functions use a syntax that I find more 
+unified and intuitive. It is thus more configurable whilst being essentially the 
+same. This is very experimental!
 
-**NOTE** This package (currently) requires my packages kulaR and domR (`notIn`, 
-`set_if_null`). However, they are only added as "Suggests" because Check doesn't 
-know where to install them from. 
+**WARNING** The functions `calc_intervals` and `plot_matrix` are often 
+problematic if used in new situations. The former is used for many defaults in 
+the other functions, so proceed with *EXTREME CAUTION*!
 
-## Public Version
-The public version of this repo can be accessed at: 
-  https://github.com/polarSaunderson/figuR
+## Instructions
+This package is mainly a personal package, so it is not available on CRAN.
+To download this package directly from GitHub, you'll need to use the "devtools" 
+package.
+It's easiest to do this within RStudio.
 
+1) Install the [devtools](https://github.com/hadley/devtools) package from CRAN: 
+``` R
+install.packages("devtools")
+```
 
-## To-Do
-### 2023-09-03
-- [ ] Think about fallback if kulaR is not available
-- [x] Should `%notIn%` & `set_if_null` be added here? They are definitely 
-      necessary, but should we make the user download `domR` for them? Or just 
-      copy them over?
-      - I've created "utils.R" for them.
+2) Load the devtools package:
+```R
+library(devtools)
+```
 
-### 2023-08-13
-- [ ] Work on general arguments for pre_plot that can be overwritten
-  - e.g. nameCex, so x and y are both set, but can be xNameCex or yNameCex
+3) Install figuR directly from GitHub:
+```R
+devtools::install_github("polarSaunderson/figuR")
+```
 
-### 2023-08-02
-- [ ] Expand arguments & document `pre_plot()`
-- [X] Add `arrange_subplots()`
-- [ ] Document functions !!!
-- [-] Use `pre_plot()` in `kulaR` for creating kulaBars
-  - actually, that just uses a simple matrix and add_axis
-- [X] Create `plot_points()`, `plot_lines()`, etc.
+4) Some of the functions in `figuR` require my `kulaR` package too.
+If you want to use these functions, it is necessary to also install these and their dependencies:
+```R
+install.packages("khroma")  # necessary for kulaR
+devtools::install_github("polarSaunderson/kulaR")
+```
+
+5) Load the figuR package
+```R
+library(figuR)
+```

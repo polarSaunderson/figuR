@@ -14,6 +14,6 @@ show_pch <- function(cex = 2, kula = "#004488FF"){
   # Code -----------------------------------------------------------------------
   plot_points(1:25, 1:25,
               pch = 1:25,
-              main = "pch codes",
+              main = "'pch' Codes",
               cex = cex, borderKula = kula)
 }

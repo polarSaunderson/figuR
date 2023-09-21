@@ -28,6 +28,8 @@ plot_matrix(
 
 \item{range}{c(vector) The min and max values to plot.}
 
+\item{breaks}{Fed directly into [graphics::image()] if not NULL.}
+
 \item{...}{Any arguments (except 'xLimits' and 'yLimits') that can be added
 to [pre_plot()].}
 
