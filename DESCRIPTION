@@ -1,7 +1,7 @@
 Package: figuR
 Type: Package
 Title: Personal Approach to Plotting in R
-Version: 0.0.2.5
+Version: 0.0.2.6
 Authors@R: 
     person("Dominic", "Saunderson",
            role = c("aut", "cre"),
@@ -19,3 +19,4 @@ Imports:
     stats
 Suggests:
     kulaR
+Remotes: polarSaunderson/kulaR@v0.1.0

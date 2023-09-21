@@ -51,6 +51,8 @@ calc_intervals <- function(x0, x1 = NULL,
   #' @export
 
   # Code -----------------------------------------------------------------------
+  # cat2(x0)
+  # cat2(x1)
   # Handle if labels (character strings) are provided instead of numbers -------
   if ("character" %in% methods::is(x0)) {
     x0  <- length(x0)
@@ -74,6 +76,9 @@ calc_intervals <- function(x0, x1 = NULL,
     }
   }
 
+  # cat2(x0)
+  # cat2(x1)
+
   # Basic Set-Up ---------------------------------------------------------------
   # We need to know a few things at the offset
   xx <- c(x0, x1)
@@ -84,6 +89,9 @@ calc_intervals <- function(x0, x1 = NULL,
 
   xxDiff <- (max(xx, na.rm = TRUE) - min(xx, na.rm = TRUE)) |>
     round(xxPrec + 1) # range
+
+  # cat2(xxPrec)
+  # cat2(xxDiff)
 
   # Is it necessary to add a 0? ------------------------------------------------
   if ((x0 < 0 & x1 > 0) | (x0 > 0 & x1 < 0)) {
@@ -123,7 +131,7 @@ calc_intervals <- function(x0, x1 = NULL,
     # Check if it is exact
     iiRemains <- (ixDiff %% iiCheck)
     iiRemain2 <- round(iiRemains, xxPrec + 1)   # matches within tolerance
-    # cat3(ii, "remainder of", iiRemains)
+    # cat3(ii, "remainder of", iiRemain2)
 
     # Store if it is exact
     if (iiRemain2 == 0) {
@@ -155,6 +163,7 @@ calc_intervals <- function(x0, x1 = NULL,
   while(isFALSE(acceptInt)) {
     # Create the vector to check
     xVector <- seq(min(xx), max(xx), incIntervals[ii])
+    xVector <- round(xVector, 10)
 
     # To check the length
     xLength <- length(xVector)
@@ -164,12 +173,13 @@ calc_intervals <- function(x0, x1 = NULL,
 
     # Is the vector suitable?
     if (xLength < intMin | xLength > intIdeal) {
-       ii <- ii + 1
-       # cat3("wrong length")
+      # cat3(ii, "wrong length")
+      ii <- ii + 1
       acceptInt <- FALSE
     } else if ((isTRUE(forceZero)) & as.character(0) %notIn% xString) {
+      # cat3(ii, "no zero")
+      # cat2(xString)
       ii <- ii + 1
-       # cat3("no zero")
       acceptInt <- FALSE
     } else if ( (as.character(x0) %notIn% xString) |
                 (as.character(x1) %notIn% xString) ) {
@@ -212,6 +222,7 @@ calc_intervals <- function(x0, x1 = NULL,
     xVector <- rev(xVector)
     xRange  <- rev(xRange)
   }
+  # print_line(">")
 
   # Return with metadata for other functions to understand what happened here!
   return(list("vector"     = xVector,
