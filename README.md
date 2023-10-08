@@ -6,9 +6,9 @@ It uses base R and graphics, but the functions use a syntax that I find more
 unified and intuitive. It is thus more configurable whilst being essentially the 
 same. This is very experimental!
 
-**WARNING** In particular, the functions `calc_intervals` and `plot_matrix` are 
-often problematic when used in new situations. The former is used for many 
-defaults in the other functions, so proceed with *EXTREME CAUTION*!
+**WARNING** The functions `calc_intervals` and `plot_matrix` are often 
+problematic if used in new situations. The former is used for many defaults in 
+the other functions, so proceed with *EXTREME CAUTION*!
 
 ## Instructions
 This package is mainly a personal package, so it is not available on CRAN.
