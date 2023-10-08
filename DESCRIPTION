@@ -1,7 +1,7 @@
 Package: figuR
 Type: Package
 Title: Opinionated Personal Approach to Customisable Plotting in R
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: 
     person("Dominic", "Saunderson",
            role = c("aut", "cre"),
@@ -11,7 +11,7 @@ Description: `figuR` is a personal package to easier customisation of figures.
     It uses base R and graphics, but the functions use a syntax that I find more 
     unified and intuitive. It is thus more configurable whilst being essentially 
     the same. This is very experimental!
-License: GPL (>= 2)
+License: GPL (>= 3)
 Encoding: UTF-8
 RoxygenNote: 7.2.3
 Imports:
