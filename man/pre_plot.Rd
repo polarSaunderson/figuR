@@ -12,6 +12,7 @@ pre_plot(
   mainCex = 1.1,
   xLabels = NULL,
   yLabels = NULL,
+  interval = NULL,
   xInterval = NULL,
   yInterval = NULL,
   xMeshlines = NULL,
@@ -121,16 +122,25 @@ function.}
 
 \item{xLabels, yLabels}{Labels for the x and y axes. See [add_axis()].}
 
+\item{interval}{What interval is between the scaffolding meshlines?
+Automatically identifies the minimum and maximum values of the plot's
+axis and uses [seq()] to calculate the intermediate tick locations. See
+also the 'meshlines' and 'labels' argument. Only one of these three
+arguments can be used at once; the order of priority is 1. 'labels'; 2.
+'interval'; and 3. 'meshlines'.}
+
 \item{xInterval, yInterval}{Intervals for the x and y axes. See [add_axis()].}
 
 \item{xMeshlines, yMeshlines}{Meshlines for the x and y axes. See [add_axis()].}
 
-\item{alignMidPoints}{BINARY: Should the scaffold mesh be aligned midway
-  between values? The default is FALSE, which is necessary for a scatter
-  plot and makes sure that the tickmarks line up with a single point value.
+\item{alignMidPoints}{BINARY: Should the values be aligned midway between
+  the scaffold meshlines? The default is FALSE, which is necessary for a
+  scatter plot and makes sure that tickmarks line up with the correct point
+  value.
 
   Set as TRUE for a plot such as an image of a matrix or a barchart, where
-  the ticks can sit in the  centre of the column.
+  the ticks can sit in the centre of the column (i.e. the value of the tick
+  refers to a 2D shape).
 
   See the examples for a visual explanation of this difference. If still
   unsure, call [plot()] using `axes = TRUE` and add dummy data with this
@@ -145,7 +155,7 @@ see there for details on the accepted input.}
 \item{xGridEvery, yGridEvery}{Use to set x and y separately.}
 
 \item{gridFirst}{numeric: Which line of the scaffold mesh should the first
-gridline be added to? 'gridEvery' subsequently counts mesh lines from
+gridline be added to? 'gridEvery' subsequently counts meshlines from
 this line. If NULL (default), matches 'labelFirst'; see there for details
 on the accepted input.}
 

@@ -71,18 +71,21 @@ also the 'meshlines' and 'labels' argument. Only one of these three
 arguments can be used at once; the order of priority is 1. 'labels'; 2.
 'interval'; and 3. 'meshlines'.}
 
-\item{meshlines}{numeric: How many ticks should be created? Include all
-possible ticks, including those that would fall at the minimum and
-maximum values. See also the 'interval' and 'labels' arguments. Only one
-of these three arguments can be used at once; the order of priority is 1.
-'labels'; 2. 'interval'; and 3. 'meshlines'.}
+\item{meshlines}{numeric: How many lines is the scaffold made up of?
+Include all possible meshlines, including those that would fall at the
+minimum and maximum values on the axis. See also the 'interval' and
+'labels' arguments. Only one of these three arguments can be used at
+once; the order of priority is 1. 'labels'; 2. 'interval'; and 3.
+'meshlines'.}
 
-\item{alignMidPoints}{BINARY: Should the scaffold mesh be aligned midway
-  between values? The default is FALSE, which is necessary for a scatter
-  plot and makes sure that the tickmarks line up with a single point value.
+\item{alignMidPoints}{BINARY: Should the values be aligned midway between
+  the scaffold meshlines? The default is FALSE, which is necessary for a
+  scatter plot and makes sure that tickmarks line up with the correct point
+  value.
 
   Set as TRUE for a plot such as an image of a matrix or a barchart, where
-  the ticks can sit in the  centre of the column.
+  the ticks can sit in the centre of the column (i.e. the value of the tick
+  refers to a 2D shape).
 
   See the examples for a visual explanation of this difference. If still
   unsure, call [plot()] using `axes = TRUE` and add dummy data with this
@@ -93,7 +96,7 @@ every how many lines of the scaffold mesh? If NULL, matches 'labelEvery';
 see there for details on the accepted input.}
 
 \item{gridFirst}{numeric: Which line of the scaffold mesh should the first
-gridline be added to? 'gridEvery' subsequently counts mesh lines from
+gridline be added to? 'gridEvery' subsequently counts meshlines from
 this line. If NULL (default), matches 'labelFirst'; see there for details
 on the accepted input.}
 
@@ -179,35 +182,39 @@ right).}
 \description{
 The syntax and logic for customising axes in R are not
   intuitive to me. This function allows different parts of an axis to be
-  more customised with more clarity.
+  customised with more clarity.
 
-  **IMPORTANT** This function **ONLY** works correctly if called after
+  **IMPORTANT**
+  This function **ONLY** works correctly if called after
   using [plot()] with the 'xaxs' and 'yaxs' **BOTH** set to "i". If not,
   the numbers on the axis will not correspond correctly to the location of
   the values. See examples.
 
-  Everything is based on a 'scaffold' of meshlines, which tickmarks,
+  Everything is based on a 'scaffold' of meshlines, which the tickmarks,
   gridlines and labels all align to.
 
-  **Labels**: The values that are indicated along the axis (e.g. 0, 1, 2,
-  ...)
+  **Labels**:
+  The values that are indicated along the axis (e.g. 0, 1, 2, ...)
 
-  **Ticks**: The notch along the axis that shows the precise location the
+  **Ticks**:
+  The notch along the axis that shows the precise location the
   labels refer to.
 
-  **Gridlines**: Lines that extend from the axis to the opposite side of
+  **Gridlines**:
+  Lines that extend from the axis to the opposite side of
   the plot. To suppress them and just add an axis, set 'gridLwd' as 0.
 
   By default, these three all tend to align with each other, but they can
   be offset, or only a subset can be included. For example, tick marks can
-  be included every 4 meshlines along the scaffolding, gridlines every 2,
-  and a label every 1.
+  be included every 4 meshlines, gridlines every 2, and a label every 1.
 
   Additionally, keep in mind these definitions when reading this
   documentation:
 
-  **Axis**: The line along the side of the plot.
+  **Axis**:
+  The actual axis line along the side of the plot.
 
-  **Name**: The name of the axis indicates what the values refer to, for
+  **Name**:
+  The name of the axis indicates what the values refer to, for
   example "Temperature (K)".
 }

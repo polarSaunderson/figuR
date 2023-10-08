@@ -10,7 +10,7 @@ show_lty <- function(lwd = 2, kula = "black"){
   #' @export
 
   # Code -----------------------------------------------------------------------
-  pre_plot(c(0,7), c(0, 7), yGridLwd = 0, xGridLwd = 0, main = "lty Types")
+  pre_plot(c(0,7), c(0, 7), yGridLwd = 0, xGridLwd = 0, main = "'lty' Types")
 
   for (ii in 1:6) {
     graphics::abline(h = ii, lty = ii, lwd = lwd, col = kula)
