@@ -10,7 +10,7 @@ Authors@R:
 Description: `figuR` is a personal package to easier customisation of figures. 
     It uses base R and graphics, but the functions use a syntax that I find more 
     unified and intuitive. It is thus more configurable whilst being essentially 
-    the same. This is very experimental! Version 0.1.1-rc1.
+    the same. This is very experimental!
 License: GPL (>= 3)
 Encoding: UTF-8
 RoxygenNote: 7.2.3
