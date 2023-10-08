@@ -19,11 +19,12 @@ plot_points(
 \arguments{
 \item{x}{The x data to plot.}
 
-\item{y}{The y data to plot. y must either be the same length as x, or a
-multiple of its length; if the latter, the x data is repeated, and the y
-treated as separate data series; 'borderKula' is ignored in such a
-situation and each y series is coloured differently (colours will repeat
-after 7 y "series").}
+\item{y}{The y data to plot. y must either be: NULL, in which case 'x' is
+used as 'y' and plotted against its index; the same length as x; or a
+multiple of the length of 'x'. If 'y' is the latter, the x data is
+repeated, and the y treated as separate data series; 'borderKula' is
+ignored in such a situation and each 'y' series is coloured differently
+(colours will repeat after 7 y "series").}
 
 \item{borderKula}{What colour should the boundary of the marker be?}
 
