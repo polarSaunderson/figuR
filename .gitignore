@@ -2,4 +2,5 @@
 .Rhistory
 .RData
 .Ruserdata
-rc_testing/
+/dev/
+/rc_testing/
