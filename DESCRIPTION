@@ -20,4 +20,4 @@ Imports:
     stats
 Suggests:
     kulaR
-Remotes: polarSaunderson/kulaR@v0.1.0
+Remotes: polarSaunderson/kulaR

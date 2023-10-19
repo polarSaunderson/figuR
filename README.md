@@ -1,4 +1,4 @@
-# figuR
+# figuR v0.1.2
 
 ## Overview
 `figuR` is a personal package to easier customisation of figures. 
